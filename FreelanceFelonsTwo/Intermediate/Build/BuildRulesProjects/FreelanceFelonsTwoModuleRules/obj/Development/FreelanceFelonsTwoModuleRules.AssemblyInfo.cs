@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("FreelanceFelonsTwoModuleRules")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Development")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+508cd56c5eed216eccd19fc6244f6b847680c64a")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f5cd62d8f0e5279fe43b1116d2a053ec3731f46d")]
 [assembly: System.Reflection.AssemblyProductAttribute("FreelanceFelonsTwoModuleRules")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FreelanceFelonsTwoModuleRules")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

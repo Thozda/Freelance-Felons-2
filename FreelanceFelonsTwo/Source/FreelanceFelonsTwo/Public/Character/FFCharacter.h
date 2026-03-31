@@ -40,7 +40,10 @@ private:
 	void SneakPressed(const FInputActionValue& Value);
 
 	UPROPERTY(EditAnywhere, Category="Input")
-	UInputMappingContext* InputMapping;
+	UInputMappingContext* BaseInputContext;
+	
+	UPROPERTY(EditAnywhere, Category="Input")
+	UInputMappingContext* WalkInputContext;
 	
 	UPROPERTY(EditAnywhere, Category="Input")
 	UInputAction* LookAction;

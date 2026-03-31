@@ -18,7 +18,8 @@ void AFFCharacter::BeginPlay()
 	if (UEnhancedInputLocalPlayerSubsystem* Subsystem =
 		ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetWorld()->GetFirstLocalPlayerFromController()))
 	{
-		Subsystem->AddMappingContext(InputMapping, 0);
+		Subsystem->AddMappingContext(BaseInputContext, 0);
+		Subsystem->AddMappingContext(WalkInputContext, 0);
 	}
 }
 
