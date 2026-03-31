@@ -1,0 +1,14 @@
+{
+    "Version": "1.2",
+    "Data": {
+        "Source": "p:\\coding\\unreal projects\\freelance-felons-2\\freelancefelonstwo\\intermediate\\build\\win64\\x64\\unrealeditor\\development\\freelancefelonstwo\\permoduleinline.gen.cpp",
+        "ProvidedModule": "",
+        "PCH": "p:\\coding\\unreal projects\\freelance-felons-2\\freelancefelonstwo\\intermediate\\build\\win64\\x64\\freelancefelonstwoeditor\\development\\unrealed\\sharedpch.unrealed.project.valapi.valexpapi.cpp20.h.pch",
+        "Includes": [
+            "p:\\coding\\unreal projects\\freelance-felons-2\\freelancefelonstwo\\intermediate\\build\\win64\\x64\\unrealeditor\\development\\freelancefelonstwo\\definitions.freelancefelonstwo.h",
+            "s:\\ue5\\ue_5.7\\engine\\source\\runtime\\core\\public\\hal\\permoduleinline.inl"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}

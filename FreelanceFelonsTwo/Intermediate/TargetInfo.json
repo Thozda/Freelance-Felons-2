@@ -1,0 +1,14 @@
+{
+	"Targets": [
+		{
+			"Name": "FreelanceFelonsTwo",
+			"Path": "..\\Source\\FreelanceFelonsTwo.Target.cs",
+			"Type": "Game"
+		},
+		{
+			"Name": "FreelanceFelonsTwoEditor",
+			"Path": "..\\Source\\FreelanceFelonsTwoEditor.Target.cs",
+			"Type": "Editor"
+		}
+	]
+}

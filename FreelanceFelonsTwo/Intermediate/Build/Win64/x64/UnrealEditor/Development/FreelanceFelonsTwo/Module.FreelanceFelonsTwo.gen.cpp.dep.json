@@ -1,0 +1,28 @@
+{
+    "Version": "1.2",
+    "Data": {
+        "Source": "p:\\coding\\unreal projects\\freelance-felons-2\\freelancefelonstwo\\intermediate\\build\\win64\\x64\\unrealeditor\\development\\freelancefelonstwo\\module.freelancefelonstwo.gen.cpp",
+        "ProvidedModule": "",
+        "PCH": "p:\\coding\\unreal projects\\freelance-felons-2\\freelancefelonstwo\\intermediate\\build\\win64\\x64\\freelancefelonstwoeditor\\development\\unrealed\\sharedpch.unrealed.project.valapi.valexpapi.cpp20.h.pch",
+        "Includes": [
+            "p:\\coding\\unreal projects\\freelance-felons-2\\freelancefelonstwo\\intermediate\\build\\win64\\x64\\unrealeditor\\development\\freelancefelonstwo\\definitions.freelancefelonstwo.h",
+            "p:\\coding\\unreal projects\\freelance-felons-2\\freelancefelonstwo\\intermediate\\build\\win64\\unrealeditor\\inc\\freelancefelonstwo\\uht\\ffcharacter.gen.cpp",
+            "p:\\coding\\unreal projects\\freelance-felons-2\\freelancefelonstwo\\source\\freelancefelonstwo\\public\\character\\ffcharacter.h",
+            "s:\\ue5\\ue_5.7\\engine\\source\\runtime\\engine\\classes\\gameframework\\character.h",
+            "s:\\ue5\\ue_5.7\\engine\\source\\runtime\\engine\\classes\\gameframework\\charactermovementreplication.h",
+            "s:\\ue5\\ue_5.7\\engine\\source\\runtime\\net\\core\\public\\net\\core\\nettoken\\nettokenexportcontext.h",
+            "s:\\ue5\\ue_5.7\\engine\\source\\runtime\\net\\iris\\public\\iris\\serialization\\irisobjectreferencepackagemap.h",
+            "s:\\ue5\\ue_5.7\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\iriscore\\uht\\irisobjectreferencepackagemap.generated.h",
+            "s:\\ue5\\ue_5.7\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\uht\\charactermovementreplication.generated.h",
+            "s:\\ue5\\ue_5.7\\engine\\source\\runtime\\engine\\classes\\gameframework\\rootmotionsource.h",
+            "s:\\ue5\\ue_5.7\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\uht\\rootmotionsource.generated.h",
+            "s:\\ue5\\ue_5.7\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\uht\\character.generated.h",
+            "p:\\coding\\unreal projects\\freelance-felons-2\\freelancefelonstwo\\intermediate\\build\\win64\\unrealeditor\\inc\\freelancefelonstwo\\uht\\ffcharacter.generated.h",
+            "s:\\ue5\\ue_5.7\\engine\\plugins\\enhancedinput\\source\\enhancedinput\\public\\inputactionvalue.h",
+            "s:\\ue5\\ue_5.7\\engine\\plugins\\enhancedinput\\intermediate\\build\\win64\\unrealeditor\\inc\\enhancedinput\\uht\\inputactionvalue.generated.h",
+            "p:\\coding\\unreal projects\\freelance-felons-2\\freelancefelonstwo\\intermediate\\build\\win64\\unrealeditor\\inc\\freelancefelonstwo\\uht\\freelancefelonstwo.init.gen.cpp"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}

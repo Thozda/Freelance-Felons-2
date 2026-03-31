@@ -1,0 +1,8 @@
+{
+	"SourceFiles": [
+		"P:\\Coding\\Unreal Projects\\Freelance-Felons-2\\FreelanceFelonsTwo\\Source\\FreelanceFelonsTwo\\FreelanceFelonsTwo.Build.cs",
+		"P:\\Coding\\Unreal Projects\\Freelance-Felons-2\\FreelanceFelonsTwo\\Source\\FreelanceFelonsTwo.Target.cs",
+		"P:\\Coding\\Unreal Projects\\Freelance-Felons-2\\FreelanceFelonsTwo\\Source\\FreelanceFelonsTwoEditor.Target.cs"
+	],
+	"EngineVersion": "5.7.4"
+}

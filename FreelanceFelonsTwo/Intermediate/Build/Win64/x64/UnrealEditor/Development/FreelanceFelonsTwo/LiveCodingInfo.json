@@ -1,0 +1,9 @@
+{
+	"RemapUnityFiles": 
+	{
+		"Module.FreelanceFelonsTwo.gen.cpp.obj": [
+			"FFCharacter.gen.cpp.obj",
+			"FreelanceFelonsTwo.init.gen.cpp.obj"
+		]
+	}
+}

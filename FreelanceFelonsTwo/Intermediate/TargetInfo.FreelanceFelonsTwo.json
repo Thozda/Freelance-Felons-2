@@ -1,0 +1,44 @@
+{
+	"Targets": [
+		{
+			"Name": "LiveLinkHub",
+			"Path": "S:\\UE5\\UE_5.7\\Engine\\Source\\Programs\\LiveLinkHub\\Source\\LiveLinkHub.Target.cs",
+			"Type": "Editor"
+		},
+		{
+			"Name": "DotNetPerforceLib",
+			"Path": "S:\\UE5\\UE_5.7\\Engine\\Source\\Programs\\Shared\\EpicGames.Perforce.Native\\DotNetPerforceLib.Target.cs",
+			"Type": "Program"
+		},
+		{
+			"Name": "IoStoreOnDemandTests",
+			"Path": "S:\\UE5\\UE_5.7\\Engine\\Source\\Runtime\\Experimental\\IoStore\\Tests\\IoStoreOnDemandTests.Target.cs",
+			"Type": "Program"
+		},
+		{
+			"Name": "EventLoopUnitTests",
+			"Path": "S:\\UE5\\UE_5.7\\Engine\\Source\\Runtime\\Online\\Experimental\\EventLoopTests\\EventLoopUnitTests.Target.cs",
+			"Type": "Program"
+		},
+		{
+			"Name": "UnrealEditor",
+			"Path": "S:\\UE5\\UE_5.7\\Engine\\Source\\UnrealEditor.Target.cs",
+			"Type": "Editor"
+		},
+		{
+			"Name": "UnrealGame",
+			"Path": "S:\\UE5\\UE_5.7\\Engine\\Source\\UnrealGame.Target.cs",
+			"Type": "Game"
+		},
+		{
+			"Name": "FreelanceFelonsTwo",
+			"Path": "..\\Source\\FreelanceFelonsTwo.Target.cs",
+			"Type": "Game"
+		},
+		{
+			"Name": "FreelanceFelonsTwoEditor",
+			"Path": "..\\Source\\FreelanceFelonsTwoEditor.Target.cs",
+			"Type": "Editor"
+		}
+	]
+}
