@@ -4,10 +4,26 @@
 #include "Character/FFCharacter.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "Camera/CameraComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "GameFramework/SpringArmComponent.h"
+#include "Kismet/KismetMathLibrary.h"
 
 AFFCharacter::AFFCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
+
+	bUseControllerRotationYaw = false;
+	
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+	GetCharacterMovement()->bUseControllerDesiredRotation = true;
+
+	CameraArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Camera Arm"));
+	CameraArm->SetupAttachment(GetRootComponent());
+	CameraArm->bUsePawnControlRotation = true;
+	
+	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
+	Camera->SetupAttachment(CameraArm);
 
 }
 
@@ -29,6 +45,9 @@ void AFFCharacter::Tick(float DeltaTime)
 
 }
 
+//
+//Input
+//
 void AFFCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
@@ -46,12 +65,32 @@ void AFFCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 void AFFCharacter::Look(const FInputActionValue& Value)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Looking"))
+	if (Controller)
+	{
+		//Current pitch plus pitch input, clamped and scaled by sensitivity
+		float Pitch = FMath::Clamp(GetControlRotation().Pitch + (Value.Get<FVector2D>().Y * MouseSensitivity), -89.f, 89.f);
+		//Current yaw plus input, scaled by sensitivity
+		float Yaw = GetControlRotation().Yaw + (Value.Get<FVector2D>().X * MouseSensitivity);
+		//Combined rotator of Pitch and Yaw
+		FRotator Direction = FRotator(Pitch, Yaw, 0.f);
+		Controller->SetControlRotation(Direction);
+	}
 }
 
 void AFFCharacter::Move(const FInputActionValue& Value)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Moving"))
+	//these are the magnitude of the controllers direction
+	float ForwardInput = -Value.Get<FVector2D>().X;
+	float RightInput = Value.Get<FVector2D>().Y;
+
+	//This is the controllers direction
+	FRotator CameraRotation = GetControlRotation();
+	FVector CameraForward = UKismetMathLibrary::GetForwardVector(CameraRotation);
+	FVector CameraRight = UKismetMathLibrary::GetRightVector(CameraRotation);
+
+	//This is the final movement vector
+	FVector Direction = CameraForward * ForwardInput + CameraRight * RightInput;
+	AddMovementInput(Direction.GetSafeNormal());
 }
 
 void AFFCharacter::JumpPressed(const FInputActionValue& Value)

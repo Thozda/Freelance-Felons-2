@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "FFCharacter.generated.h"
 
+class USpringArmComponent;
+class UCameraComponent;
 class UInputMappingContext;
 class UInputAction;
 
@@ -24,6 +26,18 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
+	//
+	//Components
+	//
+	UPROPERTY()
+	UCameraComponent* Camera;
+
+	UPROPERTY()
+	USpringArmComponent* CameraArm;
+	
+	//
+	//Input
+	//
 	UFUNCTION()
 	void Look(const FInputActionValue& Value);
 
@@ -39,6 +53,12 @@ private:
 	UFUNCTION()
 	void SneakPressed(const FInputActionValue& Value);
 
+	UPROPERTY()
+	UCharacterMovementComponent* MovementComponent;
+
+	UPROPERTY(EditAnywhere, Category="Input")
+	float MouseSensitivity = 5.f;
+	
 	UPROPERTY(EditAnywhere, Category="Input")
 	UInputMappingContext* BaseInputContext;
 	
