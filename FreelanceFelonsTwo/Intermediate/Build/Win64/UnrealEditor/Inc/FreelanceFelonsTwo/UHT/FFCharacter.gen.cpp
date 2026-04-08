@@ -22,13 +22,69 @@ ENHANCEDINPUT_API UClass* Z_Construct_UClass_UInputMappingContext_NoRegister();
 ENHANCEDINPUT_API UScriptStruct* Z_Construct_UScriptStruct_FInputActionValue();
 FREELANCEFELONSTWO_API UClass* Z_Construct_UClass_AFFCharacter();
 FREELANCEFELONSTWO_API UClass* Z_Construct_UClass_AFFCharacter_NoRegister();
+FREELANCEFELONSTWO_API UEnum* Z_Construct_UEnum_FreelanceFelonsTwo_ELocomotionState();
 UPackage* Z_Construct_UPackage__Script_FreelanceFelonsTwo();
 // ********** End Cross Module References **********************************************************
 
-// ********** Begin Class AFFCharacter Function JumpPressed ****************************************
-struct Z_Construct_UFunction_AFFCharacter_JumpPressed_Statics
+// ********** Begin Enum ELocomotionState **********************************************************
+static FEnumRegistrationInfo Z_Registration_Info_UEnum_ELocomotionState;
+static UEnum* ELocomotionState_StaticEnum()
 {
-	struct FFCharacter_eventJumpPressed_Parms
+	if (!Z_Registration_Info_UEnum_ELocomotionState.OuterSingleton)
+	{
+		Z_Registration_Info_UEnum_ELocomotionState.OuterSingleton = GetStaticEnum(Z_Construct_UEnum_FreelanceFelonsTwo_ELocomotionState, (UObject*)Z_Construct_UPackage__Script_FreelanceFelonsTwo(), TEXT("ELocomotionState"));
+	}
+	return Z_Registration_Info_UEnum_ELocomotionState.OuterSingleton;
+}
+template<> FREELANCEFELONSTWO_NON_ATTRIBUTED_API UEnum* StaticEnum<ELocomotionState>()
+{
+	return ELocomotionState_StaticEnum();
+}
+struct Z_Construct_UEnum_FreelanceFelonsTwo_ELocomotionState_Statics
+{
+#if WITH_METADATA
+	static constexpr UECodeGen_Private::FMetaDataPairParam Enum_MetaDataParams[] = {
+		{ "ELS_MAX.Name", "ELocomotionState::ELS_MAX" },
+		{ "ELS_Sneak.Name", "ELocomotionState::ELS_Sneak" },
+		{ "ELS_Sprint.Name", "ELocomotionState::ELS_Sprint" },
+		{ "ELS_Walk.Name", "ELocomotionState::ELS_Walk" },
+		{ "ModuleRelativePath", "Public/Character/FFCharacter.h" },
+	};
+#endif // WITH_METADATA
+	static constexpr UECodeGen_Private::FEnumeratorParam Enumerators[] = {
+		{ "ELocomotionState::ELS_Sneak", (int64)ELocomotionState::ELS_Sneak },
+		{ "ELocomotionState::ELS_Walk", (int64)ELocomotionState::ELS_Walk },
+		{ "ELocomotionState::ELS_Sprint", (int64)ELocomotionState::ELS_Sprint },
+		{ "ELocomotionState::ELS_MAX", (int64)ELocomotionState::ELS_MAX },
+	};
+	static const UECodeGen_Private::FEnumParams EnumParams;
+}; // struct Z_Construct_UEnum_FreelanceFelonsTwo_ELocomotionState_Statics 
+const UECodeGen_Private::FEnumParams Z_Construct_UEnum_FreelanceFelonsTwo_ELocomotionState_Statics::EnumParams = {
+	(UObject*(*)())Z_Construct_UPackage__Script_FreelanceFelonsTwo,
+	nullptr,
+	"ELocomotionState",
+	"ELocomotionState",
+	Z_Construct_UEnum_FreelanceFelonsTwo_ELocomotionState_Statics::Enumerators,
+	RF_Public|RF_Transient|RF_MarkAsNative,
+	UE_ARRAY_COUNT(Z_Construct_UEnum_FreelanceFelonsTwo_ELocomotionState_Statics::Enumerators),
+	EEnumFlags::None,
+	(uint8)UEnum::ECppForm::EnumClass,
+	METADATA_PARAMS(UE_ARRAY_COUNT(Z_Construct_UEnum_FreelanceFelonsTwo_ELocomotionState_Statics::Enum_MetaDataParams), Z_Construct_UEnum_FreelanceFelonsTwo_ELocomotionState_Statics::Enum_MetaDataParams)
+};
+UEnum* Z_Construct_UEnum_FreelanceFelonsTwo_ELocomotionState()
+{
+	if (!Z_Registration_Info_UEnum_ELocomotionState.InnerSingleton)
+	{
+		UECodeGen_Private::ConstructUEnum(Z_Registration_Info_UEnum_ELocomotionState.InnerSingleton, Z_Construct_UEnum_FreelanceFelonsTwo_ELocomotionState_Statics::EnumParams);
+	}
+	return Z_Registration_Info_UEnum_ELocomotionState.InnerSingleton;
+}
+// ********** End Enum ELocomotionState ************************************************************
+
+// ********** Begin Class AFFCharacter Function FFJump *********************************************
+struct Z_Construct_UFunction_AFFCharacter_FFJump_Statics
+{
+	struct FFCharacter_eventFFJump_Parms
 	{
 		FInputActionValue Value;
 	};
@@ -41,108 +97,48 @@ struct Z_Construct_UFunction_AFFCharacter_JumpPressed_Statics
 	};
 #endif // WITH_METADATA
 
-// ********** Begin Function JumpPressed constinit property declarations ***************************
+// ********** Begin Function FFJump constinit property declarations ********************************
 	static const UECodeGen_Private::FStructPropertyParams NewProp_Value;
 	static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
-// ********** End Function JumpPressed constinit property declarations *****************************
+// ********** End Function FFJump constinit property declarations **********************************
 	static const UECodeGen_Private::FFunctionParams FuncParams;
 };
 
-// ********** Begin Function JumpPressed Property Definitions **************************************
-const UECodeGen_Private::FStructPropertyParams Z_Construct_UFunction_AFFCharacter_JumpPressed_Statics::NewProp_Value = { "Value", nullptr, (EPropertyFlags)0x0010000008000182, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(FFCharacter_eventJumpPressed_Parms, Value), Z_Construct_UScriptStruct_FInputActionValue, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_Value_MetaData), NewProp_Value_MetaData) }; // 3592307271
-const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_AFFCharacter_JumpPressed_Statics::PropPointers[] = {
-	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_AFFCharacter_JumpPressed_Statics::NewProp_Value,
+// ********** Begin Function FFJump Property Definitions *******************************************
+const UECodeGen_Private::FStructPropertyParams Z_Construct_UFunction_AFFCharacter_FFJump_Statics::NewProp_Value = { "Value", nullptr, (EPropertyFlags)0x0010000008000182, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(FFCharacter_eventFFJump_Parms, Value), Z_Construct_UScriptStruct_FInputActionValue, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_Value_MetaData), NewProp_Value_MetaData) }; // 3592307271
+const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_AFFCharacter_FFJump_Statics::PropPointers[] = {
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_AFFCharacter_FFJump_Statics::NewProp_Value,
 };
-static_assert(UE_ARRAY_COUNT(Z_Construct_UFunction_AFFCharacter_JumpPressed_Statics::PropPointers) < 2048);
-// ********** End Function JumpPressed Property Definitions ****************************************
-const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_AFFCharacter_JumpPressed_Statics::FuncParams = { { (UObject*(*)())Z_Construct_UClass_AFFCharacter, nullptr, "JumpPressed", 	Z_Construct_UFunction_AFFCharacter_JumpPressed_Statics::PropPointers, 
-	UE_ARRAY_COUNT(Z_Construct_UFunction_AFFCharacter_JumpPressed_Statics::PropPointers), 
-sizeof(Z_Construct_UFunction_AFFCharacter_JumpPressed_Statics::FFCharacter_eventJumpPressed_Parms),
-RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x00440401, 0, 0, METADATA_PARAMS(UE_ARRAY_COUNT(Z_Construct_UFunction_AFFCharacter_JumpPressed_Statics::Function_MetaDataParams), Z_Construct_UFunction_AFFCharacter_JumpPressed_Statics::Function_MetaDataParams)},  };
-static_assert(sizeof(Z_Construct_UFunction_AFFCharacter_JumpPressed_Statics::FFCharacter_eventJumpPressed_Parms) < MAX_uint16);
-UFunction* Z_Construct_UFunction_AFFCharacter_JumpPressed()
+static_assert(UE_ARRAY_COUNT(Z_Construct_UFunction_AFFCharacter_FFJump_Statics::PropPointers) < 2048);
+// ********** End Function FFJump Property Definitions *********************************************
+const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_AFFCharacter_FFJump_Statics::FuncParams = { { (UObject*(*)())Z_Construct_UClass_AFFCharacter, nullptr, "FFJump", 	Z_Construct_UFunction_AFFCharacter_FFJump_Statics::PropPointers, 
+	UE_ARRAY_COUNT(Z_Construct_UFunction_AFFCharacter_FFJump_Statics::PropPointers), 
+sizeof(Z_Construct_UFunction_AFFCharacter_FFJump_Statics::FFCharacter_eventFFJump_Parms),
+RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x00440401, 0, 0, METADATA_PARAMS(UE_ARRAY_COUNT(Z_Construct_UFunction_AFFCharacter_FFJump_Statics::Function_MetaDataParams), Z_Construct_UFunction_AFFCharacter_FFJump_Statics::Function_MetaDataParams)},  };
+static_assert(sizeof(Z_Construct_UFunction_AFFCharacter_FFJump_Statics::FFCharacter_eventFFJump_Parms) < MAX_uint16);
+UFunction* Z_Construct_UFunction_AFFCharacter_FFJump()
 {
 	static UFunction* ReturnFunction = nullptr;
 	if (!ReturnFunction)
 	{
-		UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_AFFCharacter_JumpPressed_Statics::FuncParams);
+		UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_AFFCharacter_FFJump_Statics::FuncParams);
 	}
 	return ReturnFunction;
 }
-DEFINE_FUNCTION(AFFCharacter::execJumpPressed)
+DEFINE_FUNCTION(AFFCharacter::execFFJump)
 {
 	P_GET_STRUCT_REF(FInputActionValue,Z_Param_Out_Value);
 	P_FINISH;
 	P_NATIVE_BEGIN;
-	P_THIS->JumpPressed(Z_Param_Out_Value);
+	P_THIS->FFJump(Z_Param_Out_Value);
 	P_NATIVE_END;
 }
-// ********** End Class AFFCharacter Function JumpPressed ******************************************
+// ********** End Class AFFCharacter Function FFJump ***********************************************
 
-// ********** Begin Class AFFCharacter Function Look ***********************************************
-struct Z_Construct_UFunction_AFFCharacter_Look_Statics
+// ********** Begin Class AFFCharacter Function FFLook *********************************************
+struct Z_Construct_UFunction_AFFCharacter_FFLook_Statics
 {
-	struct FFCharacter_eventLook_Parms
-	{
-		FInputActionValue Value;
-	};
-#if WITH_METADATA
-	static constexpr UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[] = {
-#if !UE_BUILD_SHIPPING
-		{ "Comment", "//\n//Input\n//\n" },
-#endif
-		{ "ModuleRelativePath", "Public/Character/FFCharacter.h" },
-#if !UE_BUILD_SHIPPING
-		{ "ToolTip", "Input" },
-#endif
-	};
-	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_Value_MetaData[] = {
-		{ "NativeConst", "" },
-	};
-#endif // WITH_METADATA
-
-// ********** Begin Function Look constinit property declarations **********************************
-	static const UECodeGen_Private::FStructPropertyParams NewProp_Value;
-	static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
-// ********** End Function Look constinit property declarations ************************************
-	static const UECodeGen_Private::FFunctionParams FuncParams;
-};
-
-// ********** Begin Function Look Property Definitions *********************************************
-const UECodeGen_Private::FStructPropertyParams Z_Construct_UFunction_AFFCharacter_Look_Statics::NewProp_Value = { "Value", nullptr, (EPropertyFlags)0x0010000008000182, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(FFCharacter_eventLook_Parms, Value), Z_Construct_UScriptStruct_FInputActionValue, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_Value_MetaData), NewProp_Value_MetaData) }; // 3592307271
-const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_AFFCharacter_Look_Statics::PropPointers[] = {
-	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_AFFCharacter_Look_Statics::NewProp_Value,
-};
-static_assert(UE_ARRAY_COUNT(Z_Construct_UFunction_AFFCharacter_Look_Statics::PropPointers) < 2048);
-// ********** End Function Look Property Definitions ***********************************************
-const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_AFFCharacter_Look_Statics::FuncParams = { { (UObject*(*)())Z_Construct_UClass_AFFCharacter, nullptr, "Look", 	Z_Construct_UFunction_AFFCharacter_Look_Statics::PropPointers, 
-	UE_ARRAY_COUNT(Z_Construct_UFunction_AFFCharacter_Look_Statics::PropPointers), 
-sizeof(Z_Construct_UFunction_AFFCharacter_Look_Statics::FFCharacter_eventLook_Parms),
-RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x00440401, 0, 0, METADATA_PARAMS(UE_ARRAY_COUNT(Z_Construct_UFunction_AFFCharacter_Look_Statics::Function_MetaDataParams), Z_Construct_UFunction_AFFCharacter_Look_Statics::Function_MetaDataParams)},  };
-static_assert(sizeof(Z_Construct_UFunction_AFFCharacter_Look_Statics::FFCharacter_eventLook_Parms) < MAX_uint16);
-UFunction* Z_Construct_UFunction_AFFCharacter_Look()
-{
-	static UFunction* ReturnFunction = nullptr;
-	if (!ReturnFunction)
-	{
-		UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_AFFCharacter_Look_Statics::FuncParams);
-	}
-	return ReturnFunction;
-}
-DEFINE_FUNCTION(AFFCharacter::execLook)
-{
-	P_GET_STRUCT_REF(FInputActionValue,Z_Param_Out_Value);
-	P_FINISH;
-	P_NATIVE_BEGIN;
-	P_THIS->Look(Z_Param_Out_Value);
-	P_NATIVE_END;
-}
-// ********** End Class AFFCharacter Function Look *************************************************
-
-// ********** Begin Class AFFCharacter Function Move ***********************************************
-struct Z_Construct_UFunction_AFFCharacter_Move_Statics
-{
-	struct FFCharacter_eventMove_Parms
+	struct FFCharacter_eventFFLook_Parms
 	{
 		FInputActionValue Value;
 	};
@@ -155,43 +151,97 @@ struct Z_Construct_UFunction_AFFCharacter_Move_Statics
 	};
 #endif // WITH_METADATA
 
-// ********** Begin Function Move constinit property declarations **********************************
+// ********** Begin Function FFLook constinit property declarations ********************************
 	static const UECodeGen_Private::FStructPropertyParams NewProp_Value;
 	static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
-// ********** End Function Move constinit property declarations ************************************
+// ********** End Function FFLook constinit property declarations **********************************
 	static const UECodeGen_Private::FFunctionParams FuncParams;
 };
 
-// ********** Begin Function Move Property Definitions *********************************************
-const UECodeGen_Private::FStructPropertyParams Z_Construct_UFunction_AFFCharacter_Move_Statics::NewProp_Value = { "Value", nullptr, (EPropertyFlags)0x0010000008000182, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(FFCharacter_eventMove_Parms, Value), Z_Construct_UScriptStruct_FInputActionValue, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_Value_MetaData), NewProp_Value_MetaData) }; // 3592307271
-const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_AFFCharacter_Move_Statics::PropPointers[] = {
-	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_AFFCharacter_Move_Statics::NewProp_Value,
+// ********** Begin Function FFLook Property Definitions *******************************************
+const UECodeGen_Private::FStructPropertyParams Z_Construct_UFunction_AFFCharacter_FFLook_Statics::NewProp_Value = { "Value", nullptr, (EPropertyFlags)0x0010000008000182, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(FFCharacter_eventFFLook_Parms, Value), Z_Construct_UScriptStruct_FInputActionValue, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_Value_MetaData), NewProp_Value_MetaData) }; // 3592307271
+const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_AFFCharacter_FFLook_Statics::PropPointers[] = {
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_AFFCharacter_FFLook_Statics::NewProp_Value,
 };
-static_assert(UE_ARRAY_COUNT(Z_Construct_UFunction_AFFCharacter_Move_Statics::PropPointers) < 2048);
-// ********** End Function Move Property Definitions ***********************************************
-const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_AFFCharacter_Move_Statics::FuncParams = { { (UObject*(*)())Z_Construct_UClass_AFFCharacter, nullptr, "Move", 	Z_Construct_UFunction_AFFCharacter_Move_Statics::PropPointers, 
-	UE_ARRAY_COUNT(Z_Construct_UFunction_AFFCharacter_Move_Statics::PropPointers), 
-sizeof(Z_Construct_UFunction_AFFCharacter_Move_Statics::FFCharacter_eventMove_Parms),
-RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x00440401, 0, 0, METADATA_PARAMS(UE_ARRAY_COUNT(Z_Construct_UFunction_AFFCharacter_Move_Statics::Function_MetaDataParams), Z_Construct_UFunction_AFFCharacter_Move_Statics::Function_MetaDataParams)},  };
-static_assert(sizeof(Z_Construct_UFunction_AFFCharacter_Move_Statics::FFCharacter_eventMove_Parms) < MAX_uint16);
-UFunction* Z_Construct_UFunction_AFFCharacter_Move()
+static_assert(UE_ARRAY_COUNT(Z_Construct_UFunction_AFFCharacter_FFLook_Statics::PropPointers) < 2048);
+// ********** End Function FFLook Property Definitions *********************************************
+const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_AFFCharacter_FFLook_Statics::FuncParams = { { (UObject*(*)())Z_Construct_UClass_AFFCharacter, nullptr, "FFLook", 	Z_Construct_UFunction_AFFCharacter_FFLook_Statics::PropPointers, 
+	UE_ARRAY_COUNT(Z_Construct_UFunction_AFFCharacter_FFLook_Statics::PropPointers), 
+sizeof(Z_Construct_UFunction_AFFCharacter_FFLook_Statics::FFCharacter_eventFFLook_Parms),
+RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x00440401, 0, 0, METADATA_PARAMS(UE_ARRAY_COUNT(Z_Construct_UFunction_AFFCharacter_FFLook_Statics::Function_MetaDataParams), Z_Construct_UFunction_AFFCharacter_FFLook_Statics::Function_MetaDataParams)},  };
+static_assert(sizeof(Z_Construct_UFunction_AFFCharacter_FFLook_Statics::FFCharacter_eventFFLook_Parms) < MAX_uint16);
+UFunction* Z_Construct_UFunction_AFFCharacter_FFLook()
 {
 	static UFunction* ReturnFunction = nullptr;
 	if (!ReturnFunction)
 	{
-		UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_AFFCharacter_Move_Statics::FuncParams);
+		UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_AFFCharacter_FFLook_Statics::FuncParams);
 	}
 	return ReturnFunction;
 }
-DEFINE_FUNCTION(AFFCharacter::execMove)
+DEFINE_FUNCTION(AFFCharacter::execFFLook)
 {
 	P_GET_STRUCT_REF(FInputActionValue,Z_Param_Out_Value);
 	P_FINISH;
 	P_NATIVE_BEGIN;
-	P_THIS->Move(Z_Param_Out_Value);
+	P_THIS->FFLook(Z_Param_Out_Value);
 	P_NATIVE_END;
 }
-// ********** End Class AFFCharacter Function Move *************************************************
+// ********** End Class AFFCharacter Function FFLook ***********************************************
+
+// ********** Begin Class AFFCharacter Function FFMove *********************************************
+struct Z_Construct_UFunction_AFFCharacter_FFMove_Statics
+{
+	struct FFCharacter_eventFFMove_Parms
+	{
+		FInputActionValue Value;
+	};
+#if WITH_METADATA
+	static constexpr UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[] = {
+		{ "ModuleRelativePath", "Public/Character/FFCharacter.h" },
+	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_Value_MetaData[] = {
+		{ "NativeConst", "" },
+	};
+#endif // WITH_METADATA
+
+// ********** Begin Function FFMove constinit property declarations ********************************
+	static const UECodeGen_Private::FStructPropertyParams NewProp_Value;
+	static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
+// ********** End Function FFMove constinit property declarations **********************************
+	static const UECodeGen_Private::FFunctionParams FuncParams;
+};
+
+// ********** Begin Function FFMove Property Definitions *******************************************
+const UECodeGen_Private::FStructPropertyParams Z_Construct_UFunction_AFFCharacter_FFMove_Statics::NewProp_Value = { "Value", nullptr, (EPropertyFlags)0x0010000008000182, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(FFCharacter_eventFFMove_Parms, Value), Z_Construct_UScriptStruct_FInputActionValue, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_Value_MetaData), NewProp_Value_MetaData) }; // 3592307271
+const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_AFFCharacter_FFMove_Statics::PropPointers[] = {
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_AFFCharacter_FFMove_Statics::NewProp_Value,
+};
+static_assert(UE_ARRAY_COUNT(Z_Construct_UFunction_AFFCharacter_FFMove_Statics::PropPointers) < 2048);
+// ********** End Function FFMove Property Definitions *********************************************
+const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_AFFCharacter_FFMove_Statics::FuncParams = { { (UObject*(*)())Z_Construct_UClass_AFFCharacter, nullptr, "FFMove", 	Z_Construct_UFunction_AFFCharacter_FFMove_Statics::PropPointers, 
+	UE_ARRAY_COUNT(Z_Construct_UFunction_AFFCharacter_FFMove_Statics::PropPointers), 
+sizeof(Z_Construct_UFunction_AFFCharacter_FFMove_Statics::FFCharacter_eventFFMove_Parms),
+RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x00440401, 0, 0, METADATA_PARAMS(UE_ARRAY_COUNT(Z_Construct_UFunction_AFFCharacter_FFMove_Statics::Function_MetaDataParams), Z_Construct_UFunction_AFFCharacter_FFMove_Statics::Function_MetaDataParams)},  };
+static_assert(sizeof(Z_Construct_UFunction_AFFCharacter_FFMove_Statics::FFCharacter_eventFFMove_Parms) < MAX_uint16);
+UFunction* Z_Construct_UFunction_AFFCharacter_FFMove()
+{
+	static UFunction* ReturnFunction = nullptr;
+	if (!ReturnFunction)
+	{
+		UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_AFFCharacter_FFMove_Statics::FuncParams);
+	}
+	return ReturnFunction;
+}
+DEFINE_FUNCTION(AFFCharacter::execFFMove)
+{
+	P_GET_STRUCT_REF(FInputActionValue,Z_Param_Out_Value);
+	P_FINISH;
+	P_NATIVE_BEGIN;
+	P_THIS->FFMove(Z_Param_Out_Value);
+	P_NATIVE_END;
+}
+// ********** End Class AFFCharacter Function FFMove ***********************************************
 
 // ********** Begin Class AFFCharacter Function SneakPressed ***************************************
 struct Z_Construct_UFunction_AFFCharacter_SneakPressed_Statics
@@ -361,6 +411,18 @@ struct Z_Construct_UClass_AFFCharacter_Statics
 		{ "Category", "Input" },
 		{ "ModuleRelativePath", "Public/Character/FFCharacter.h" },
 	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_WalkSpeed_MetaData[] = {
+		{ "Category", "Input" },
+		{ "ModuleRelativePath", "Public/Character/FFCharacter.h" },
+	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_SprintSpeed_MetaData[] = {
+		{ "Category", "Input" },
+		{ "ModuleRelativePath", "Public/Character/FFCharacter.h" },
+	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_SneakSpeed_MetaData[] = {
+		{ "Category", "Input" },
+		{ "ModuleRelativePath", "Public/Character/FFCharacter.h" },
+	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_BaseInputContext_MetaData[] = {
 		{ "Category", "Input" },
 		{ "ModuleRelativePath", "Public/Character/FFCharacter.h" },
@@ -396,6 +458,9 @@ struct Z_Construct_UClass_AFFCharacter_Statics
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_CameraArm;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_MovementComponent;
 	static const UECodeGen_Private::FFloatPropertyParams NewProp_MouseSensitivity;
+	static const UECodeGen_Private::FFloatPropertyParams NewProp_WalkSpeed;
+	static const UECodeGen_Private::FFloatPropertyParams NewProp_SprintSpeed;
+	static const UECodeGen_Private::FFloatPropertyParams NewProp_SneakSpeed;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_BaseInputContext;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_WalkInputContext;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_LookAction;
@@ -406,17 +471,17 @@ struct Z_Construct_UClass_AFFCharacter_Statics
 	static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
 // ********** End Class AFFCharacter constinit property declarations *******************************
 	static constexpr UE::CodeGen::FClassNativeFunction Funcs[] = {
-		{ .NameUTF8 = UTF8TEXT("JumpPressed"), .Pointer = &AFFCharacter::execJumpPressed },
-		{ .NameUTF8 = UTF8TEXT("Look"), .Pointer = &AFFCharacter::execLook },
-		{ .NameUTF8 = UTF8TEXT("Move"), .Pointer = &AFFCharacter::execMove },
+		{ .NameUTF8 = UTF8TEXT("FFJump"), .Pointer = &AFFCharacter::execFFJump },
+		{ .NameUTF8 = UTF8TEXT("FFLook"), .Pointer = &AFFCharacter::execFFLook },
+		{ .NameUTF8 = UTF8TEXT("FFMove"), .Pointer = &AFFCharacter::execFFMove },
 		{ .NameUTF8 = UTF8TEXT("SneakPressed"), .Pointer = &AFFCharacter::execSneakPressed },
 		{ .NameUTF8 = UTF8TEXT("SprintPressed"), .Pointer = &AFFCharacter::execSprintPressed },
 	};
 	static UObject* (*const DependentSingletons[])();
 	static constexpr FClassFunctionLinkInfo FuncInfo[] = {
-		{ &Z_Construct_UFunction_AFFCharacter_JumpPressed, "JumpPressed" }, // 1156329996
-		{ &Z_Construct_UFunction_AFFCharacter_Look, "Look" }, // 218183905
-		{ &Z_Construct_UFunction_AFFCharacter_Move, "Move" }, // 404517745
+		{ &Z_Construct_UFunction_AFFCharacter_FFJump, "FFJump" }, // 3344478043
+		{ &Z_Construct_UFunction_AFFCharacter_FFLook, "FFLook" }, // 3979967521
+		{ &Z_Construct_UFunction_AFFCharacter_FFMove, "FFMove" }, // 987413064
 		{ &Z_Construct_UFunction_AFFCharacter_SneakPressed, "SneakPressed" }, // 2935902147
 		{ &Z_Construct_UFunction_AFFCharacter_SprintPressed, "SprintPressed" }, // 2241687653
 	};
@@ -432,6 +497,9 @@ const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AFFCharacter_S
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AFFCharacter_Statics::NewProp_CameraArm = { "CameraArm", nullptr, (EPropertyFlags)0x0040000000080008, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFFCharacter, CameraArm), Z_Construct_UClass_USpringArmComponent_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_CameraArm_MetaData), NewProp_CameraArm_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AFFCharacter_Statics::NewProp_MovementComponent = { "MovementComponent", nullptr, (EPropertyFlags)0x0040000000080008, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFFCharacter, MovementComponent), Z_Construct_UClass_UCharacterMovementComponent_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_MovementComponent_MetaData), NewProp_MovementComponent_MetaData) };
 const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_AFFCharacter_Statics::NewProp_MouseSensitivity = { "MouseSensitivity", nullptr, (EPropertyFlags)0x0040000000000001, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFFCharacter, MouseSensitivity), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_MouseSensitivity_MetaData), NewProp_MouseSensitivity_MetaData) };
+const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_AFFCharacter_Statics::NewProp_WalkSpeed = { "WalkSpeed", nullptr, (EPropertyFlags)0x0040000000000001, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFFCharacter, WalkSpeed), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_WalkSpeed_MetaData), NewProp_WalkSpeed_MetaData) };
+const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_AFFCharacter_Statics::NewProp_SprintSpeed = { "SprintSpeed", nullptr, (EPropertyFlags)0x0040000000000001, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFFCharacter, SprintSpeed), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_SprintSpeed_MetaData), NewProp_SprintSpeed_MetaData) };
+const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_AFFCharacter_Statics::NewProp_SneakSpeed = { "SneakSpeed", nullptr, (EPropertyFlags)0x0040000000000001, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFFCharacter, SneakSpeed), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_SneakSpeed_MetaData), NewProp_SneakSpeed_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AFFCharacter_Statics::NewProp_BaseInputContext = { "BaseInputContext", nullptr, (EPropertyFlags)0x0040000000000001, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFFCharacter, BaseInputContext), Z_Construct_UClass_UInputMappingContext_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_BaseInputContext_MetaData), NewProp_BaseInputContext_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AFFCharacter_Statics::NewProp_WalkInputContext = { "WalkInputContext", nullptr, (EPropertyFlags)0x0040000000000001, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFFCharacter, WalkInputContext), Z_Construct_UClass_UInputMappingContext_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_WalkInputContext_MetaData), NewProp_WalkInputContext_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AFFCharacter_Statics::NewProp_LookAction = { "LookAction", nullptr, (EPropertyFlags)0x0040000000000001, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFFCharacter, LookAction), Z_Construct_UClass_UInputAction_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_LookAction_MetaData), NewProp_LookAction_MetaData) };
@@ -444,6 +512,9 @@ const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_AFFCharac
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFFCharacter_Statics::NewProp_CameraArm,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFFCharacter_Statics::NewProp_MovementComponent,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFFCharacter_Statics::NewProp_MouseSensitivity,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFFCharacter_Statics::NewProp_WalkSpeed,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFFCharacter_Statics::NewProp_SprintSpeed,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFFCharacter_Statics::NewProp_SneakSpeed,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFFCharacter_Statics::NewProp_BaseInputContext,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFFCharacter_Statics::NewProp_WalkInputContext,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFFCharacter_Statics::NewProp_LookAction,
@@ -494,15 +565,18 @@ AFFCharacter::~AFFCharacter() {}
 // ********** Begin Registration *******************************************************************
 struct Z_CompiledInDeferFile_FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Character_FFCharacter_h__Script_FreelanceFelonsTwo_Statics
 {
+	static constexpr FEnumRegisterCompiledInInfo EnumInfo[] = {
+		{ ELocomotionState_StaticEnum, TEXT("ELocomotionState"), &Z_Registration_Info_UEnum_ELocomotionState, CONSTRUCT_RELOAD_VERSION_INFO(FEnumReloadVersionInfo, 1162864551U) },
+	};
 	static constexpr FClassRegisterCompiledInInfo ClassInfo[] = {
-		{ Z_Construct_UClass_AFFCharacter, AFFCharacter::StaticClass, TEXT("AFFCharacter"), &Z_Registration_Info_UClass_AFFCharacter, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(AFFCharacter), 2431083225U) },
+		{ Z_Construct_UClass_AFFCharacter, AFFCharacter::StaticClass, TEXT("AFFCharacter"), &Z_Registration_Info_UClass_AFFCharacter, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(AFFCharacter), 1812472788U) },
 	};
 }; // Z_CompiledInDeferFile_FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Character_FFCharacter_h__Script_FreelanceFelonsTwo_Statics 
-static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Character_FFCharacter_h__Script_FreelanceFelonsTwo_3712950471{
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Character_FFCharacter_h__Script_FreelanceFelonsTwo_3965897791{
 	TEXT("/Script/FreelanceFelonsTwo"),
 	Z_CompiledInDeferFile_FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Character_FFCharacter_h__Script_FreelanceFelonsTwo_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Character_FFCharacter_h__Script_FreelanceFelonsTwo_Statics::ClassInfo),
 	nullptr, 0,
-	nullptr, 0,
+	Z_CompiledInDeferFile_FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Character_FFCharacter_h__Script_FreelanceFelonsTwo_Statics::EnumInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Character_FFCharacter_h__Script_FreelanceFelonsTwo_Statics::EnumInfo),
 };
 // ********** End Registration *********************************************************************
 

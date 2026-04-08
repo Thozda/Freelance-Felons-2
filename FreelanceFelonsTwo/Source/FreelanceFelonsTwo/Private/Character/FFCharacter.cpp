@@ -47,23 +47,29 @@ void AFFCharacter::Tick(float DeltaTime)
 
 //
 //Input
-//
+
+/**
+ *	enhanced input callbacks call key pressed or released functions for sprinting and sneaking
+ *	these functions call a setter for the locomotion state enum
+ *	that setter calls a function containing a switch statement
+ *	the switch statement calls the actioning function of the most recent input
+ */
+
 void AFFCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
 	{
-		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ThisClass::Look);
-		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ThisClass::Move);
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ThisClass::JumpPressed);
+		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ThisClass::FFLook);
+		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ThisClass::FFMove);
+		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ThisClass::FFJump);
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Triggered, this, &ThisClass::SprintPressed);
 		EnhancedInputComponent->BindAction(SneakAction, ETriggerEvent::Triggered, this, &ThisClass::SneakPressed);
 	}
 }
 
-
-void AFFCharacter::Look(const FInputActionValue& Value)
+void AFFCharacter::FFLook(const FInputActionValue& Value)
 {
 	if (Controller)
 	{
@@ -77,7 +83,7 @@ void AFFCharacter::Look(const FInputActionValue& Value)
 	}
 }
 
-void AFFCharacter::Move(const FInputActionValue& Value)
+void AFFCharacter::FFMove(const FInputActionValue& Value)
 {
 	//these are the magnitude of the controllers direction
 	float ForwardInput = -Value.Get<FVector2D>().X;
@@ -93,17 +99,85 @@ void AFFCharacter::Move(const FInputActionValue& Value)
 	AddMovementInput(Direction.GetSafeNormal());
 }
 
-void AFFCharacter::JumpPressed(const FInputActionValue& Value)
+void AFFCharacter::FFJump(const FInputActionValue& Value)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Jumping"))
+	Jump();
 }
 
 void AFFCharacter::SprintPressed(const FInputActionValue& Value)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Sprinting"))
+	if (LocomotionState != ELocomotionState::ELS_Sprint)
+	{
+		SetLocomotionState(ELocomotionState::ELS_Sprint);
+	}
+	else 
+	{
+		SetLocomotionState(ELocomotionState::ELS_Walk);
+	}
 }
 
 void AFFCharacter::SneakPressed(const FInputActionValue& Value)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Sneaking"))
+	if (LocomotionState != ELocomotionState::ELS_Sneak)
+	{
+		SetLocomotionState(ELocomotionState::ELS_Sneak);
+	}
+	else 
+	{
+		SetLocomotionState(ELocomotionState::ELS_Walk);
+	}
+}
+
+void AFFCharacter::SetLocomotionState(ELocomotionState NewState)
+{
+	ELocomotionState OldState = LocomotionState;
+	LocomotionState = NewState;
+
+	if (OldState != NewState)
+	{
+		SwitchLocomotion();
+	}
+}
+
+void AFFCharacter::SwitchLocomotion()
+{
+	switch (LocomotionState)
+	{
+	case ELocomotionState::ELS_Walk:
+		FFWalk();
+		break;
+	case ELocomotionState::ELS_Sprint:
+		FFSprint();
+		break;
+	case ELocomotionState::ELS_Sneak:
+		FFSneak();
+		break;
+	}
+}
+
+void AFFCharacter::FFWalk()
+{
+	MovementComponent = MovementComponent == nullptr ? GetCharacterMovement() : MovementComponent;
+	if (MovementComponent)
+	{
+		MovementComponent->MaxWalkSpeed = WalkSpeed;
+	}
+}
+
+void AFFCharacter::FFSprint()
+{
+	MovementComponent = MovementComponent == nullptr ? GetCharacterMovement() : MovementComponent;
+	if (MovementComponent)
+	{
+		MovementComponent->MaxWalkSpeed = SprintSpeed;
+	}
+}
+
+void AFFCharacter::FFSneak()
+{
+	MovementComponent = MovementComponent == nullptr ? GetCharacterMovement() : MovementComponent;
+	if (MovementComponent)
+	{
+		MovementComponent->MaxWalkSpeed = SneakSpeed;
+	}
 }

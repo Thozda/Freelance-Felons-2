@@ -11,6 +11,16 @@ class UCameraComponent;
 class UInputMappingContext;
 class UInputAction;
 
+UENUM()
+enum class ELocomotionState : uint8
+{
+	ELS_Sneak,
+	ELS_Walk,
+	ELS_Sprint,
+
+	ELS_MAX
+};
+
 UCLASS()
 class FREELANCEFELONSTWO_API AFFCharacter : public ACharacter
 {
@@ -38,14 +48,20 @@ private:
 	//
 	//Input
 	//
-	UFUNCTION()
-	void Look(const FInputActionValue& Value);
+	void SetLocomotionState(ELocomotionState NewState);
+	void SwitchLocomotion();
+	void FFWalk();
+	void FFSprint();
+	void FFSneak();
 
 	UFUNCTION()
-	void Move(const FInputActionValue& Value);
+	void FFLook(const FInputActionValue& Value);
 
 	UFUNCTION()
-	void JumpPressed(const FInputActionValue& Value);
+	void FFMove(const FInputActionValue& Value);
+
+	UFUNCTION()
+	void FFJump(const FInputActionValue& Value);
 
 	UFUNCTION()
 	void SprintPressed(const FInputActionValue& Value);
@@ -56,8 +72,19 @@ private:
 	UPROPERTY()
 	UCharacterMovementComponent* MovementComponent;
 
+	ELocomotionState LocomotionState = ELocomotionState::ELS_Walk;
+	
 	UPROPERTY(EditAnywhere, Category="Input")
 	float MouseSensitivity = 5.f;
+	
+	UPROPERTY(EditAnywhere, Category="Input")
+	float WalkSpeed = 600.f;
+	
+	UPROPERTY(EditAnywhere, Category="Input")
+	float SprintSpeed = 900.f;
+	
+	UPROPERTY(EditAnywhere, Category="Input")
+	float SneakSpeed = 400.f;
 	
 	UPROPERTY(EditAnywhere, Category="Input")
 	UInputMappingContext* BaseInputContext;
