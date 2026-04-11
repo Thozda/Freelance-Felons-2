@@ -1,0 +1,7 @@
+[21140:3980:0410/182224.625:WARNING:chrome_main_delegate.cc(745)] This is Chrome version 128.0.6613.138 (not a warning)
+[21140:3980:0410/182224.819:WARNING:account_consistency_mode_manager.cc(77)] Desktop Identity Consistency cannot be enabled as no OAuth client ID and client secret have been configured.
+[21140:3980:0410/182427.793:ERROR:network_service_instance_impl.cc(608)] Network service crashed, restarting service.
+[7980:40192:0410/182428.657:ERROR:frame_impl.cc(537)] frame 5-7C526FF01A38325B3E0EF90C0ED3349D connection timeout
+[21140:3980:0410/182431.434:ERROR:device_event_log_impl.cc(196)] [18:24:30.839] USB: usb_service_win.cc:105 SetupDiGetDeviceProperty({{A45C254E-DF1C-4EFD-8020-67D146A850E0}, 6}) failed: Element not found. (0x490)
+[21140:3980:0410/185742.455:ERROR:device_event_log_impl.cc(196)] [18:57:42.385] USB: usb_service_win.cc:105 SetupDiGetDeviceProperty({{A45C254E-DF1C-4EFD-8020-67D146A850E0}, 6}) failed: Element not found. (0x490)
+[21140:3980:0410/200746.060:WARNING:pref_notifier_impl.cc(41)] Pref observer for media_router.cast_allow_all_ips found at shutdown.
