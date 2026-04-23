@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "FFCharacter.generated.h"
 
+class UFFAnimInstance;
 class USpringArmComponent;
 class UCameraComponent;
 class UInputMappingContext;
@@ -17,6 +18,7 @@ enum class ELocomotionState : uint8
 	ELS_Sneak,
 	ELS_Walk,
 	ELS_Sprint,
+	ELS_Jump,
 
 	ELS_MAX
 };
@@ -34,6 +36,7 @@ public:
 	
 protected:
 	virtual void BeginPlay() override;
+	virtual void Landed(const FHitResult& Hit) override;
 
 private:
 	//
@@ -44,6 +47,9 @@ private:
 
 	UPROPERTY()
 	USpringArmComponent* CameraArm;
+
+	UPROPERTY()
+	USkeletalMeshComponent* MetahumanBody;
 	
 	//
 	//Input
@@ -53,7 +59,12 @@ private:
 	void FFWalk();
 	void FFSprint();
 	void FFSneak();
+	void FFJump();
+	void FFInteract();
+	void FFVehicleInteract();
 
+	void AutoCancelSprint();
+	
 	UFUNCTION()
 	void FFLook(const FInputActionValue& Value);
 
@@ -61,18 +72,19 @@ private:
 	void FFMove(const FInputActionValue& Value);
 
 	UFUNCTION()
-	void FFJump(const FInputActionValue& Value);
-
-	UFUNCTION()
 	void SprintPressed(const FInputActionValue& Value);
 
 	UFUNCTION()
 	void SneakPressed(const FInputActionValue& Value);
 
+	UFUNCTION()
+	void JumpPressed(const FInputActionValue& Value);
+
 	UPROPERTY()
 	UCharacterMovementComponent* MovementComponent;
 
 	ELocomotionState LocomotionState = ELocomotionState::ELS_Walk;
+	ELocomotionState PreJumpLocomotionState = ELocomotionState::ELS_Walk;
 	
 	UPROPERTY(EditAnywhere, Category="Input")
 	float MouseSensitivity = 5.f;
@@ -106,5 +118,33 @@ private:
 
 	UPROPERTY(EditAnywhere, Category="Input")
 	UInputAction* SneakAction;
+
+	UPROPERTY(EditAnywhere, Category="Input")
+	UInputAction* InteractAction;
+
+	UPROPERTY(EditAnywhere, Category="Input")
+	UInputAction* VehicleInteractAction;
+
+	//
+	//Animation
+	//
+	void CheckIsFalling();
+
+	//
+	//Interact
+	//
+	TArray<AActor*> GetInteractableActorsInRange();
+	float InteractRadius = 100;
+
+	//
+	//Utility
+	//
+	AActor* GetClosestActorInArray(TArray<AActor*> Actors);
+	
+public:
+	float GetSpeed() const;
+	bool GetIsSneaking() const;
+	bool GetIsJumping() const;
+	bool GetIsFalling();
 
 };

@@ -1,5 +1,14 @@
 {
 	"RemapUnityFiles": 
 	{
+		"Module.FreelanceFelonsTwo.gen.cpp.obj": [
+			"FFAnimInstance.gen.cpp.obj",
+			"FFCar.gen.cpp.obj",
+			"FFCharacter.gen.cpp.obj",
+			"FFPlayerController.gen.cpp.obj",
+			"FFVehicle.gen.cpp.obj",
+			"FreelanceFelonsTwo.init.gen.cpp.obj",
+			"InteractInterface.gen.cpp.obj"
+		]
 	}
 }

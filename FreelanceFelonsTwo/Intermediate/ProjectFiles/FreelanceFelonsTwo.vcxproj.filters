@@ -45,8 +45,38 @@
     <Filter Include="Source\FreelanceFelonsTwo\Private\Character">
       <UniqueIdentifier>{8AA2703D-EF9B-35CD-A383-5B9B562A835A}</UniqueIdentifier>
     </Filter>
+    <ClCompile Include="..\..\Source\FreelanceFelonsTwo\Private\Character\FFAnimInstance.cpp">
+      <Filter>Source\FreelanceFelonsTwo\Private\Character</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\FreelanceFelonsTwo\Private\Character\FFCharacter.cpp">
       <Filter>Source\FreelanceFelonsTwo\Private\Character</Filter>
+    </ClCompile>
+    <Filter Include="Source\FreelanceFelonsTwo\Private\Controller">
+      <UniqueIdentifier>{58544CD7-CA30-35FB-BC19-CCF22D997ED5}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\FreelanceFelonsTwo\Private\Controller\FFPlayerController.cpp">
+      <Filter>Source\FreelanceFelonsTwo\Private\Controller</Filter>
+    </ClCompile>
+    <Filter Include="Source\FreelanceFelonsTwo\Private\GameMode">
+      <UniqueIdentifier>{A8E774A1-D85F-3168-8DC2-2DCA4CD22E49}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\FreelanceFelonsTwo\Private\GameMode\FFGameModeBase.cpp">
+      <Filter>Source\FreelanceFelonsTwo\Private\GameMode</Filter>
+    </ClCompile>
+    <Filter Include="Source\FreelanceFelonsTwo\Private\Interface">
+      <UniqueIdentifier>{CC7D97BF-E3A9-3E4B-AA25-8A26F5313ADB}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\FreelanceFelonsTwo\Private\Interface\InteractInterface.cpp">
+      <Filter>Source\FreelanceFelonsTwo\Private\Interface</Filter>
+    </ClCompile>
+    <Filter Include="Source\FreelanceFelonsTwo\Private\Vehicle">
+      <UniqueIdentifier>{7FFE9967-9F46-3DFC-8476-59ECEEBC39A1}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\FreelanceFelonsTwo\Private\Vehicle\FFCar.cpp">
+      <Filter>Source\FreelanceFelonsTwo\Private\Vehicle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\FreelanceFelonsTwo\Private\Vehicle\FFVehicle.cpp">
+      <Filter>Source\FreelanceFelonsTwo\Private\Vehicle</Filter>
     </ClCompile>
     <Filter Include="Source\FreelanceFelonsTwo\Public">
       <UniqueIdentifier>{CC16C61D-EA3C-3061-9995-A0F299AA869D}</UniqueIdentifier>
@@ -54,8 +84,38 @@
     <Filter Include="Source\FreelanceFelonsTwo\Public\Character">
       <UniqueIdentifier>{BF2C6D16-2090-3F03-BC5B-796334620BEA}</UniqueIdentifier>
     </Filter>
+    <ClInclude Include="..\..\Source\FreelanceFelonsTwo\Public\Character\FFAnimInstance.h">
+      <Filter>Source\FreelanceFelonsTwo\Public\Character</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\FreelanceFelonsTwo\Public\Character\FFCharacter.h">
       <Filter>Source\FreelanceFelonsTwo\Public\Character</Filter>
+    </ClInclude>
+    <Filter Include="Source\FreelanceFelonsTwo\Public\Controller">
+      <UniqueIdentifier>{5EF501CB-77B2-325D-B175-9F8F1268D752}</UniqueIdentifier>
+    </Filter>
+    <ClInclude Include="..\..\Source\FreelanceFelonsTwo\Public\Controller\FFPlayerController.h">
+      <Filter>Source\FreelanceFelonsTwo\Public\Controller</Filter>
+    </ClInclude>
+    <Filter Include="Source\FreelanceFelonsTwo\Public\GameMode">
+      <UniqueIdentifier>{ECE0FAEC-533A-308F-9052-675F2B76141B}</UniqueIdentifier>
+    </Filter>
+    <ClInclude Include="..\..\Source\FreelanceFelonsTwo\Public\GameMode\FFGameModeBase.h">
+      <Filter>Source\FreelanceFelonsTwo\Public\GameMode</Filter>
+    </ClInclude>
+    <Filter Include="Source\FreelanceFelonsTwo\Public\Interface">
+      <UniqueIdentifier>{4E0C0A8E-A534-3E51-81DA-2B21D384D0C5}</UniqueIdentifier>
+    </Filter>
+    <ClInclude Include="..\..\Source\FreelanceFelonsTwo\Public\Interface\InteractInterface.h">
+      <Filter>Source\FreelanceFelonsTwo\Public\Interface</Filter>
+    </ClInclude>
+    <Filter Include="Source\FreelanceFelonsTwo\Public\Vehicle">
+      <UniqueIdentifier>{669B57CD-D167-3C18-9C6D-FE1DFAD0398D}</UniqueIdentifier>
+    </Filter>
+    <ClInclude Include="..\..\Source\FreelanceFelonsTwo\Public\Vehicle\FFCar.h">
+      <Filter>Source\FreelanceFelonsTwo\Public\Vehicle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\FreelanceFelonsTwo\Public\Vehicle\FFVehicle.h">
+      <Filter>Source\FreelanceFelonsTwo\Public\Vehicle</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

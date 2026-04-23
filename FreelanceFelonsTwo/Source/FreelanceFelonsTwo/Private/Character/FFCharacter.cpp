@@ -7,7 +7,9 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Interface/InteractInterface.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 AFFCharacter::AFFCharacter()
 {
@@ -26,7 +28,7 @@ AFFCharacter::AFFCharacter()
 	Camera->SetupAttachment(CameraArm);
 
 }
-
+ 
 void AFFCharacter::BeginPlay()
 {
 	Super::BeginPlay();
@@ -43,11 +45,13 @@ void AFFCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	AutoCancelSprint();
+	CheckIsFalling();
 }
 
 //
 //Input
-
+//
 /**
  *	enhanced input callbacks call key pressed or released functions for sprinting and sneaking
  *	these functions call a setter for the locomotion state enum
@@ -66,6 +70,8 @@ void AFFCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ThisClass::FFJump);
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Triggered, this, &ThisClass::SprintPressed);
 		EnhancedInputComponent->BindAction(SneakAction, ETriggerEvent::Triggered, this, &ThisClass::SneakPressed);
+		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &ThisClass::FFInteract);
+		EnhancedInputComponent->BindAction(VehicleInteractAction, ETriggerEvent::Triggered, this, &ThisClass::FFVehicleInteract);
 	}
 }
 
@@ -91,17 +97,13 @@ void AFFCharacter::FFMove(const FInputActionValue& Value)
 
 	//This is the controllers direction
 	FRotator CameraRotation = GetControlRotation();
+	CameraRotation.Pitch = 0.f;
 	FVector CameraForward = UKismetMathLibrary::GetForwardVector(CameraRotation);
 	FVector CameraRight = UKismetMathLibrary::GetRightVector(CameraRotation);
 
 	//This is the final movement vector
 	FVector Direction = CameraForward * ForwardInput + CameraRight * RightInput;
 	AddMovementInput(Direction.GetSafeNormal());
-}
-
-void AFFCharacter::FFJump(const FInputActionValue& Value)
-{
-	Jump();
 }
 
 void AFFCharacter::SprintPressed(const FInputActionValue& Value)
@@ -128,6 +130,16 @@ void AFFCharacter::SneakPressed(const FInputActionValue& Value)
 	}
 }
 
+void AFFCharacter::JumpPressed(const FInputActionValue& Value)
+{
+	if (LocomotionState != ELocomotionState::ELS_Jump)
+	{
+		PreJumpLocomotionState = LocomotionState;
+	}
+	
+	SetLocomotionState(ELocomotionState::ELS_Jump);
+}
+
 void AFFCharacter::SetLocomotionState(ELocomotionState NewState)
 {
 	ELocomotionState OldState = LocomotionState;
@@ -151,6 +163,9 @@ void AFFCharacter::SwitchLocomotion()
 		break;
 	case ELocomotionState::ELS_Sneak:
 		FFSneak();
+		break;
+	case ELocomotionState::ELS_Jump:
+		FFJump();
 		break;
 	}
 }
@@ -180,4 +195,134 @@ void AFFCharacter::FFSneak()
 	{
 		MovementComponent->MaxWalkSpeed = SneakSpeed;
 	}
+}
+
+void AFFCharacter::FFJump()
+{
+	Jump();
+}
+
+void AFFCharacter::CheckIsFalling()
+{
+	if (GetIsFalling())
+	{
+		
+		if (LocomotionState != ELocomotionState::ELS_Jump)
+		{
+			PreJumpLocomotionState = LocomotionState;
+		}
+
+		SetLocomotionState(ELocomotionState::ELS_Jump);
+	}
+}
+
+void AFFCharacter::Landed(const FHitResult& Hit)
+{
+	Super::Landed(Hit);
+
+	SetLocomotionState(PreJumpLocomotionState);
+}
+
+void AFFCharacter::AutoCancelSprint()
+{
+	if (GetSpeed() <= 50.f && LocomotionState == ELocomotionState::ELS_Sprint)
+	{
+		SetLocomotionState(ELocomotionState::ELS_Walk);
+	}
+}
+
+//
+//Interact
+//
+void AFFCharacter::FFInteract()
+{
+	TArray<AActor*> InteractableActors = GetInteractableActorsInRange();
+	AActor* ClosestInteractableActor = GetClosestActorInArray(InteractableActors);
+	IInteractInterface* InteractTarget = Cast<IInteractInterface>(ClosestInteractableActor);
+	if (InteractTarget)
+	{
+		InteractTarget->Interact(this);
+	}
+}
+
+void AFFCharacter::FFVehicleInteract()
+{
+	TArray<AActor*> InteractableActors = GetInteractableActorsInRange();
+	AActor* ClosestInteractableActor = GetClosestActorInArray(InteractableActors);
+	IInteractInterface* InteractTarget = Cast<IInteractInterface>(ClosestInteractableActor);
+	if (InteractTarget)
+	{
+		InteractTarget->VehicleInteract(this);
+	}
+}
+
+TArray<AActor*> AFFCharacter::GetInteractableActorsInRange()
+{
+	TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypeQuery;
+	UClass* ActorClassFilter = nullptr;
+	TArray<AActor*> ActorsToIgnore;
+	TArray<AActor*> ActorsInRange;
+	UKismetSystemLibrary::SphereOverlapActors(this,
+		GetActorLocation(),
+		InteractRadius,
+		ObjectTypeQuery,
+		ActorClassFilter,
+		ActorsToIgnore,
+		ActorsInRange)
+	;
+
+	TArray<AActor*> InteractableActors;
+	for (AActor* Actor : ActorsInRange)
+	{
+		if (Cast<IInteractInterface>(Actor))
+		{
+			InteractableActors.AddUnique(Actor);
+		}
+	}
+
+	return InteractableActors;
+}
+
+//
+//Getters & Setters
+//
+float AFFCharacter::GetSpeed() const
+{
+	return GetVelocity().Size2D();
+}
+
+bool AFFCharacter::GetIsSneaking() const
+{
+	return LocomotionState == ELocomotionState::ELS_Sneak;
+}
+
+bool AFFCharacter::GetIsJumping() const
+{
+	return LocomotionState == ELocomotionState::ELS_Jump;
+}
+
+bool AFFCharacter::GetIsFalling()
+{
+	MovementComponent = MovementComponent == nullptr ? GetCharacterMovement() : MovementComponent;
+	return MovementComponent && MovementComponent->IsFalling();
+}
+
+AActor* AFFCharacter::GetClosestActorInArray(TArray<AActor*> Actors)
+{
+	AActor* Closest = nullptr;
+	for (AActor* Actor : Actors)
+	{
+		if (Actor != nullptr && Closest != nullptr)
+		{
+			if (GetDistanceTo(Actor) < GetDistanceTo(Closest))
+			{
+				Closest = Actor;
+			}
+		}
+		else if (Actor != nullptr)
+		{
+			Closest = Actor;
+		}
+	}
+	return Closest;
 }

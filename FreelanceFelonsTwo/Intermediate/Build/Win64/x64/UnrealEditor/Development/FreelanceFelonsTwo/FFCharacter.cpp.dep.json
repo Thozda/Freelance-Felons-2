@@ -67,9 +67,15 @@
             "s:\\ue5\\ue_5.7\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\uht\\charactermovementcomponent.generated.h",
             "s:\\ue5\\ue_5.7\\engine\\source\\runtime\\engine\\classes\\gameframework\\springarmcomponent.h",
             "s:\\ue5\\ue_5.7\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\uht\\springarmcomponent.generated.h",
+            "p:\\coding\\unreal projects\\freelance-felons-2\\freelancefelonstwo\\source\\freelancefelonstwo\\public\\interface\\interactinterface.h",
+            "p:\\coding\\unreal projects\\freelance-felons-2\\freelancefelonstwo\\intermediate\\build\\win64\\unrealeditor\\inc\\freelancefelonstwo\\uht\\interactinterface.generated.h",
             "s:\\ue5\\ue_5.7\\engine\\source\\runtime\\engine\\classes\\kismet\\kismetmathlibrary.h",
             "s:\\ue5\\ue_5.7\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\uht\\kismetmathlibrary.generated.h",
-            "s:\\ue5\\ue_5.7\\engine\\source\\runtime\\engine\\classes\\kismet\\kismetmathlibrary.inl"
+            "s:\\ue5\\ue_5.7\\engine\\source\\runtime\\engine\\classes\\kismet\\kismetmathlibrary.inl",
+            "s:\\ue5\\ue_5.7\\engine\\source\\runtime\\engine\\classes\\kismet\\kismetsystemlibrary.h",
+            "s:\\ue5\\ue_5.7\\engine\\source\\runtime\\coreuobject\\public\\uobject\\propertyaccessutil.h",
+            "s:\\ue5\\ue_5.7\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\coreuobject\\uht\\propertyaccessutil.generated.h",
+            "s:\\ue5\\ue_5.7\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\uht\\kismetsystemlibrary.generated.h"
         ],
         "ImportedModules": [],
         "ImportedHeaderUnits": []
