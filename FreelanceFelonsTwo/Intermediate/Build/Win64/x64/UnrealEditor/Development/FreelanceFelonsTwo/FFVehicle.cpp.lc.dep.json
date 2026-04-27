@@ -18,7 +18,13 @@
             "s:\\ue5\\ue_5.7\\engine\\source\\runtime\\engine\\classes\\camera\\cameracomponent.h",
             "s:\\ue5\\ue_5.7\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\uht\\cameracomponent.generated.h",
             "s:\\ue5\\ue_5.7\\engine\\source\\runtime\\engine\\classes\\gameframework\\springarmcomponent.h",
-            "s:\\ue5\\ue_5.7\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\uht\\springarmcomponent.generated.h"
+            "s:\\ue5\\ue_5.7\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\uht\\springarmcomponent.generated.h",
+            "s:\\ue5\\ue_5.7\\engine\\source\\runtime\\engine\\classes\\kismet\\gameplaystatics.h",
+            "s:\\ue5\\ue_5.7\\engine\\source\\runtime\\engine\\classes\\sound\\dialoguetypes.h",
+            "s:\\ue5\\ue_5.7\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\uht\\dialoguetypes.generated.h",
+            "s:\\ue5\\ue_5.7\\engine\\source\\runtime\\engine\\classes\\kismet\\gameplaystaticstypes.h",
+            "s:\\ue5\\ue_5.7\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\uht\\gameplaystaticstypes.generated.h",
+            "s:\\ue5\\ue_5.7\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\uht\\gameplaystatics.generated.h"
         ],
         "ImportedModules": [],
         "ImportedHeaderUnits": []

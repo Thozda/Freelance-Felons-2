@@ -5,6 +5,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "Camera/CameraComponent.h"
+#include "Controller/FFPlayerController.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Interface/InteractInterface.h"
@@ -32,13 +33,6 @@ AFFCharacter::AFFCharacter()
 void AFFCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
-	if (UEnhancedInputLocalPlayerSubsystem* Subsystem =
-		ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetWorld()->GetFirstLocalPlayerFromController()))
-	{
-		Subsystem->AddMappingContext(BaseInputContext, 0);
-		Subsystem->AddMappingContext(WalkInputContext, 0);
-	}
 }
 
 void AFFCharacter::Tick(float DeltaTime)
@@ -77,8 +71,11 @@ void AFFCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 void AFFCharacter::FFLook(const FInputActionValue& Value)
 {
-	if (Controller)
+	if (Controller && Cast<AFFPlayerController>(Controller))
 	{
+		AFFPlayerController* FFPlayerController = Cast<AFFPlayerController>(Controller);
+		const float MouseSensitivity = FFPlayerController->GetMouseSensitivity();
+		
 		//Current pitch plus pitch input, clamped and scaled by sensitivity
 		float Pitch = FMath::Clamp(GetControlRotation().Pitch + (Value.Get<FVector2D>().Y * MouseSensitivity), -89.f, 89.f);
 		//Current yaw plus input, scaled by sensitivity
@@ -262,7 +259,8 @@ TArray<AActor*> AFFCharacter::GetInteractableActorsInRange()
 	UClass* ActorClassFilter = nullptr;
 	TArray<AActor*> ActorsToIgnore;
 	TArray<AActor*> ActorsInRange;
-	UKismetSystemLibrary::SphereOverlapActors(this,
+	UKismetSystemLibrary::SphereOverlapActors(
+		this,
 		GetActorLocation(),
 		InteractRadius,
 		ObjectTypeQuery,

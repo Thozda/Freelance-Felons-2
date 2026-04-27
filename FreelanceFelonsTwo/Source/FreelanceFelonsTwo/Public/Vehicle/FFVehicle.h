@@ -11,6 +11,7 @@ class USceneComponent;
 class UCameraComponent;
 class USpringArmComponent;
 class UStaticMeshComponent;
+class UInputAction;
 
 UENUM()
 enum class EVehicleState : uint8
@@ -56,7 +57,7 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	virtual void VehicleInteract(AActor* Instigator) override;
+	virtual void VehicleInteract(APawn* Instigator) override;
 
 protected:
 	virtual void BeginPlay() override;
@@ -75,8 +76,14 @@ protected:
 	float MaxEntryDistance = 130.f;
 
 private:
+	//
+	//Player
+	//
 	UPROPERTY()
-	AActor* InstigatorCharacter = nullptr;
+	APawn* InstigatorCharacter = nullptr;
+
+	UPROPERTY()
+	APlayerController* PlayerController;
 	
 	//
 	//Components
@@ -92,12 +99,18 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* Body;
+	
+	UPROPERTY(VisibleAnywhere)
+	USceneComponent* CharacterSocket;
 
+	//Doors
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* LeftDoor;
 
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent* LeftDoorTracePoint;
+	
+	FDoorData DriversDoorData;
 	
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* RightDoor;
@@ -105,6 +118,10 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent* RightDoorTracePoint;
 	
+	UPROPERTY()
+	TArray<FDoorData> Doors;
+
+	//Wheels
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* FrontLeftWheel;
 
@@ -117,9 +134,38 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* RearRightWheel;
 
-	UPROPERTY()
-	TArray<FDoorData> Doors;
+	//
+	//Input
+	//
+	void FFInteract();
+	void FFVehicleInteract();
+	void FFHandbreak();
+	
+	UFUNCTION()
+	void FFLook(const FInputActionValue& Value);
 
+	UFUNCTION()
+	void FFMove(const FInputActionValue& Value);
+
+	UPROPERTY(EditAnywhere, Category="Input")
+	UInputAction* LookAction;
+
+	UPROPERTY(EditAnywhere, Category="Input")
+	UInputAction* MoveAction;
+
+	UPROPERTY(EditAnywhere, Category="Input")
+	UInputAction* InteractAction;
+
+	UPROPERTY(EditAnywhere, Category="Input")
+	UInputAction* VehicleInteractAction;
+
+	UPROPERTY(EditAnywhere, Category="Input")
+	UInputAction* HandbreakAction;
+
+	//
+	//Utility
+	//
+	void PossessVehicle();
 
 public:
 	

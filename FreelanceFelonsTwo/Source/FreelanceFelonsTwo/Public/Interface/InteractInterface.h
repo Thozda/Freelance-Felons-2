@@ -18,6 +18,6 @@ class FREELANCEFELONSTWO_API IInteractInterface
 
 	
 public:
-	virtual void Interact(AActor* InteractInstigator);
-	virtual void VehicleInteract(AActor* InteractInstigator);
+	virtual void Interact(APawn* InteractInstigator);
+	virtual void VehicleInteract(APawn* InteractInstigator);
 };

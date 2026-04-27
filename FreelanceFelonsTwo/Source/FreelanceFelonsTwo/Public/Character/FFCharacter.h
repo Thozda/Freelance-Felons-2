@@ -87,9 +87,6 @@ private:
 	ELocomotionState PreJumpLocomotionState = ELocomotionState::ELS_Walk;
 	
 	UPROPERTY(EditAnywhere, Category="Input")
-	float MouseSensitivity = 5.f;
-	
-	UPROPERTY(EditAnywhere, Category="Input")
 	float WalkSpeed = 600.f;
 	
 	UPROPERTY(EditAnywhere, Category="Input")
@@ -97,12 +94,6 @@ private:
 	
 	UPROPERTY(EditAnywhere, Category="Input")
 	float SneakSpeed = 400.f;
-	
-	UPROPERTY(EditAnywhere, Category="Input")
-	UInputMappingContext* BaseInputContext;
-	
-	UPROPERTY(EditAnywhere, Category="Input")
-	UInputMappingContext* WalkInputContext;
 	
 	UPROPERTY(EditAnywhere, Category="Input")
 	UInputAction* LookAction;

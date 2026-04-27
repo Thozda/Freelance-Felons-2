@@ -3,10 +3,10 @@
 
 #include "Interface/InteractInterface.h"
 
-void IInteractInterface::Interact(AActor* InteractInstigator)
+void IInteractInterface::Interact(APawn* InteractInstigator)
 {
 }
 
-void IInteractInterface::VehicleInteract(AActor* InteractInstigator)
+void IInteractInterface::VehicleInteract(APawn* InteractInstigator)
 {
 }

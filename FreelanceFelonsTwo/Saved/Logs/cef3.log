@@ -1,5 +1,7 @@
-[4820:23116:0423/200942.026:WARNING:chrome_main_delegate.cc(745)] This is Chrome version 128.0.6613.138 (not a warning)
-[4820:23116:0423/200942.208:WARNING:account_consistency_mode_manager.cc(77)] Desktop Identity Consistency cannot be enabled as no OAuth client ID and client secret have been configured.
-[4820:23116:0423/200950.585:ERROR:device_event_log_impl.cc(196)] [20:09:50.214] USB: usb_service_win.cc:105 SetupDiGetDeviceProperty({{A45C254E-DF1C-4EFD-8020-67D146A850E0}, 6}) failed: Element not found. (0x490)
-[18396:30884:0423/200952.792:WARNING:frame_impl.cc(430)] virtual CefFrameImpl::SendProcessMessage sent to detached frame 5-007173BCF6CA8C5D8A374B001C710345 will be ignored
-[4820:23116:0423/203705.354:WARNING:pref_notifier_impl.cc(41)] Pref observer for media_router.cast_allow_all_ips found at shutdown.
+[26644:21748:0427/185852.955:WARNING:chrome_main_delegate.cc(745)] This is Chrome version 128.0.6613.138 (not a warning)
+[26644:21748:0427/185853.057:WARNING:account_consistency_mode_manager.cc(77)] Desktop Identity Consistency cannot be enabled as no OAuth client ID and client secret have been configured.
+[26644:21748:0427/185901.242:ERROR:device_event_log_impl.cc(196)] [18:59:01.032] USB: usb_service_win.cc:105 SetupDiGetDeviceProperty({{A45C254E-DF1C-4EFD-8020-67D146A850E0}, 6}) failed: Element not found. (0x490)
+[20484:8248:0427/185903.456:WARNING:frame_impl.cc(430)] virtual CefFrameImpl::SendProcessMessage sent to detached frame 5-5D70AA87D0385E5E78CAD0745F91C4FB will be ignored
+[15728:4776:0427/193225.340:ERROR:angle_platform_impl.cc(44)] Renderer11.cpp:2280 (virtual rx::Renderer11::testDeviceLost): The D3D11 device was removed, HRESULT: 0x887A0007
+[15728:4776:0427/193225.359:ERROR:shared_context_state.cc(1244)] SharedContextState context lost via ARB/EXT_robustness. Reset status = GL_UNKNOWN_CONTEXT_RESET_KHR
+[15728:4776:0427/193225.362:ERROR:gpu_service_impl.cc(1164)] Exiting GPU process because some drivers can't recover from errors. GPU process will restart shortly.
