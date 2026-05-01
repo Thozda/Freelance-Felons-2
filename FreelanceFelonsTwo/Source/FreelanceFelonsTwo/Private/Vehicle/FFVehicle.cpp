@@ -5,7 +5,9 @@
 
 #include "EnhancedInputComponent.h"
 #include "Camera/CameraComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "Controller/FFPlayerController.h"
+#include "GameFramework/Character.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -27,8 +29,11 @@ AFFVehicle::AFFVehicle()
 	Body = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Body"));
 	Body->SetupAttachment(GetRootComponent());
 
-	CharacterSocket = CreateDefaultSubobject<USceneComponent>(TEXT("CharacterSocket"));
-	CharacterSocket->SetupAttachment(GetRootComponent());
+	CharacterSocketLeft = CreateDefaultSubobject<USceneComponent>(TEXT("CharacterSocketLeft"));
+	CharacterSocketLeft->SetupAttachment(GetRootComponent());
+
+	CharacterSocketRight = CreateDefaultSubobject<USceneComponent>(TEXT("CharacterSocketRight"));
+	CharacterSocketRight->SetupAttachment(GetRootComponent());
 
 	//
 	//Doors
@@ -39,7 +44,6 @@ AFFVehicle::AFFVehicle()
 	LeftDoorTracePoint->SetupAttachment(LeftDoor);
 	DriversDoorData.DoorMesh = LeftDoor;
 	DriversDoorData.TracePoint = LeftDoorTracePoint;
-	DriversDoorData.DoorSide = EDoorSide::EDS_LeftSide;
 	Doors.Add(DriversDoorData);
 
 	RightDoor = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RightDoor"));
@@ -49,7 +53,6 @@ AFFVehicle::AFFVehicle()
 	FDoorData RightDoorData;
 	RightDoorData.DoorMesh = RightDoor;
 	RightDoorData.TracePoint = RightDoorTracePoint;
-	RightDoorData.DoorSide = EDoorSide::EDS_RightSide;
 	Doors.Add(RightDoorData);
 	
 	//
@@ -232,7 +235,7 @@ bool AFFVehicle::NoDoorObstacles(const FDoorData& Door)
 			this,
 			Start,
 			End,
-			FVector(10.f, 75.f, 50.f),
+			FVector(10.f, 100.f, 50.f),
 			Door.TracePoint->GetComponentRotation(),
 			TraceTypeQuery1,
 			false,
@@ -249,46 +252,64 @@ void AFFVehicle::Enter(const FDoorData& Door)
 {
 	//Check if vehicle is parked or has NPC to take care of
 	//work out animations depending on door player is using
-	//does an NPC need spawning
-	//transfer controller
+	//To enable timing control, NPC spawning and PossessVehicle() handles by notifies on car enter animations
 	//vehicle state to transition
-	
-	PlayerController = PlayerController == nullptr ? UGameplayStatics::GetPlayerController(this, 0) : PlayerController;
-	if (PlayerController == nullptr) return;
+
+	bool bShouldReturn = EnterMontage == nullptr ||
+		Cast<ACharacter>(InstigatorCharacter) == nullptr ||
+		Cast<ACharacter>(InstigatorCharacter)->GetMesh() == nullptr ||
+		Cast<ACharacter>(InstigatorCharacter)->GetCapsuleComponent() == nullptr ||
+		LeftDoor == nullptr;
+	if (bShouldReturn) return;
+
+	CurrentDoor = Door.DoorMesh;
+	EnteringDriversDoor = CurrentDoor == LeftDoor;
+	USkeletalMeshComponent* CharacterMesh = Cast<ACharacter>(InstigatorCharacter)->GetMesh();
+	UCapsuleComponent* CharacterCapsule = Cast<ACharacter>(InstigatorCharacter)->GetCapsuleComponent();
 	
 	switch (VehicleState)
 	{
 	case EVehicleState::EVS_Parked:
-		//which door is the player at
-		//what length of time before drivable
+		//which door is the player at - correct animation
 		
 		VehicleState = EVehicleState::EVS_Transition;
-		PossessVehicle();
+		CharacterMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		CharacterCapsule->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		//PossessVehicle();
 		
-		if (Door.DoorSide == EDoorSide::EDS_LeftSide) //Getting in Drivers Side
+		if (Door.DoorMesh == LeftDoor) //Getting in Drivers Side
 		{
-		
+			InstigatorCharacter->AttachToComponent(CharacterSocketLeft, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+			CharacterMesh->GetAnimInstance()->Montage_Play(EnterMontage);
+			CharacterMesh->GetAnimInstance()->Montage_JumpToSection(FName("DriverParked"), EnterMontage);
 		}
 		else //Passenger Side
 		{
-		
+			InstigatorCharacter->AttachToComponent(CharacterSocketRight, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+			CharacterMesh->GetAnimInstance()->Montage_Play(EnterMontage);
+			CharacterMesh->GetAnimInstance()->Montage_JumpToSection(FName("PassengerParked"), EnterMontage);
 		}
 		
 		break;
 	case EVehicleState::EVS_Traffic:
-		//spawn NPC - animate getting out drivers side
 		//Which side is the player getting in from
 		
 		VehicleState = EVehicleState::EVS_Transition;
-		PossessVehicle();
+		CharacterMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		CharacterCapsule->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		//PossessVehicle();
 		
-		if (Door.DoorSide == EDoorSide::EDS_LeftSide) //Getting in Drivers Side
+		if (Door.DoorMesh == LeftDoor) //Getting in Drivers Side
 		{
-		
+			InstigatorCharacter->AttachToComponent(CharacterSocketLeft, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+			CharacterMesh->GetAnimInstance()->Montage_Play(EnterMontage);
+			CharacterMesh->GetAnimInstance()->Montage_JumpToSection(FName("OpenDriverDoor"), EnterMontage);
 		}
 		else //Passenger Side
 		{
-		
+			InstigatorCharacter->AttachToComponent(CharacterSocketRight, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+			CharacterMesh->GetAnimInstance()->Montage_Play(EnterMontage);
+			CharacterMesh->GetAnimInstance()->Montage_JumpToSection(FName("PassengerParked"), EnterMontage);
 		}
 		
 		break;
@@ -297,7 +318,9 @@ void AFFVehicle::Enter(const FDoorData& Door)
 
 void AFFVehicle::PossessVehicle()
 {
-	//Player Controller Checked before Function call to ensure state not preemptivly changed.
+	PlayerController = PlayerController == nullptr ? UGameplayStatics::GetPlayerController(this, 0) : PlayerController;
+	if (PlayerController == nullptr) return;
+
 	PlayerController->Possess(this);
 	AFFPlayerController* FFPlayerController = Cast<AFFPlayerController>(PlayerController);
 	if (FFPlayerController)
@@ -306,11 +329,11 @@ void AFFVehicle::PossessVehicle()
 	}
 	
 	VehicleState = EVehicleState::EVS_Player;
+	AnimateDoorEntryClose();
 	
-	if (InstigatorCharacter && CharacterSocket)
+	if (InstigatorCharacter && CharacterSocketLeft)
 	{
-		InstigatorCharacter->AttachToComponent(CharacterSocket, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
-		InstigatorCharacter->SetActorEnableCollision(false);
+		InstigatorCharacter->AttachToComponent(CharacterSocketLeft, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 		InstigatorCharacter->SetActorHiddenInGame(true);
 	}
 }
@@ -320,22 +343,45 @@ void AFFVehicle::Exit()
 	if (!NoDoorObstacles(DriversDoorData)) return; //Door Blocked - Exit Cancelled
 	
 	//Get player - ensure can be possessed
-	VehicleState = EVehicleState::EVS_Transition;
 	PlayerController = PlayerController == nullptr ? UGameplayStatics::GetPlayerController(this, 0) : PlayerController;
-
-	if (InstigatorCharacter && PlayerController)
+	
+	if (InstigatorCharacter && PlayerController && Cast<ACharacter>(InstigatorCharacter)->GetMesh() && Cast<ACharacter>(InstigatorCharacter)->GetCapsuleComponent())
 	{
+		VehicleState = EVehicleState::EVS_Transition;
+
+		//Open door before showing player
+		CurrentDoor = DriversDoorData.DoorMesh;
+		EnteringDriversDoor = true;
+		AnimateDoorExitOpen();
+	}
+}
+
+void AFFVehicle::CharacterExit()
+{
+	//Called after the door has been opened for the character to get out
+	PlayerController = PlayerController == nullptr ? UGameplayStatics::GetPlayerController(this, 0) : PlayerController;
+	USkeletalMeshComponent* CharacterMesh = Cast<ACharacter>(InstigatorCharacter)->GetMesh();
+	UCapsuleComponent* CharacterCapsule = Cast<ACharacter>(InstigatorCharacter)->GetCapsuleComponent();
+	
+	if (InstigatorCharacter && PlayerController && CharacterMesh && CharacterCapsule)
+	{
+		//Show the character, enable collision and play exit animation
+		InstigatorCharacter->SetActorHiddenInGame(false);
+		InstigatorCharacter->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		InstigatorCharacter->SetActorRotation(FRotator(0.f, GetActorRotation().Yaw - 90.f, 0.f));
+		CharacterCapsule->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+		CharacterMesh->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+		CharacterMesh->GetAnimInstance()->Montage_Play(ExitAnim);
+		
 		PlayerController->Possess(InstigatorCharacter);
+		
 		AFFPlayerController* FFPlayerController = Cast<AFFPlayerController>(PlayerController);
 		if (FFPlayerController)
 		{
 			FFPlayerController->SetWalkInput();
+			FFPlayerController->SetControlRotation(FRotator(0.f, InstigatorCharacter->GetActorRotation().Yaw - 180.f, 0.f));
 		}
+		
 		VehicleState = EVehicleState::EVS_Parked;
-		
-		InstigatorCharacter->SetActorEnableCollision(true);
-		InstigatorCharacter->SetActorHiddenInGame(false);
-		InstigatorCharacter->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
-		
 	}
 }

@@ -2,8 +2,9 @@
 
 
 #include "Controller/FFPlayerController.h"
-
 #include "EnhancedInputSubsystems.h"
+#include "Character/FFCharacter.h"
+#include "Vehicle/FFVehicle.h"
 
 void AFFPlayerController::BeginPlay()
 {
@@ -34,5 +35,44 @@ void AFFPlayerController::SetVehicleInput()
 	{
 		Subsystem->RemoveMappingContext(WalkInputContext);
 		Subsystem->AddMappingContext(VehicleInputContext, 0);
+	}
+}
+
+void AFFPlayerController::VehiclePossess()
+{
+	AFFCharacter* FFCharacter = Cast<AFFCharacter>(GetPawn());
+	if (FFCharacter)
+	{
+		AFFVehicle* FFVehicle = Cast<AFFVehicle>(FFCharacter->GetLatestVehicleInteraction());
+		if (FFVehicle)
+		{
+			FFVehicle->PossessVehicle();
+		}
+	}
+}
+
+void AFFPlayerController::EntryAnimationDoor()
+{
+	AFFCharacter* FFCharacter = Cast<AFFCharacter>(GetPawn());
+	if (FFCharacter)
+	{
+		AFFVehicle* FFVehicle = Cast<AFFVehicle>(FFCharacter->GetLatestVehicleInteraction());
+		if (FFVehicle)
+		{
+			FFVehicle->AnimateDoorEntry();
+		}
+	}
+}
+
+void AFFPlayerController::ExitAnimationDoor()
+{
+	AFFCharacter* FFCharacter = Cast<AFFCharacter>(GetPawn());
+	if (FFCharacter)
+	{
+		AFFVehicle* FFVehicle = Cast<AFFVehicle>(FFCharacter->GetLatestVehicleInteraction());
+		if (FFVehicle)
+		{
+			FFVehicle->AnimateDoorEntryClose();
+		}
 	}
 }

@@ -23,6 +23,14 @@ public:
 	void SetWalkInput();
 	void SetVehicleInput();
 
+	//
+	//Vehicles
+	//
+	void VehiclePossess();
+
+	void EntryAnimationDoor();
+	void ExitAnimationDoor();
+
 protected:
 	virtual void BeginPlay() override;
 

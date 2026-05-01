@@ -19,7 +19,7 @@ struct FInputActionValue;
 
 // ********** Begin ScriptStruct FDoorData *********************************************************
 struct Z_Construct_UScriptStruct_FDoorData_Statics;
-#define FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Vehicle_FFVehicle_h_39_GENERATED_BODY \
+#define FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Vehicle_FFVehicle_h_31_GENERATED_BODY \
 	friend struct ::Z_Construct_UScriptStruct_FDoorData_Statics; \
 	FREELANCEFELONSTWO_API static class UScriptStruct* StaticStruct();
 
@@ -28,15 +28,17 @@ struct FDoorData;
 // ********** End ScriptStruct FDoorData ***********************************************************
 
 // ********** Begin Class AFFVehicle ***************************************************************
-#define FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Vehicle_FFVehicle_h_53_RPC_WRAPPERS_NO_PURE_DECLS \
+#define FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Vehicle_FFVehicle_h_44_RPC_WRAPPERS_NO_PURE_DECLS \
 	DECLARE_FUNCTION(execFFMove); \
-	DECLARE_FUNCTION(execFFLook);
+	DECLARE_FUNCTION(execFFLook); \
+	DECLARE_FUNCTION(execCharacterExit);
 
 
+#define FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Vehicle_FFVehicle_h_44_CALLBACK_WRAPPERS
 struct Z_Construct_UClass_AFFVehicle_Statics;
 FREELANCEFELONSTWO_API UClass* Z_Construct_UClass_AFFVehicle_NoRegister();
 
-#define FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Vehicle_FFVehicle_h_53_INCLASS_NO_PURE_DECLS \
+#define FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Vehicle_FFVehicle_h_44_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesAFFVehicle(); \
 	friend struct ::Z_Construct_UClass_AFFVehicle_Statics; \
@@ -48,7 +50,7 @@ public: \
 	virtual UObject* _getUObject() const override { return const_cast<AFFVehicle*>(this); }
 
 
-#define FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Vehicle_FFVehicle_h_53_ENHANCED_CONSTRUCTORS \
+#define FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Vehicle_FFVehicle_h_44_ENHANCED_CONSTRUCTORS \
 	/** Deleted move- and copy-constructors, should never be used */ \
 	AFFVehicle(AFFVehicle&&) = delete; \
 	AFFVehicle(const AFFVehicle&) = delete; \
@@ -58,13 +60,14 @@ public: \
 	NO_API virtual ~AFFVehicle();
 
 
-#define FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Vehicle_FFVehicle_h_50_PROLOG
-#define FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Vehicle_FFVehicle_h_53_GENERATED_BODY \
+#define FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Vehicle_FFVehicle_h_41_PROLOG
+#define FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Vehicle_FFVehicle_h_44_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Vehicle_FFVehicle_h_53_RPC_WRAPPERS_NO_PURE_DECLS \
-	FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Vehicle_FFVehicle_h_53_INCLASS_NO_PURE_DECLS \
-	FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Vehicle_FFVehicle_h_53_ENHANCED_CONSTRUCTORS \
+	FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Vehicle_FFVehicle_h_44_RPC_WRAPPERS_NO_PURE_DECLS \
+	FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Vehicle_FFVehicle_h_44_CALLBACK_WRAPPERS \
+	FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Vehicle_FFVehicle_h_44_INCLASS_NO_PURE_DECLS \
+	FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Vehicle_FFVehicle_h_44_ENHANCED_CONSTRUCTORS \
 private: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
@@ -87,15 +90,5 @@ enum class EVehicleState : uint8;
 template<> struct TIsUEnumClass<EVehicleState> { enum { Value = true }; };
 template<> FREELANCEFELONSTWO_NON_ATTRIBUTED_API UEnum* StaticEnum<EVehicleState>();
 // ********** End Enum EVehicleState ***************************************************************
-
-// ********** Begin Enum EDoorSide *****************************************************************
-#define FOREACH_ENUM_EDOORSIDE(op) \
-	op(EDoorSide::EDS_LeftSide) \
-	op(EDoorSide::EDS_RightSide) 
-
-enum class EDoorSide : uint8;
-template<> struct TIsUEnumClass<EDoorSide> { enum { Value = true }; };
-template<> FREELANCEFELONSTWO_NON_ATTRIBUTED_API UEnum* StaticEnum<EDoorSide>();
-// ********** End Enum EDoorSide *******************************************************************
 
 PRAGMA_ENABLE_DEPRECATION_WARNINGS

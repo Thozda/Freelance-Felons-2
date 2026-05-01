@@ -127,6 +127,8 @@ private:
 	TArray<AActor*> GetInteractableActorsInRange();
 	float InteractRadius = 100;
 
+	AActor* LatestVehicleInteraction;
+
 	//
 	//Utility
 	//
@@ -137,5 +139,6 @@ public:
 	bool GetIsSneaking() const;
 	bool GetIsJumping() const;
 	bool GetIsFalling();
+	FORCEINLINE AActor* GetLatestVehicleInteraction() const { return LatestVehicleInteraction; }
 
 };

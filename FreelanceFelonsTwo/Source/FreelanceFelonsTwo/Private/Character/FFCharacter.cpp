@@ -249,6 +249,7 @@ void AFFCharacter::FFVehicleInteract()
 	IInteractInterface* InteractTarget = Cast<IInteractInterface>(ClosestInteractableActor);
 	if (InteractTarget)
 	{
+		LatestVehicleInteraction = ClosestInteractableActor;
 		InteractTarget->VehicleInteract(this);
 	}
 }

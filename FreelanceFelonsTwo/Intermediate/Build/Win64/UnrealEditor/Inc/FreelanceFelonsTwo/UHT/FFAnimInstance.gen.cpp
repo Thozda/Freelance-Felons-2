@@ -20,6 +20,111 @@ FREELANCEFELONSTWO_API UClass* Z_Construct_UClass_UFFAnimInstance_NoRegister();
 UPackage* Z_Construct_UPackage__Script_FreelanceFelonsTwo();
 // ********** End Cross Module References **********************************************************
 
+// ********** Begin Class UFFAnimInstance Function DoorEnterAnimation ******************************
+struct Z_Construct_UFunction_UFFAnimInstance_DoorEnterAnimation_Statics
+{
+#if WITH_METADATA
+	static constexpr UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[] = {
+		{ "ModuleRelativePath", "Public/Character/FFAnimInstance.h" },
+	};
+#endif // WITH_METADATA
+
+// ********** Begin Function DoorEnterAnimation constinit property declarations ********************
+// ********** End Function DoorEnterAnimation constinit property declarations **********************
+	static const UECodeGen_Private::FFunctionParams FuncParams;
+};
+const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_UFFAnimInstance_DoorEnterAnimation_Statics::FuncParams = { { (UObject*(*)())Z_Construct_UClass_UFFAnimInstance, nullptr, "DoorEnterAnimation", 	nullptr, 
+	0, 
+0,
+RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04020401, 0, 0, METADATA_PARAMS(UE_ARRAY_COUNT(Z_Construct_UFunction_UFFAnimInstance_DoorEnterAnimation_Statics::Function_MetaDataParams), Z_Construct_UFunction_UFFAnimInstance_DoorEnterAnimation_Statics::Function_MetaDataParams)},  };
+UFunction* Z_Construct_UFunction_UFFAnimInstance_DoorEnterAnimation()
+{
+	static UFunction* ReturnFunction = nullptr;
+	if (!ReturnFunction)
+	{
+		UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_UFFAnimInstance_DoorEnterAnimation_Statics::FuncParams);
+	}
+	return ReturnFunction;
+}
+DEFINE_FUNCTION(UFFAnimInstance::execDoorEnterAnimation)
+{
+	P_FINISH;
+	P_NATIVE_BEGIN;
+	P_THIS->DoorEnterAnimation();
+	P_NATIVE_END;
+}
+// ********** End Class UFFAnimInstance Function DoorEnterAnimation ********************************
+
+// ********** Begin Class UFFAnimInstance Function DoorExitAnimation *******************************
+struct Z_Construct_UFunction_UFFAnimInstance_DoorExitAnimation_Statics
+{
+#if WITH_METADATA
+	static constexpr UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[] = {
+		{ "ModuleRelativePath", "Public/Character/FFAnimInstance.h" },
+	};
+#endif // WITH_METADATA
+
+// ********** Begin Function DoorExitAnimation constinit property declarations *********************
+// ********** End Function DoorExitAnimation constinit property declarations ***********************
+	static const UECodeGen_Private::FFunctionParams FuncParams;
+};
+const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_UFFAnimInstance_DoorExitAnimation_Statics::FuncParams = { { (UObject*(*)())Z_Construct_UClass_UFFAnimInstance, nullptr, "DoorExitAnimation", 	nullptr, 
+	0, 
+0,
+RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04020401, 0, 0, METADATA_PARAMS(UE_ARRAY_COUNT(Z_Construct_UFunction_UFFAnimInstance_DoorExitAnimation_Statics::Function_MetaDataParams), Z_Construct_UFunction_UFFAnimInstance_DoorExitAnimation_Statics::Function_MetaDataParams)},  };
+UFunction* Z_Construct_UFunction_UFFAnimInstance_DoorExitAnimation()
+{
+	static UFunction* ReturnFunction = nullptr;
+	if (!ReturnFunction)
+	{
+		UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_UFFAnimInstance_DoorExitAnimation_Statics::FuncParams);
+	}
+	return ReturnFunction;
+}
+DEFINE_FUNCTION(UFFAnimInstance::execDoorExitAnimation)
+{
+	P_FINISH;
+	P_NATIVE_BEGIN;
+	P_THIS->DoorExitAnimation();
+	P_NATIVE_END;
+}
+// ********** End Class UFFAnimInstance Function DoorExitAnimation *********************************
+
+// ********** Begin Class UFFAnimInstance Function VehiclePossess **********************************
+struct Z_Construct_UFunction_UFFAnimInstance_VehiclePossess_Statics
+{
+#if WITH_METADATA
+	static constexpr UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[] = {
+		{ "ModuleRelativePath", "Public/Character/FFAnimInstance.h" },
+	};
+#endif // WITH_METADATA
+
+// ********** Begin Function VehiclePossess constinit property declarations ************************
+// ********** End Function VehiclePossess constinit property declarations **************************
+	static const UECodeGen_Private::FFunctionParams FuncParams;
+};
+const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_UFFAnimInstance_VehiclePossess_Statics::FuncParams = { { (UObject*(*)())Z_Construct_UClass_UFFAnimInstance, nullptr, "VehiclePossess", 	nullptr, 
+	0, 
+0,
+RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04020401, 0, 0, METADATA_PARAMS(UE_ARRAY_COUNT(Z_Construct_UFunction_UFFAnimInstance_VehiclePossess_Statics::Function_MetaDataParams), Z_Construct_UFunction_UFFAnimInstance_VehiclePossess_Statics::Function_MetaDataParams)},  };
+UFunction* Z_Construct_UFunction_UFFAnimInstance_VehiclePossess()
+{
+	static UFunction* ReturnFunction = nullptr;
+	if (!ReturnFunction)
+	{
+		UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_UFFAnimInstance_VehiclePossess_Statics::FuncParams);
+	}
+	return ReturnFunction;
+}
+DEFINE_FUNCTION(UFFAnimInstance::execVehiclePossess)
+{
+	P_FINISH;
+	P_NATIVE_BEGIN;
+	P_THIS->VehiclePossess();
+	P_NATIVE_END;
+}
+// ********** End Class UFFAnimInstance Function VehiclePossess ************************************
+
 // ********** Begin Class UFFAnimInstance **********************************************************
 FClassRegistrationInfo Z_Registration_Info_UClass_UFFAnimInstance;
 UClass* UFFAnimInstance::GetPrivateStaticClass()
@@ -93,7 +198,18 @@ struct Z_Construct_UClass_UFFAnimInstance_Statics
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_FFCharacter;
 	static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
 // ********** End Class UFFAnimInstance constinit property declarations ****************************
+	static constexpr UE::CodeGen::FClassNativeFunction Funcs[] = {
+		{ .NameUTF8 = UTF8TEXT("DoorEnterAnimation"), .Pointer = &UFFAnimInstance::execDoorEnterAnimation },
+		{ .NameUTF8 = UTF8TEXT("DoorExitAnimation"), .Pointer = &UFFAnimInstance::execDoorExitAnimation },
+		{ .NameUTF8 = UTF8TEXT("VehiclePossess"), .Pointer = &UFFAnimInstance::execVehiclePossess },
+	};
 	static UObject* (*const DependentSingletons[])();
+	static constexpr FClassFunctionLinkInfo FuncInfo[] = {
+		{ &Z_Construct_UFunction_UFFAnimInstance_DoorEnterAnimation, "DoorEnterAnimation" }, // 781577376
+		{ &Z_Construct_UFunction_UFFAnimInstance_DoorExitAnimation, "DoorExitAnimation" }, // 3753133564
+		{ &Z_Construct_UFunction_UFFAnimInstance_VehiclePossess, "VehiclePossess" }, // 1321658338
+	};
+	static_assert(UE_ARRAY_COUNT(FuncInfo) < 2048);
 	static constexpr FCppClassTypeInfoStatic StaticCppClassTypeInfo = {
 		TCppClassTypeTraits<UFFAnimInstance>::IsAbstract,
 	};
@@ -137,11 +253,11 @@ const UECodeGen_Private::FClassParams Z_Construct_UClass_UFFAnimInstance_Statics
 	nullptr,
 	&StaticCppClassTypeInfo,
 	DependentSingletons,
-	nullptr,
+	FuncInfo,
 	Z_Construct_UClass_UFFAnimInstance_Statics::PropPointers,
 	nullptr,
 	UE_ARRAY_COUNT(DependentSingletons),
-	0,
+	UE_ARRAY_COUNT(FuncInfo),
 	UE_ARRAY_COUNT(Z_Construct_UClass_UFFAnimInstance_Statics::PropPointers),
 	0,
 	0x009000A8u,
@@ -149,6 +265,8 @@ const UECodeGen_Private::FClassParams Z_Construct_UClass_UFFAnimInstance_Statics
 };
 void UFFAnimInstance::StaticRegisterNativesUFFAnimInstance()
 {
+	UClass* Class = UFFAnimInstance::StaticClass();
+	FNativeFunctionRegistrar::RegisterFunctions(Class, MakeConstArrayView(Z_Construct_UClass_UFFAnimInstance_Statics::Funcs));
 }
 UClass* Z_Construct_UClass_UFFAnimInstance()
 {
@@ -167,10 +285,10 @@ UFFAnimInstance::~UFFAnimInstance() {}
 struct Z_CompiledInDeferFile_FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Character_FFAnimInstance_h__Script_FreelanceFelonsTwo_Statics
 {
 	static constexpr FClassRegisterCompiledInInfo ClassInfo[] = {
-		{ Z_Construct_UClass_UFFAnimInstance, UFFAnimInstance::StaticClass, TEXT("UFFAnimInstance"), &Z_Registration_Info_UClass_UFFAnimInstance, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(UFFAnimInstance), 1627048035U) },
+		{ Z_Construct_UClass_UFFAnimInstance, UFFAnimInstance::StaticClass, TEXT("UFFAnimInstance"), &Z_Registration_Info_UClass_UFFAnimInstance, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(UFFAnimInstance), 2988261999U) },
 	};
 }; // Z_CompiledInDeferFile_FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Character_FFAnimInstance_h__Script_FreelanceFelonsTwo_Statics 
-static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Character_FFAnimInstance_h__Script_FreelanceFelonsTwo_2229187881{
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Character_FFAnimInstance_h__Script_FreelanceFelonsTwo_2009449435{
 	TEXT("/Script/FreelanceFelonsTwo"),
 	Z_CompiledInDeferFile_FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Character_FFAnimInstance_h__Script_FreelanceFelonsTwo_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Character_FFAnimInstance_h__Script_FreelanceFelonsTwo_Statics::ClassInfo),
 	nullptr, 0,

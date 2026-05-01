@@ -12,6 +12,7 @@ class UCameraComponent;
 class USpringArmComponent;
 class UStaticMeshComponent;
 class UInputAction;
+class UAnimMontage;
 
 UENUM()
 enum class EVehicleState : uint8
@@ -22,15 +23,6 @@ enum class EVehicleState : uint8
 	EVS_Player,
 
 	EVS_MAX
-};
-
-UENUM()
-enum class EDoorSide : uint8
-{
-	EDS_LeftSide,
-	EDS_RightSide,
-
-	EDS_MAX
 };
 
 USTRUCT()
@@ -44,7 +36,6 @@ struct FDoorData
 	UPROPERTY()
 	USceneComponent* TracePoint;
 
-	EDoorSide DoorSide;
 };
 
 UCLASS()
@@ -58,6 +49,20 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual void VehicleInteract(APawn* Instigator) override;
+	
+	void PossessVehicle();
+
+	UFUNCTION(BlueprintCallable)
+	void CharacterExit();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void AnimateDoorEntry();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void AnimateDoorEntryClose();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void AnimateDoorExitOpen();
 
 protected:
 	virtual void BeginPlay() override;
@@ -73,7 +78,19 @@ protected:
 	bool NoDoorObstacles(const FDoorData& Door);
 	void Exit();
 
-	float MaxEntryDistance = 130.f;
+	float MaxEntryDistance = 150.f;
+
+	UPROPERTY(EditAnywhere, Category = "Animations")
+	UAnimMontage* EnterMontage;
+
+	UPROPERTY(EditAnywhere, Category = "Animations")
+	UAnimMontage* ExitAnim;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UStaticMeshComponent* CurrentDoor;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	bool EnteringDriversDoor;
 
 private:
 	//
@@ -101,7 +118,10 @@ private:
 	UStaticMeshComponent* Body;
 	
 	UPROPERTY(VisibleAnywhere)
-	USceneComponent* CharacterSocket;
+	USceneComponent* CharacterSocketLeft;
+
+	UPROPERTY(VisibleAnywhere)
+	USceneComponent* CharacterSocketRight;
 
 	//Doors
 	UPROPERTY(VisibleAnywhere)
@@ -165,7 +185,6 @@ private:
 	//
 	//Utility
 	//
-	void PossessVehicle();
 
 public:
 	

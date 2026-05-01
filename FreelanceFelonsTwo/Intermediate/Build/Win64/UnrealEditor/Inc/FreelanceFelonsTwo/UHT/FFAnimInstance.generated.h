@@ -17,6 +17,12 @@
 PRAGMA_DISABLE_DEPRECATION_WARNINGS
 
 // ********** Begin Class UFFAnimInstance **********************************************************
+#define FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Character_FFAnimInstance_h_16_RPC_WRAPPERS_NO_PURE_DECLS \
+	DECLARE_FUNCTION(execDoorExitAnimation); \
+	DECLARE_FUNCTION(execDoorEnterAnimation); \
+	DECLARE_FUNCTION(execVehiclePossess);
+
+
 struct Z_Construct_UClass_UFFAnimInstance_Statics;
 FREELANCEFELONSTWO_API UClass* Z_Construct_UClass_UFFAnimInstance_NoRegister();
 
@@ -47,6 +53,7 @@ public: \
 #define FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Character_FFAnimInstance_h_16_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
+	FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Character_FFAnimInstance_h_16_RPC_WRAPPERS_NO_PURE_DECLS \
 	FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Character_FFAnimInstance_h_16_INCLASS_NO_PURE_DECLS \
 	FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Character_FFAnimInstance_h_16_ENHANCED_CONSTRUCTORS \
 private: \

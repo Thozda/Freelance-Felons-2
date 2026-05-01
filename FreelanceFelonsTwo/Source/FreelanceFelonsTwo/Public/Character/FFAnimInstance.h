@@ -18,6 +18,15 @@ class FREELANCEFELONSTWO_API UFFAnimInstance : public UAnimInstance
 public:
 	virtual void NativeBeginPlay() override;
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
+
+	UFUNCTION(BlueprintCallable)
+	void VehiclePossess();
+	
+	UFUNCTION(BlueprintCallable)
+	void DoorEnterAnimation();
+	
+	UFUNCTION(BlueprintCallable)
+	void DoorExitAnimation();
 	
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)

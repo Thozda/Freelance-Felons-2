@@ -16,6 +16,7 @@ void EmptyLinkFunctionForGeneratedCodeFFVehicle() {}
 ENGINE_API UClass* Z_Construct_UClass_APawn();
 ENGINE_API UClass* Z_Construct_UClass_APawn_NoRegister();
 ENGINE_API UClass* Z_Construct_UClass_APlayerController_NoRegister();
+ENGINE_API UClass* Z_Construct_UClass_UAnimMontage_NoRegister();
 ENGINE_API UClass* Z_Construct_UClass_UCameraComponent_NoRegister();
 ENGINE_API UClass* Z_Construct_UClass_USceneComponent_NoRegister();
 ENGINE_API UClass* Z_Construct_UClass_USpringArmComponent_NoRegister();
@@ -25,7 +26,6 @@ ENHANCEDINPUT_API UScriptStruct* Z_Construct_UScriptStruct_FInputActionValue();
 FREELANCEFELONSTWO_API UClass* Z_Construct_UClass_AFFVehicle();
 FREELANCEFELONSTWO_API UClass* Z_Construct_UClass_AFFVehicle_NoRegister();
 FREELANCEFELONSTWO_API UClass* Z_Construct_UClass_UInteractInterface_NoRegister();
-FREELANCEFELONSTWO_API UEnum* Z_Construct_UEnum_FreelanceFelonsTwo_EDoorSide();
 FREELANCEFELONSTWO_API UEnum* Z_Construct_UEnum_FreelanceFelonsTwo_EVehicleState();
 FREELANCEFELONSTWO_API UScriptStruct* Z_Construct_UScriptStruct_FDoorData();
 UPackage* Z_Construct_UPackage__Script_FreelanceFelonsTwo();
@@ -87,59 +87,6 @@ UEnum* Z_Construct_UEnum_FreelanceFelonsTwo_EVehicleState()
 	return Z_Registration_Info_UEnum_EVehicleState.InnerSingleton;
 }
 // ********** End Enum EVehicleState ***************************************************************
-
-// ********** Begin Enum EDoorSide *****************************************************************
-static FEnumRegistrationInfo Z_Registration_Info_UEnum_EDoorSide;
-static UEnum* EDoorSide_StaticEnum()
-{
-	if (!Z_Registration_Info_UEnum_EDoorSide.OuterSingleton)
-	{
-		Z_Registration_Info_UEnum_EDoorSide.OuterSingleton = GetStaticEnum(Z_Construct_UEnum_FreelanceFelonsTwo_EDoorSide, (UObject*)Z_Construct_UPackage__Script_FreelanceFelonsTwo(), TEXT("EDoorSide"));
-	}
-	return Z_Registration_Info_UEnum_EDoorSide.OuterSingleton;
-}
-template<> FREELANCEFELONSTWO_NON_ATTRIBUTED_API UEnum* StaticEnum<EDoorSide>()
-{
-	return EDoorSide_StaticEnum();
-}
-struct Z_Construct_UEnum_FreelanceFelonsTwo_EDoorSide_Statics
-{
-#if WITH_METADATA
-	static constexpr UECodeGen_Private::FMetaDataPairParam Enum_MetaDataParams[] = {
-		{ "EDS_LeftSide.Name", "EDoorSide::EDS_LeftSide" },
-		{ "EDS_MAX.Name", "EDoorSide::EDS_MAX" },
-		{ "EDS_RightSide.Name", "EDoorSide::EDS_RightSide" },
-		{ "ModuleRelativePath", "Public/Vehicle/FFVehicle.h" },
-	};
-#endif // WITH_METADATA
-	static constexpr UECodeGen_Private::FEnumeratorParam Enumerators[] = {
-		{ "EDoorSide::EDS_LeftSide", (int64)EDoorSide::EDS_LeftSide },
-		{ "EDoorSide::EDS_RightSide", (int64)EDoorSide::EDS_RightSide },
-		{ "EDoorSide::EDS_MAX", (int64)EDoorSide::EDS_MAX },
-	};
-	static const UECodeGen_Private::FEnumParams EnumParams;
-}; // struct Z_Construct_UEnum_FreelanceFelonsTwo_EDoorSide_Statics 
-const UECodeGen_Private::FEnumParams Z_Construct_UEnum_FreelanceFelonsTwo_EDoorSide_Statics::EnumParams = {
-	(UObject*(*)())Z_Construct_UPackage__Script_FreelanceFelonsTwo,
-	nullptr,
-	"EDoorSide",
-	"EDoorSide",
-	Z_Construct_UEnum_FreelanceFelonsTwo_EDoorSide_Statics::Enumerators,
-	RF_Public|RF_Transient|RF_MarkAsNative,
-	UE_ARRAY_COUNT(Z_Construct_UEnum_FreelanceFelonsTwo_EDoorSide_Statics::Enumerators),
-	EEnumFlags::None,
-	(uint8)UEnum::ECppForm::EnumClass,
-	METADATA_PARAMS(UE_ARRAY_COUNT(Z_Construct_UEnum_FreelanceFelonsTwo_EDoorSide_Statics::Enum_MetaDataParams), Z_Construct_UEnum_FreelanceFelonsTwo_EDoorSide_Statics::Enum_MetaDataParams)
-};
-UEnum* Z_Construct_UEnum_FreelanceFelonsTwo_EDoorSide()
-{
-	if (!Z_Registration_Info_UEnum_EDoorSide.InnerSingleton)
-	{
-		UECodeGen_Private::ConstructUEnum(Z_Registration_Info_UEnum_EDoorSide.InnerSingleton, Z_Construct_UEnum_FreelanceFelonsTwo_EDoorSide_Statics::EnumParams);
-	}
-	return Z_Registration_Info_UEnum_EDoorSide.InnerSingleton;
-}
-// ********** End Enum EDoorSide *******************************************************************
 
 // ********** Begin ScriptStruct FDoorData *********************************************************
 struct Z_Construct_UScriptStruct_FDoorData_Statics
@@ -212,6 +159,143 @@ UScriptStruct* Z_Construct_UScriptStruct_FDoorData()
 	return CastChecked<UScriptStruct>(Z_Registration_Info_UScriptStruct_FDoorData.InnerSingleton);
 }
 // ********** End ScriptStruct FDoorData ***********************************************************
+
+// ********** Begin Class AFFVehicle Function AnimateDoorEntry *************************************
+static FName NAME_AFFVehicle_AnimateDoorEntry = FName(TEXT("AnimateDoorEntry"));
+void AFFVehicle::AnimateDoorEntry()
+{
+	UFunction* Func = FindFunctionChecked(NAME_AFFVehicle_AnimateDoorEntry);
+	ProcessEvent(Func,NULL);
+}
+struct Z_Construct_UFunction_AFFVehicle_AnimateDoorEntry_Statics
+{
+#if WITH_METADATA
+	static constexpr UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[] = {
+		{ "ModuleRelativePath", "Public/Vehicle/FFVehicle.h" },
+	};
+#endif // WITH_METADATA
+
+// ********** Begin Function AnimateDoorEntry constinit property declarations **********************
+// ********** End Function AnimateDoorEntry constinit property declarations ************************
+	static const UECodeGen_Private::FFunctionParams FuncParams;
+};
+const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_AFFVehicle_AnimateDoorEntry_Statics::FuncParams = { { (UObject*(*)())Z_Construct_UClass_AFFVehicle, nullptr, "AnimateDoorEntry", 	nullptr, 
+	0, 
+0,
+RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x08020800, 0, 0, METADATA_PARAMS(UE_ARRAY_COUNT(Z_Construct_UFunction_AFFVehicle_AnimateDoorEntry_Statics::Function_MetaDataParams), Z_Construct_UFunction_AFFVehicle_AnimateDoorEntry_Statics::Function_MetaDataParams)},  };
+UFunction* Z_Construct_UFunction_AFFVehicle_AnimateDoorEntry()
+{
+	static UFunction* ReturnFunction = nullptr;
+	if (!ReturnFunction)
+	{
+		UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_AFFVehicle_AnimateDoorEntry_Statics::FuncParams);
+	}
+	return ReturnFunction;
+}
+// ********** End Class AFFVehicle Function AnimateDoorEntry ***************************************
+
+// ********** Begin Class AFFVehicle Function AnimateDoorEntryClose ********************************
+static FName NAME_AFFVehicle_AnimateDoorEntryClose = FName(TEXT("AnimateDoorEntryClose"));
+void AFFVehicle::AnimateDoorEntryClose()
+{
+	UFunction* Func = FindFunctionChecked(NAME_AFFVehicle_AnimateDoorEntryClose);
+	ProcessEvent(Func,NULL);
+}
+struct Z_Construct_UFunction_AFFVehicle_AnimateDoorEntryClose_Statics
+{
+#if WITH_METADATA
+	static constexpr UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[] = {
+		{ "ModuleRelativePath", "Public/Vehicle/FFVehicle.h" },
+	};
+#endif // WITH_METADATA
+
+// ********** Begin Function AnimateDoorEntryClose constinit property declarations *****************
+// ********** End Function AnimateDoorEntryClose constinit property declarations *******************
+	static const UECodeGen_Private::FFunctionParams FuncParams;
+};
+const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_AFFVehicle_AnimateDoorEntryClose_Statics::FuncParams = { { (UObject*(*)())Z_Construct_UClass_AFFVehicle, nullptr, "AnimateDoorEntryClose", 	nullptr, 
+	0, 
+0,
+RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x08020800, 0, 0, METADATA_PARAMS(UE_ARRAY_COUNT(Z_Construct_UFunction_AFFVehicle_AnimateDoorEntryClose_Statics::Function_MetaDataParams), Z_Construct_UFunction_AFFVehicle_AnimateDoorEntryClose_Statics::Function_MetaDataParams)},  };
+UFunction* Z_Construct_UFunction_AFFVehicle_AnimateDoorEntryClose()
+{
+	static UFunction* ReturnFunction = nullptr;
+	if (!ReturnFunction)
+	{
+		UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_AFFVehicle_AnimateDoorEntryClose_Statics::FuncParams);
+	}
+	return ReturnFunction;
+}
+// ********** End Class AFFVehicle Function AnimateDoorEntryClose **********************************
+
+// ********** Begin Class AFFVehicle Function AnimateDoorExitOpen **********************************
+static FName NAME_AFFVehicle_AnimateDoorExitOpen = FName(TEXT("AnimateDoorExitOpen"));
+void AFFVehicle::AnimateDoorExitOpen()
+{
+	UFunction* Func = FindFunctionChecked(NAME_AFFVehicle_AnimateDoorExitOpen);
+	ProcessEvent(Func,NULL);
+}
+struct Z_Construct_UFunction_AFFVehicle_AnimateDoorExitOpen_Statics
+{
+#if WITH_METADATA
+	static constexpr UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[] = {
+		{ "ModuleRelativePath", "Public/Vehicle/FFVehicle.h" },
+	};
+#endif // WITH_METADATA
+
+// ********** Begin Function AnimateDoorExitOpen constinit property declarations *******************
+// ********** End Function AnimateDoorExitOpen constinit property declarations *********************
+	static const UECodeGen_Private::FFunctionParams FuncParams;
+};
+const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_AFFVehicle_AnimateDoorExitOpen_Statics::FuncParams = { { (UObject*(*)())Z_Construct_UClass_AFFVehicle, nullptr, "AnimateDoorExitOpen", 	nullptr, 
+	0, 
+0,
+RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x08020800, 0, 0, METADATA_PARAMS(UE_ARRAY_COUNT(Z_Construct_UFunction_AFFVehicle_AnimateDoorExitOpen_Statics::Function_MetaDataParams), Z_Construct_UFunction_AFFVehicle_AnimateDoorExitOpen_Statics::Function_MetaDataParams)},  };
+UFunction* Z_Construct_UFunction_AFFVehicle_AnimateDoorExitOpen()
+{
+	static UFunction* ReturnFunction = nullptr;
+	if (!ReturnFunction)
+	{
+		UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_AFFVehicle_AnimateDoorExitOpen_Statics::FuncParams);
+	}
+	return ReturnFunction;
+}
+// ********** End Class AFFVehicle Function AnimateDoorExitOpen ************************************
+
+// ********** Begin Class AFFVehicle Function CharacterExit ****************************************
+struct Z_Construct_UFunction_AFFVehicle_CharacterExit_Statics
+{
+#if WITH_METADATA
+	static constexpr UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[] = {
+		{ "ModuleRelativePath", "Public/Vehicle/FFVehicle.h" },
+	};
+#endif // WITH_METADATA
+
+// ********** Begin Function CharacterExit constinit property declarations *************************
+// ********** End Function CharacterExit constinit property declarations ***************************
+	static const UECodeGen_Private::FFunctionParams FuncParams;
+};
+const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_AFFVehicle_CharacterExit_Statics::FuncParams = { { (UObject*(*)())Z_Construct_UClass_AFFVehicle, nullptr, "CharacterExit", 	nullptr, 
+	0, 
+0,
+RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04020401, 0, 0, METADATA_PARAMS(UE_ARRAY_COUNT(Z_Construct_UFunction_AFFVehicle_CharacterExit_Statics::Function_MetaDataParams), Z_Construct_UFunction_AFFVehicle_CharacterExit_Statics::Function_MetaDataParams)},  };
+UFunction* Z_Construct_UFunction_AFFVehicle_CharacterExit()
+{
+	static UFunction* ReturnFunction = nullptr;
+	if (!ReturnFunction)
+	{
+		UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_AFFVehicle_CharacterExit_Statics::FuncParams);
+	}
+	return ReturnFunction;
+}
+DEFINE_FUNCTION(AFFVehicle::execCharacterExit)
+{
+	P_FINISH;
+	P_NATIVE_BEGIN;
+	P_THIS->CharacterExit();
+	P_NATIVE_END;
+}
+// ********** End Class AFFVehicle Function CharacterExit ******************************************
 
 // ********** Begin Class AFFVehicle Function FFLook ***********************************************
 struct Z_Construct_UFunction_AFFVehicle_FFLook_Statics
@@ -359,6 +443,23 @@ struct Z_Construct_UClass_AFFVehicle_Statics
 		{ "IncludePath", "Vehicle/FFVehicle.h" },
 		{ "ModuleRelativePath", "Public/Vehicle/FFVehicle.h" },
 	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_EnterMontage_MetaData[] = {
+		{ "Category", "Animations" },
+		{ "ModuleRelativePath", "Public/Vehicle/FFVehicle.h" },
+	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_ExitAnim_MetaData[] = {
+		{ "Category", "Animations" },
+		{ "ModuleRelativePath", "Public/Vehicle/FFVehicle.h" },
+	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_CurrentDoor_MetaData[] = {
+		{ "Category", "FFVehicle" },
+		{ "EditInline", "true" },
+		{ "ModuleRelativePath", "Public/Vehicle/FFVehicle.h" },
+	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_EnteringDriversDoor_MetaData[] = {
+		{ "Category", "FFVehicle" },
+		{ "ModuleRelativePath", "Public/Vehicle/FFVehicle.h" },
+	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_InstigatorCharacter_MetaData[] = {
 #if !UE_BUILD_SHIPPING
 		{ "Comment", "//\n//Player\n//\n" },
@@ -396,7 +497,12 @@ struct Z_Construct_UClass_AFFVehicle_Statics
 		{ "EditInline", "true" },
 		{ "ModuleRelativePath", "Public/Vehicle/FFVehicle.h" },
 	};
-	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_CharacterSocket_MetaData[] = {
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_CharacterSocketLeft_MetaData[] = {
+		{ "Category", "FFVehicle" },
+		{ "EditInline", "true" },
+		{ "ModuleRelativePath", "Public/Vehicle/FFVehicle.h" },
+	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_CharacterSocketRight_MetaData[] = {
 		{ "Category", "FFVehicle" },
 		{ "EditInline", "true" },
 		{ "ModuleRelativePath", "Public/Vehicle/FFVehicle.h" },
@@ -479,13 +585,19 @@ struct Z_Construct_UClass_AFFVehicle_Statics
 #endif // WITH_METADATA
 
 // ********** Begin Class AFFVehicle constinit property declarations *******************************
+	static const UECodeGen_Private::FObjectPropertyParams NewProp_EnterMontage;
+	static const UECodeGen_Private::FObjectPropertyParams NewProp_ExitAnim;
+	static const UECodeGen_Private::FObjectPropertyParams NewProp_CurrentDoor;
+	static void NewProp_EnteringDriversDoor_SetBit(void* Obj);
+	static const UECodeGen_Private::FBoolPropertyParams NewProp_EnteringDriversDoor;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_InstigatorCharacter;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_PlayerController;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_Root;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_Camera;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_CameraArm;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_Body;
-	static const UECodeGen_Private::FObjectPropertyParams NewProp_CharacterSocket;
+	static const UECodeGen_Private::FObjectPropertyParams NewProp_CharacterSocketLeft;
+	static const UECodeGen_Private::FObjectPropertyParams NewProp_CharacterSocketRight;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_LeftDoor;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_LeftDoorTracePoint;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_RightDoor;
@@ -504,11 +616,16 @@ struct Z_Construct_UClass_AFFVehicle_Statics
 	static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
 // ********** End Class AFFVehicle constinit property declarations *********************************
 	static constexpr UE::CodeGen::FClassNativeFunction Funcs[] = {
+		{ .NameUTF8 = UTF8TEXT("CharacterExit"), .Pointer = &AFFVehicle::execCharacterExit },
 		{ .NameUTF8 = UTF8TEXT("FFLook"), .Pointer = &AFFVehicle::execFFLook },
 		{ .NameUTF8 = UTF8TEXT("FFMove"), .Pointer = &AFFVehicle::execFFMove },
 	};
 	static UObject* (*const DependentSingletons[])();
 	static constexpr FClassFunctionLinkInfo FuncInfo[] = {
+		{ &Z_Construct_UFunction_AFFVehicle_AnimateDoorEntry, "AnimateDoorEntry" }, // 4194290209
+		{ &Z_Construct_UFunction_AFFVehicle_AnimateDoorEntryClose, "AnimateDoorEntryClose" }, // 2146714678
+		{ &Z_Construct_UFunction_AFFVehicle_AnimateDoorExitOpen, "AnimateDoorExitOpen" }, // 2481663596
+		{ &Z_Construct_UFunction_AFFVehicle_CharacterExit, "CharacterExit" }, // 3841983033
 		{ &Z_Construct_UFunction_AFFVehicle_FFLook, "FFLook" }, // 882398517
 		{ &Z_Construct_UFunction_AFFVehicle_FFMove, "FFMove" }, // 1410202813
 	};
@@ -521,13 +638,22 @@ struct Z_Construct_UClass_AFFVehicle_Statics
 }; // struct Z_Construct_UClass_AFFVehicle_Statics
 
 // ********** Begin Class AFFVehicle Property Definitions ******************************************
+const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AFFVehicle_Statics::NewProp_EnterMontage = { "EnterMontage", nullptr, (EPropertyFlags)0x0020080000000001, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFFVehicle, EnterMontage), Z_Construct_UClass_UAnimMontage_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_EnterMontage_MetaData), NewProp_EnterMontage_MetaData) };
+const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AFFVehicle_Statics::NewProp_ExitAnim = { "ExitAnim", nullptr, (EPropertyFlags)0x0020080000000001, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFFVehicle, ExitAnim), Z_Construct_UClass_UAnimMontage_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_ExitAnim_MetaData), NewProp_ExitAnim_MetaData) };
+const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AFFVehicle_Statics::NewProp_CurrentDoor = { "CurrentDoor", nullptr, (EPropertyFlags)0x00200800000a001d, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFFVehicle, CurrentDoor), Z_Construct_UClass_UStaticMeshComponent_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_CurrentDoor_MetaData), NewProp_CurrentDoor_MetaData) };
+void Z_Construct_UClass_AFFVehicle_Statics::NewProp_EnteringDriversDoor_SetBit(void* Obj)
+{
+	((AFFVehicle*)Obj)->EnteringDriversDoor = 1;
+}
+const UECodeGen_Private::FBoolPropertyParams Z_Construct_UClass_AFFVehicle_Statics::NewProp_EnteringDriversDoor = { "EnteringDriversDoor", nullptr, (EPropertyFlags)0x0020080000020015, UECodeGen_Private::EPropertyGenFlags::Bool | UECodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, sizeof(bool), sizeof(AFFVehicle), &Z_Construct_UClass_AFFVehicle_Statics::NewProp_EnteringDriversDoor_SetBit, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_EnteringDriversDoor_MetaData), NewProp_EnteringDriversDoor_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AFFVehicle_Statics::NewProp_InstigatorCharacter = { "InstigatorCharacter", nullptr, (EPropertyFlags)0x0040000000000000, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFFVehicle, InstigatorCharacter), Z_Construct_UClass_APawn_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_InstigatorCharacter_MetaData), NewProp_InstigatorCharacter_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AFFVehicle_Statics::NewProp_PlayerController = { "PlayerController", nullptr, (EPropertyFlags)0x0040000000000000, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFFVehicle, PlayerController), Z_Construct_UClass_APlayerController_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_PlayerController_MetaData), NewProp_PlayerController_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AFFVehicle_Statics::NewProp_Root = { "Root", nullptr, (EPropertyFlags)0x0040000000080008, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFFVehicle, Root), Z_Construct_UClass_USceneComponent_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_Root_MetaData), NewProp_Root_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AFFVehicle_Statics::NewProp_Camera = { "Camera", nullptr, (EPropertyFlags)0x00400000000a0009, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFFVehicle, Camera), Z_Construct_UClass_UCameraComponent_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_Camera_MetaData), NewProp_Camera_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AFFVehicle_Statics::NewProp_CameraArm = { "CameraArm", nullptr, (EPropertyFlags)0x00400000000a0009, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFFVehicle, CameraArm), Z_Construct_UClass_USpringArmComponent_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_CameraArm_MetaData), NewProp_CameraArm_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AFFVehicle_Statics::NewProp_Body = { "Body", nullptr, (EPropertyFlags)0x00400000000a0009, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFFVehicle, Body), Z_Construct_UClass_UStaticMeshComponent_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_Body_MetaData), NewProp_Body_MetaData) };
-const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AFFVehicle_Statics::NewProp_CharacterSocket = { "CharacterSocket", nullptr, (EPropertyFlags)0x00400000000a0009, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFFVehicle, CharacterSocket), Z_Construct_UClass_USceneComponent_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_CharacterSocket_MetaData), NewProp_CharacterSocket_MetaData) };
+const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AFFVehicle_Statics::NewProp_CharacterSocketLeft = { "CharacterSocketLeft", nullptr, (EPropertyFlags)0x00400000000a0009, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFFVehicle, CharacterSocketLeft), Z_Construct_UClass_USceneComponent_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_CharacterSocketLeft_MetaData), NewProp_CharacterSocketLeft_MetaData) };
+const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AFFVehicle_Statics::NewProp_CharacterSocketRight = { "CharacterSocketRight", nullptr, (EPropertyFlags)0x00400000000a0009, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFFVehicle, CharacterSocketRight), Z_Construct_UClass_USceneComponent_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_CharacterSocketRight_MetaData), NewProp_CharacterSocketRight_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AFFVehicle_Statics::NewProp_LeftDoor = { "LeftDoor", nullptr, (EPropertyFlags)0x00400000000a0009, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFFVehicle, LeftDoor), Z_Construct_UClass_UStaticMeshComponent_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_LeftDoor_MetaData), NewProp_LeftDoor_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AFFVehicle_Statics::NewProp_LeftDoorTracePoint = { "LeftDoorTracePoint", nullptr, (EPropertyFlags)0x00400000000a0009, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFFVehicle, LeftDoorTracePoint), Z_Construct_UClass_USceneComponent_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_LeftDoorTracePoint_MetaData), NewProp_LeftDoorTracePoint_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AFFVehicle_Statics::NewProp_RightDoor = { "RightDoor", nullptr, (EPropertyFlags)0x00400000000a0009, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFFVehicle, RightDoor), Z_Construct_UClass_UStaticMeshComponent_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_RightDoor_MetaData), NewProp_RightDoor_MetaData) };
@@ -544,13 +670,18 @@ const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AFFVehicle_Sta
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AFFVehicle_Statics::NewProp_VehicleInteractAction = { "VehicleInteractAction", nullptr, (EPropertyFlags)0x0040000000000001, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFFVehicle, VehicleInteractAction), Z_Construct_UClass_UInputAction_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_VehicleInteractAction_MetaData), NewProp_VehicleInteractAction_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AFFVehicle_Statics::NewProp_HandbreakAction = { "HandbreakAction", nullptr, (EPropertyFlags)0x0040000000000001, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFFVehicle, HandbreakAction), Z_Construct_UClass_UInputAction_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_HandbreakAction_MetaData), NewProp_HandbreakAction_MetaData) };
 const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_AFFVehicle_Statics::PropPointers[] = {
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFFVehicle_Statics::NewProp_EnterMontage,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFFVehicle_Statics::NewProp_ExitAnim,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFFVehicle_Statics::NewProp_CurrentDoor,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFFVehicle_Statics::NewProp_EnteringDriversDoor,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFFVehicle_Statics::NewProp_InstigatorCharacter,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFFVehicle_Statics::NewProp_PlayerController,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFFVehicle_Statics::NewProp_Root,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFFVehicle_Statics::NewProp_Camera,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFFVehicle_Statics::NewProp_CameraArm,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFFVehicle_Statics::NewProp_Body,
-	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFFVehicle_Statics::NewProp_CharacterSocket,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFFVehicle_Statics::NewProp_CharacterSocketLeft,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFFVehicle_Statics::NewProp_CharacterSocketRight,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFFVehicle_Statics::NewProp_LeftDoor,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFFVehicle_Statics::NewProp_LeftDoorTracePoint,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFFVehicle_Statics::NewProp_RightDoor,
@@ -614,16 +745,15 @@ struct Z_CompiledInDeferFile_FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Pu
 {
 	static constexpr FEnumRegisterCompiledInInfo EnumInfo[] = {
 		{ EVehicleState_StaticEnum, TEXT("EVehicleState"), &Z_Registration_Info_UEnum_EVehicleState, CONSTRUCT_RELOAD_VERSION_INFO(FEnumReloadVersionInfo, 1771876355U) },
-		{ EDoorSide_StaticEnum, TEXT("EDoorSide"), &Z_Registration_Info_UEnum_EDoorSide, CONSTRUCT_RELOAD_VERSION_INFO(FEnumReloadVersionInfo, 429163426U) },
 	};
 	static constexpr FStructRegisterCompiledInInfo ScriptStructInfo[] = {
 		{ FDoorData::StaticStruct, Z_Construct_UScriptStruct_FDoorData_Statics::NewStructOps, TEXT("DoorData"),&Z_Registration_Info_UScriptStruct_FDoorData, CONSTRUCT_RELOAD_VERSION_INFO(FStructReloadVersionInfo, sizeof(FDoorData), 1016745551U) },
 	};
 	static constexpr FClassRegisterCompiledInInfo ClassInfo[] = {
-		{ Z_Construct_UClass_AFFVehicle, AFFVehicle::StaticClass, TEXT("AFFVehicle"), &Z_Registration_Info_UClass_AFFVehicle, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(AFFVehicle), 438984056U) },
+		{ Z_Construct_UClass_AFFVehicle, AFFVehicle::StaticClass, TEXT("AFFVehicle"), &Z_Registration_Info_UClass_AFFVehicle, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(AFFVehicle), 3471410843U) },
 	};
 }; // Z_CompiledInDeferFile_FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Vehicle_FFVehicle_h__Script_FreelanceFelonsTwo_Statics 
-static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Vehicle_FFVehicle_h__Script_FreelanceFelonsTwo_4000863180{
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Vehicle_FFVehicle_h__Script_FreelanceFelonsTwo_198604409{
 	TEXT("/Script/FreelanceFelonsTwo"),
 	Z_CompiledInDeferFile_FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Vehicle_FFVehicle_h__Script_FreelanceFelonsTwo_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Vehicle_FFVehicle_h__Script_FreelanceFelonsTwo_Statics::ClassInfo),
 	Z_CompiledInDeferFile_FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Vehicle_FFVehicle_h__Script_FreelanceFelonsTwo_Statics::ScriptStructInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Vehicle_FFVehicle_h__Script_FreelanceFelonsTwo_Statics::ScriptStructInfo),

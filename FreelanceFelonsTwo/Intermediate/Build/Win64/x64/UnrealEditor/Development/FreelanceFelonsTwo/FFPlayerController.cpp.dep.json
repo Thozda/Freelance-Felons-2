@@ -31,7 +31,22 @@
             "s:\\ue5\\ue_5.7\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\gameplaytags\\uht\\gameplaytagsmanager.generated.h",
             "s:\\ue5\\ue_5.7\\engine\\plugins\\enhancedinput\\intermediate\\build\\win64\\unrealeditor\\inc\\enhancedinput\\uht\\enhancedplayerinput.generated.h",
             "s:\\ue5\\ue_5.7\\engine\\plugins\\enhancedinput\\intermediate\\build\\win64\\unrealeditor\\inc\\enhancedinput\\uht\\enhancedinputsubsysteminterface.generated.h",
-            "s:\\ue5\\ue_5.7\\engine\\plugins\\enhancedinput\\intermediate\\build\\win64\\unrealeditor\\inc\\enhancedinput\\uht\\enhancedinputsubsystems.generated.h"
+            "s:\\ue5\\ue_5.7\\engine\\plugins\\enhancedinput\\intermediate\\build\\win64\\unrealeditor\\inc\\enhancedinput\\uht\\enhancedinputsubsystems.generated.h",
+            "p:\\coding\\unreal projects\\freelance-felons-2\\freelancefelonstwo\\source\\freelancefelonstwo\\public\\character\\ffcharacter.h",
+            "s:\\ue5\\ue_5.7\\engine\\source\\runtime\\engine\\classes\\gameframework\\character.h",
+            "s:\\ue5\\ue_5.7\\engine\\source\\runtime\\engine\\classes\\gameframework\\charactermovementreplication.h",
+            "s:\\ue5\\ue_5.7\\engine\\source\\runtime\\net\\core\\public\\net\\core\\nettoken\\nettokenexportcontext.h",
+            "s:\\ue5\\ue_5.7\\engine\\source\\runtime\\net\\iris\\public\\iris\\serialization\\irisobjectreferencepackagemap.h",
+            "s:\\ue5\\ue_5.7\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\iriscore\\uht\\irisobjectreferencepackagemap.generated.h",
+            "s:\\ue5\\ue_5.7\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\uht\\charactermovementreplication.generated.h",
+            "s:\\ue5\\ue_5.7\\engine\\source\\runtime\\engine\\classes\\gameframework\\rootmotionsource.h",
+            "s:\\ue5\\ue_5.7\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\uht\\rootmotionsource.generated.h",
+            "s:\\ue5\\ue_5.7\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\uht\\character.generated.h",
+            "p:\\coding\\unreal projects\\freelance-felons-2\\freelancefelonstwo\\intermediate\\build\\win64\\unrealeditor\\inc\\freelancefelonstwo\\uht\\ffcharacter.generated.h",
+            "p:\\coding\\unreal projects\\freelance-felons-2\\freelancefelonstwo\\source\\freelancefelonstwo\\public\\vehicle\\ffvehicle.h",
+            "p:\\coding\\unreal projects\\freelance-felons-2\\freelancefelonstwo\\source\\freelancefelonstwo\\public\\interface\\interactinterface.h",
+            "p:\\coding\\unreal projects\\freelance-felons-2\\freelancefelonstwo\\intermediate\\build\\win64\\unrealeditor\\inc\\freelancefelonstwo\\uht\\interactinterface.generated.h",
+            "p:\\coding\\unreal projects\\freelance-felons-2\\freelancefelonstwo\\intermediate\\build\\win64\\unrealeditor\\inc\\freelancefelonstwo\\uht\\ffvehicle.generated.h"
         ],
         "ImportedModules": [],
         "ImportedHeaderUnits": []

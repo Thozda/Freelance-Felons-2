@@ -1,4 +1,17 @@
-2026/04/27-18:46:24.619 6b98 Reusing MANIFEST P:\Coding\Unreal Projects\Freelance-Felons-2\FreelanceFelonsTwo\Saved\webcache_6613\Default\Local Storage\leveldb/MANIFEST-000001
-2026/04/27-18:46:24.626 6b98 Recovering log #53
-2026/04/27-18:46:24.628 6b98 Reusing old log P:\Coding\Unreal Projects\Freelance-Felons-2\FreelanceFelonsTwo\Saved\webcache_6613\Default\Local Storage\leveldb/000053.log 
-2026/04/27-18:55:28.110 76e4 Level-0 table #56: started
+2026/04/30-15:57:58.205 8890 Reusing MANIFEST P:\Coding\Unreal Projects\Freelance-Felons-2\FreelanceFelonsTwo\Saved\webcache_6613\Default\Local Storage\leveldb/MANIFEST-000001
+2026/04/30-15:57:58.218 8890 Recovering log #88
+2026/04/30-15:57:58.218 8890 Level-0 table #90: started
+2026/04/30-15:57:58.282 8890 Level-0 table #90: 76696 bytes OK
+2026/04/30-15:57:58.283 8890 Recovering log #90
+2026/04/30-15:57:58.288 8890 Reusing old log P:\Coding\Unreal Projects\Freelance-Felons-2\FreelanceFelonsTwo\Saved\webcache_6613\Default\Local Storage\leveldb/000090.log 
+2026/04/30-15:57:58.328 8890 Delete type=0 #88
+2026/04/30-15:57:58.328 8890 Delete type=2 #91
+2026/04/30-15:57:58.329 7938 Compacting 4@0 + 1@1 files
+2026/04/30-15:57:58.381 7938 Generated table #91@0: 7 keys, 26159 bytes
+2026/04/30-15:57:58.381 7938 Compacted 4@0 + 1@1 files => 26159 bytes
+2026/04/30-15:57:58.434 7938 compacted to: files[ 0 1 0 0 0 0 0 ]
+2026/04/30-15:57:58.435 7938 Delete type=2 #80
+2026/04/30-15:57:58.435 7938 Delete type=2 #82
+2026/04/30-15:57:58.436 7938 Delete type=2 #85
+2026/04/30-15:57:58.436 7938 Delete type=2 #87
+2026/04/30-15:57:58.436 7938 Delete type=2 #90
