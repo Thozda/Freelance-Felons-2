@@ -1,4 +1,0 @@
-[2108:1284:0430/201315.868:WARNING:chrome_main_delegate.cc(745)] This is Chrome version 128.0.6613.138 (not a warning)
-[2108:1284:0430/201315.955:WARNING:account_consistency_mode_manager.cc(77)] Desktop Identity Consistency cannot be enabled as no OAuth client ID and client secret have been configured.
-[2108:1284:0430/201325.206:ERROR:device_event_log_impl.cc(196)] [20:13:24.970] USB: usb_service_win.cc:105 SetupDiGetDeviceProperty({{A45C254E-DF1C-4EFD-8020-67D146A850E0}, 6}) failed: Element not found. (0x490)
-[19200:20344:0430/201327.846:WARNING:frame_impl.cc(430)] virtual CefFrameImpl::SendProcessMessage sent to detached frame 5-A5A7A55A5EB7CEDAA4C4C09A06EEFB2E will be ignored

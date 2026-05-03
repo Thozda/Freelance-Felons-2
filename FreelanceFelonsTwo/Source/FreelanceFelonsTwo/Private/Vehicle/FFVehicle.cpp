@@ -19,7 +19,10 @@ AFFVehicle::AFFVehicle()
 
 	Root = CreateDefaultSubobject<UBoxComponent>(TEXT("Root"));
 	SetRootComponent(Root);
-	Root->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+	Root->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	Root->SetCollisionResponseToAllChannels(ECR_Ignore);
+	Root->SetCollisionResponseToChannel(ECC_WorldStatic, ECR_Block);
+	Root->SetSimulatePhysics(true);
 	
 	CameraArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Camera Arm"));
 	CameraArm->SetupAttachment(GetRootComponent());
@@ -63,15 +66,35 @@ AFFVehicle::AFFVehicle()
 	//
 	FrontLeftWheel = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("FrontLeftWheel"));
 	FrontLeftWheel->SetupAttachment(Body);
+	FrontLeftWheelData.WheelMesh = FrontLeftWheel;
+	FrontLeftWheelTracePoint = CreateDefaultSubobject<USceneComponent>(TEXT("FrontLeftWheelTracePoint"));
+	FrontLeftWheelTracePoint->SetupAttachment(Body);
+	FrontLeftWheelTracePoint->SetRelativeLocation(FrontLeftWheel->GetRelativeLocation());
+	FrontLeftWheelData.TracePoint = FrontLeftWheelTracePoint;
 
 	FrontRightWheel = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("FrontRightWheel"));
 	FrontRightWheel->SetupAttachment(Body);
+	FrontRightWheelData.WheelMesh = FrontRightWheel;
+	FrontRightWheelTracePoint = CreateDefaultSubobject<USceneComponent>(TEXT("FrontRightWheelTracePoint"));
+	FrontRightWheelTracePoint->SetupAttachment(Body);
+	FrontRightWheelTracePoint->SetRelativeLocation(FrontRightWheel->GetRelativeLocation());
+	FrontRightWheelData.TracePoint = FrontRightWheelTracePoint;
 
 	RearLeftWheel = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RearLeftWheel"));
 	RearLeftWheel->SetupAttachment(Body);
+	RearLeftWheelData.WheelMesh = RearLeftWheel;
+	RearLeftWheelTracePoint = CreateDefaultSubobject<USceneComponent>(TEXT("RearLeftWheelTracePoint"));
+	RearLeftWheelTracePoint->SetupAttachment(Body);
+	RearLeftWheelTracePoint->SetRelativeLocation(RearLeftWheel->GetRelativeLocation());
+	RearLeftWheelData.TracePoint = RearLeftWheelTracePoint;
 
 	RearRightWheel = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RearRightWheel"));
 	RearRightWheel->SetupAttachment(Body);
+	RearRightWheelData.WheelMesh = RearRightWheel;
+	RearRightWheelTracePoint = CreateDefaultSubobject<USceneComponent>(TEXT("RearRightWheelTracePoint"));
+	RearRightWheelTracePoint->SetupAttachment(Body);
+	RearRightWheelTracePoint->SetRelativeLocation(RearRightWheel->GetRelativeLocation());
+	RearRightWheelData.TracePoint = RearRightWheelTracePoint;
 
 }
 
@@ -126,6 +149,9 @@ void AFFVehicle::FFMove(const FInputActionValue& Value)
 	//these are the magnitude of the controllers direction
 	float ForwardInput = -Value.Get<FVector2D>().X;
 	float RightInput = Value.Get<FVector2D>().Y;
+
+	ApplyForceAtWheel(RearLeftWheelData, ForwardInput);
+	ApplyForceAtWheel(RearRightWheelData, ForwardInput);
 
 	//This is the controllers direction
 	FRotator CameraRotation = GetControlRotation();
@@ -387,4 +413,41 @@ void AFFVehicle::CharacterExit()
 		
 		VehicleState = EVehicleState::EVS_Parked;
 	}
+}
+
+//
+//Movement
+//
+FHitResult AFFVehicle::WheelGroundedCheck(FWheelData WheelData)
+{
+	if (WheelData.TracePoint == nullptr) return FHitResult();
+	
+	FVector Start = WheelData.TracePoint->GetComponentLocation();
+	FVector End = Start - WheelData.TracePoint->GetUpVector() * MaxWheelHeight;
+	TArray<AActor*> ActorsToIgnore;
+	FHitResult OutHit;
+
+	UKismetSystemLibrary::LineTraceSingle(
+		this,
+		Start,
+		End,
+		TraceTypeQuery1,
+		false,
+		ActorsToIgnore,
+		EDrawDebugTrace::ForOneFrame,
+		OutHit,
+		true
+	);
+
+	return OutHit;
+}
+
+void AFFVehicle::ApplyForceAtWheel(FWheelData WheelData, float Input)
+{
+	FHitResult HitResult;
+	HitResult = WheelGroundedCheck(WheelData);
+	
+	if (!HitResult.bBlockingHit) return;
+
+	Root->AddForceAtLocation(GetActorForwardVector() * Input * EngineForce, HitResult.ImpactPoint);
 }

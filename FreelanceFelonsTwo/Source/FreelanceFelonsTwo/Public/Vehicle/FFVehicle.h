@@ -106,6 +106,18 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	bool EnteringDriversDoor;
 
+	//
+	//Movement
+	//
+	FHitResult WheelGroundedCheck(FWheelData WheelData);
+	void ApplyForceAtWheel(FWheelData WheelData, float Input);
+
+	UPROPERTY(EditAnywhere)
+	float MaxWheelHeight = 50;
+
+	UPROPERTY(EditAnywhere)
+	float EngineForce = 500000;
+	
 private:
 	//
 	//Player
@@ -119,7 +131,7 @@ private:
 	//
 	//Components
 	//
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere)
 	UBoxComponent* Root;
 	
 	UPROPERTY(VisibleAnywhere)
