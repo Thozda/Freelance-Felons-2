@@ -11,6 +11,7 @@ class USceneComponent;
 class UCameraComponent;
 class USpringArmComponent;
 class UStaticMeshComponent;
+class UBoxComponent;
 class UInputAction;
 class UAnimMontage;
 
@@ -36,6 +37,19 @@ struct FDoorData
 	UPROPERTY()
 	USceneComponent* TracePoint;
 
+};
+
+USTRUCT()
+struct FWheelData
+{
+	GENERATED_BODY()
+
+	UPROPERTY()
+	UStaticMeshComponent* WheelMesh;
+	
+	UPROPERTY()
+	USceneComponent* TracePoint;
+	
 };
 
 UCLASS()
@@ -106,7 +120,7 @@ private:
 	//Components
 	//
 	UPROPERTY()
-	USceneComponent* Root;
+	UBoxComponent* Root;
 	
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* Camera;
@@ -142,18 +156,38 @@ private:
 	TArray<FDoorData> Doors;
 
 	//Wheels
+	FWheelData FrontLeftWheelData;
+	
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* FrontLeftWheel;
 
 	UPROPERTY(VisibleAnywhere)
+	USceneComponent* FrontLeftWheelTracePoint;
+	
+	FWheelData FrontRightWheelData;
+
+	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* FrontRightWheel;
+	
+	UPROPERTY(VisibleAnywhere)
+	USceneComponent* FrontRightWheelTracePoint;
+	
+	FWheelData RearLeftWheelData;
 
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* RearLeftWheel;
 
 	UPROPERTY(VisibleAnywhere)
+	USceneComponent* RearLeftWheelTracePoint;
+	
+	FWheelData RearRightWheelData;
+
+	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* RearRightWheel;
 
+	UPROPERTY(VisibleAnywhere)
+	USceneComponent* RearRightWheelTracePoint;
+	
 	//
 	//Input
 	//

@@ -5,6 +5,7 @@
 
 #include "EnhancedInputComponent.h"
 #include "Camera/CameraComponent.h"
+#include "Components/BoxComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Controller/FFPlayerController.h"
 #include "GameFramework/Character.h"
@@ -16,8 +17,9 @@ AFFVehicle::AFFVehicle()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
+	Root = CreateDefaultSubobject<UBoxComponent>(TEXT("Root"));
 	SetRootComponent(Root);
+	Root->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
 	
 	CameraArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Camera Arm"));
 	CameraArm->SetupAttachment(GetRootComponent());
@@ -28,6 +30,7 @@ AFFVehicle::AFFVehicle()
 
 	Body = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Body"));
 	Body->SetupAttachment(GetRootComponent());
+	Body->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 
 	CharacterSocketLeft = CreateDefaultSubobject<USceneComponent>(TEXT("CharacterSocketLeft"));
 	CharacterSocketLeft->SetupAttachment(GetRootComponent());
