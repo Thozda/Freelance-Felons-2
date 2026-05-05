@@ -11,7 +11,6 @@
 #include "GameFramework/Character.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "Kismet/KismetMathLibrary.h"
 
 AFFVehicle::AFFVehicle()
 {
@@ -33,7 +32,8 @@ AFFVehicle::AFFVehicle()
 
 	Body = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Body"));
 	Body->SetupAttachment(GetRootComponent());
-	Body->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	Body->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	Body->SetMassOverrideInKg(NAME_None); //Makes the mass 1KG to allow vehicle mass to be set on the root only
 
 	CharacterSocketLeft = CreateDefaultSubobject<USceneComponent>(TEXT("CharacterSocketLeft"));
 	CharacterSocketLeft->SetupAttachment(GetRootComponent());
@@ -66,35 +66,39 @@ AFFVehicle::AFFVehicle()
 	//
 	FrontLeftWheel = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("FrontLeftWheel"));
 	FrontLeftWheel->SetupAttachment(Body);
-	FrontLeftWheelData.WheelMesh = FrontLeftWheel;
+	FWheelData WheelData0;
+	WheelData0.WheelMesh = FrontLeftWheel;
 	FrontLeftWheelTracePoint = CreateDefaultSubobject<USceneComponent>(TEXT("FrontLeftWheelTracePoint"));
 	FrontLeftWheelTracePoint->SetupAttachment(Body);
-	FrontLeftWheelTracePoint->SetRelativeLocation(FrontLeftWheel->GetRelativeLocation());
-	FrontLeftWheelData.TracePoint = FrontLeftWheelTracePoint;
+	WheelData0.TracePoint = FrontLeftWheelTracePoint;
+	Wheels.Add(WheelData0);
 
 	FrontRightWheel = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("FrontRightWheel"));
 	FrontRightWheel->SetupAttachment(Body);
-	FrontRightWheelData.WheelMesh = FrontRightWheel;
+	FWheelData WheelData1;
+	WheelData1.WheelMesh = FrontRightWheel;
 	FrontRightWheelTracePoint = CreateDefaultSubobject<USceneComponent>(TEXT("FrontRightWheelTracePoint"));
 	FrontRightWheelTracePoint->SetupAttachment(Body);
-	FrontRightWheelTracePoint->SetRelativeLocation(FrontRightWheel->GetRelativeLocation());
-	FrontRightWheelData.TracePoint = FrontRightWheelTracePoint;
+	WheelData1.TracePoint = FrontRightWheelTracePoint;
+	Wheels.Add(WheelData1);
 
 	RearLeftWheel = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RearLeftWheel"));
 	RearLeftWheel->SetupAttachment(Body);
-	RearLeftWheelData.WheelMesh = RearLeftWheel;
+	FWheelData WheelData2;
+	WheelData2.WheelMesh = RearLeftWheel;
 	RearLeftWheelTracePoint = CreateDefaultSubobject<USceneComponent>(TEXT("RearLeftWheelTracePoint"));
 	RearLeftWheelTracePoint->SetupAttachment(Body);
-	RearLeftWheelTracePoint->SetRelativeLocation(RearLeftWheel->GetRelativeLocation());
-	RearLeftWheelData.TracePoint = RearLeftWheelTracePoint;
+	WheelData2.TracePoint = RearLeftWheelTracePoint;
+	Wheels.Add(WheelData2);
 
 	RearRightWheel = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RearRightWheel"));
 	RearRightWheel->SetupAttachment(Body);
-	RearRightWheelData.WheelMesh = RearRightWheel;
+	FWheelData WheelData3;
+	WheelData3.WheelMesh = RearRightWheel;
 	RearRightWheelTracePoint = CreateDefaultSubobject<USceneComponent>(TEXT("RearRightWheelTracePoint"));
 	RearRightWheelTracePoint->SetupAttachment(Body);
-	RearRightWheelTracePoint->SetRelativeLocation(RearRightWheel->GetRelativeLocation());
-	RearRightWheelData.TracePoint = RearRightWheelTracePoint;
+	WheelData3.TracePoint = RearRightWheelTracePoint;
+	Wheels.Add(WheelData3);
 
 }
 
@@ -108,6 +112,9 @@ void AFFVehicle::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	UpdateWheelGroundedTrace();
+	LateralWheelFriction();
+	ApplyVehicleSteeringInput(DeltaTime);
 }
 
 //
@@ -121,6 +128,7 @@ void AFFVehicle::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 	{
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ThisClass::FFLook);
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ThisClass::FFMove);
+		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Completed, this, &ThisClass::FFMoveReset);
 		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &ThisClass::FFInteract);
 		EnhancedInputComponent->BindAction(VehicleInteractAction, ETriggerEvent::Triggered, this, &ThisClass::FFVehicleInteract);
 		EnhancedInputComponent->BindAction(HandbreakAction, ETriggerEvent::Triggered, this, &ThisClass::FFHandbreak);
@@ -150,18 +158,13 @@ void AFFVehicle::FFMove(const FInputActionValue& Value)
 	float ForwardInput = -Value.Get<FVector2D>().X;
 	float RightInput = Value.Get<FVector2D>().Y;
 
-	ApplyForceAtWheel(RearLeftWheelData, ForwardInput);
-	ApplyForceAtWheel(RearRightWheelData, ForwardInput);
+	ApplyVehicleForwardInput(ForwardInput);
+	TargetSteerAngle = RightInput;
+}
 
-	//This is the controllers direction
-	FRotator CameraRotation = GetControlRotation();
-	CameraRotation.Pitch = 0.f;
-	FVector CameraForward = UKismetMathLibrary::GetForwardVector(CameraRotation);
-	FVector CameraRight = UKismetMathLibrary::GetRightVector(CameraRotation);
-
-	//This is the final movement vector
-	FVector Direction = CameraForward * ForwardInput + CameraRight * RightInput;
-	AddMovementInput(Direction.GetSafeNormal());
+void AFFVehicle::FFMoveReset(const FInputActionValue& Value)
+{
+	TargetSteerAngle = 0.f;
 }
 
 void AFFVehicle::FFInteract()
@@ -418,8 +421,51 @@ void AFFVehicle::CharacterExit()
 //
 //Movement
 //
-FHitResult AFFVehicle::WheelGroundedCheck(FWheelData WheelData)
+void AFFVehicle::ApplyVehicleForwardInput(float Input)
 {
+	//Decides which wheels need power
+	switch (DriveTrain)
+	{
+	case EDriveTrain::EDT_RearWheelDrive:
+		ApplyForceAtWheel(Wheels[RearLeftWheelData], Input);
+		ApplyForceAtWheel(Wheels[RearRightWheelData], Input);
+		break;
+		
+	case EDriveTrain::EDT_FrontWheelDrive:
+		ApplyForceAtWheel(Wheels[FrontLeftWheelData], Input);
+		ApplyForceAtWheel(Wheels[FrontRightWheelData], Input);
+		break;
+		
+	case EDriveTrain::EDT_FourWheelDrive:
+		ApplyForceAtWheel(Wheels[FrontLeftWheelData], Input);
+		ApplyForceAtWheel(Wheels[FrontRightWheelData], Input);
+		ApplyForceAtWheel(Wheels[RearLeftWheelData], Input);
+		ApplyForceAtWheel(Wheels[RearRightWheelData], Input);
+		break;
+	}
+}
+
+void AFFVehicle::ApplyForceAtWheel(const FWheelData& WheelData, float Input)
+{
+	//Checks if wheel grounded
+	//Add the actual force of the wheels
+	if (!WheelData.WheelGroundedTrace.bBlockingHit) return;
+
+	Root->AddForceAtLocation(GetActorForwardVector() * Input * CalculateForcePerWheel(), WheelData.WheelGroundedTrace.ImpactPoint);
+}
+
+void AFFVehicle::UpdateWheelGroundedTrace()
+{
+	for (FWheelData& Wheel : Wheels)
+	{
+		FHitResult HitResult = WheelGroundedCheck(Wheel);
+		Wheel.WheelGroundedTrace = HitResult;
+	}
+}
+
+FHitResult AFFVehicle::WheelGroundedCheck(const FWheelData& WheelData)
+{
+	//Performs trace down by UPROPERTY float to see if given wheel is touching the ground
 	if (WheelData.TracePoint == nullptr) return FHitResult();
 	
 	FVector Start = WheelData.TracePoint->GetComponentLocation();
@@ -442,12 +488,57 @@ FHitResult AFFVehicle::WheelGroundedCheck(FWheelData WheelData)
 	return OutHit;
 }
 
-void AFFVehicle::ApplyForceAtWheel(FWheelData WheelData, float Input)
+float AFFVehicle::CalculateForcePerWheel()
 {
-	FHitResult HitResult;
-	HitResult = WheelGroundedCheck(WheelData);
-	
-	if (!HitResult.bBlockingHit) return;
+	if (DriveTrain == EDriveTrain::EDT_FourWheelDrive)
+	{
+		return EngineForce / 4;
+	}
+	return  EngineForce / 2;
+}
 
-	Root->AddForceAtLocation(GetActorForwardVector() * Input * EngineForce, HitResult.ImpactPoint);
+//Friction
+void AFFVehicle::LateralWheelFriction()
+{
+	for (FWheelData Wheel : Wheels)
+	{
+		if (!Wheel.WheelGroundedTrace.bBlockingHit) continue;
+		
+		FVector VehicleVelocity = Root->GetPhysicsLinearVelocityAtPoint(Wheel.WheelGroundedTrace.ImpactPoint);
+		FVector WheelRight = Wheel.WheelMesh->GetForwardVector();
+		float LateralVelocity = FVector::DotProduct(VehicleVelocity, WheelRight);
+		Root->AddForceAtLocation(-WheelRight * LateralVelocity * LateralFriction * Root->GetMass(),
+			Wheel.WheelGroundedTrace.ImpactPoint);
+	}
+}
+
+//Steering
+void AFFVehicle::ApplyVehicleSteeringInput(float DeltaTime)
+{
+	//Turns the wheel mesh along with right input, allowing lateral friction to steer the cars direction
+	//Interps to inputted angle over time to avoid snapping
+
+	float Input = FMath::FInterpTo(CurrentSteerAngle, TargetSteerAngle, DeltaTime, MaxSteeringInterpSpeed);
+	CurrentSteerAngle = Input;
+
+	UE_LOG(LogTemp, Warning, TEXT("Input: %f, Current: %f, Target: %f"), Input, CurrentSteerAngle, TargetSteerAngle);
+	
+	RotateWheelMesh(Wheels[FrontLeftWheelData], Input);
+	RotateWheelMesh(Wheels[FrontRightWheelData], Input);
+}
+
+void AFFVehicle::RotateWheelMesh(const FWheelData& Wheel, float Input)
+{
+	if (Wheel.WheelMesh == nullptr) return;
+
+	if (Wheel.WheelMesh->GetRelativeRotation().Yaw > 90.f || Wheel.WheelMesh->GetRelativeRotation().Yaw < -90.f)
+	{
+		//Wheel forward yaw = 180
+		Wheel.WheelMesh->SetRelativeRotation(FRotator(0.f, Input * MaxSteeringAngle + 180, 0.f));
+	}
+	else
+	{
+		//Wheel forward yaw = 0
+		Wheel.WheelMesh->SetRelativeRotation(FRotator(0.f, Input * MaxSteeringAngle, 0.f));
+	}
 }

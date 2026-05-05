@@ -26,6 +26,16 @@ enum class EVehicleState : uint8
 	EVS_MAX
 };
 
+UENUM(BlueprintType)
+enum class EDriveTrain : uint8
+{
+	EDT_FrontWheelDrive UMETA(DisplayName = "FWD"),
+	EDT_RearWheelDrive UMETA(DisplayName = "RWD"),
+	EDT_FourWheelDrive UMETA(DisplayName = "4WD"),
+	
+	EDT_MAX UMETA(DisplayName = "DefaultMAX")
+};
+
 USTRUCT()
 struct FDoorData
 {
@@ -49,6 +59,9 @@ struct FWheelData
 	
 	UPROPERTY()
 	USceneComponent* TracePoint;
+
+	UPROPERTY()
+	FHitResult WheelGroundedTrace;
 	
 };
 
@@ -109,14 +122,32 @@ protected:
 	//
 	//Movement
 	//
-	FHitResult WheelGroundedCheck(FWheelData WheelData);
-	void ApplyForceAtWheel(FWheelData WheelData, float Input);
+	void ApplyVehicleForwardInput(float Input);
+	void ApplyForceAtWheel(const FWheelData& WheelData, float Input);
+	void ApplyVehicleSteeringInput(float DeltaTime);
+	void RotateWheelMesh(const FWheelData& Wheel, float Input);
+
+	TArray<FWheelData> Wheels;
+	float TargetSteerAngle = 0.f;
+	float CurrentSteerAngle = 0.f;
 
 	UPROPERTY(EditAnywhere)
-	float MaxWheelHeight = 50;
+	EDriveTrain DriveTrain = EDriveTrain::EDT_RearWheelDrive;
+	
+	UPROPERTY(EditAnywhere)
+	float MaxWheelHeight = 50.f;
 
 	UPROPERTY(EditAnywhere)
-	float EngineForce = 500000;
+	float EngineForce = 1000000.f;
+	
+	UPROPERTY(EditAnywhere)
+	float LateralFriction = 1.f;
+	
+	UPROPERTY(EditAnywhere)
+	float MaxSteeringAngle = 30.f;
+	
+	UPROPERTY(EditAnywhere)
+	float MaxSteeringInterpSpeed = 2.f;
 	
 private:
 	//
@@ -168,7 +199,7 @@ private:
 	TArray<FDoorData> Doors;
 
 	//Wheels
-	FWheelData FrontLeftWheelData;
+	float FrontLeftWheelData = 0;
 	
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* FrontLeftWheel;
@@ -176,7 +207,7 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent* FrontLeftWheelTracePoint;
 	
-	FWheelData FrontRightWheelData;
+	float FrontRightWheelData = 1;
 
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* FrontRightWheel;
@@ -184,7 +215,7 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent* FrontRightWheelTracePoint;
 	
-	FWheelData RearLeftWheelData;
+	float RearLeftWheelData = 2;
 
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* RearLeftWheel;
@@ -192,7 +223,7 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent* RearLeftWheelTracePoint;
 	
-	FWheelData RearRightWheelData;
+	float RearRightWheelData = 3;
 
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* RearRightWheel;
@@ -213,6 +244,9 @@ private:
 	UFUNCTION()
 	void FFMove(const FInputActionValue& Value);
 
+	UFUNCTION()
+	void FFMoveReset(const FInputActionValue& Value);
+
 	UPROPERTY(EditAnywhere, Category="Input")
 	UInputAction* LookAction;
 
@@ -229,8 +263,12 @@ private:
 	UInputAction* HandbreakAction;
 
 	//
-	//Utility
+	//Movement
 	//
+	void UpdateWheelGroundedTrace();
+	FHitResult WheelGroundedCheck(const FWheelData& WheelData);
+	float CalculateForcePerWheel();
+	void LateralWheelFriction();
 
 public:
 	
