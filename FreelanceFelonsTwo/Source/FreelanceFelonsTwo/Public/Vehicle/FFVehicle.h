@@ -62,6 +62,8 @@ struct FWheelData
 
 	UPROPERTY()
 	FHitResult WheelGroundedTrace;
+
+	bool bRearWheel;
 	
 };
 
@@ -126,10 +128,12 @@ protected:
 	void ApplyForceAtWheel(const FWheelData& WheelData, float Input);
 	void ApplyVehicleSteeringInput(float DeltaTime);
 	void RotateWheelMesh(const FWheelData& Wheel, float Input);
+	void ApplyHandbrake(const FWheelData& Wheel);
 
 	TArray<FWheelData> Wheels;
 	float TargetSteerAngle = 0.f;
 	float CurrentSteerAngle = 0.f;
+	bool bHandbrakeActive = false;
 
 	UPROPERTY(EditAnywhere)
 	EDriveTrain DriveTrain = EDriveTrain::EDT_RearWheelDrive;
@@ -141,13 +145,41 @@ protected:
 	float EngineForce = 1000000.f;
 	
 	UPROPERTY(EditAnywhere)
-	float LateralFriction = 1.f;
+	float MaxSpeed = 4470.f;
+	
+	UPROPERTY(EditAnywhere)
+	float MinLateralFriction = 1.f;
+	
+	UPROPERTY(EditAnywhere)
+	float MaxLateralFriction = 1.f;
 	
 	UPROPERTY(EditAnywhere)
 	float MaxSteeringAngle = 30.f;
 	
 	UPROPERTY(EditAnywhere)
+	float MinSteeringAngle = 5.f;
+	
+	UPROPERTY(EditAnywhere)
 	float MaxSteeringInterpSpeed = 2.f;
+
+	UPROPERTY(EditAnywhere)
+	float HandbrakeForce = 2.f;
+
+	UPROPERTY(EditAnywhere)
+	float HandbrakeGripMultiplier = 0.5f;
+
+	//
+	//Suspension
+	//
+	UPROPERTY(EditAnywhere)
+	float SpringStrength = 150000.f;
+	
+	UPROPERTY(EditAnywhere)
+	float SpringDampening = 8000.f;
+
+	//Radius
+	UPROPERTY(EditAnywhere)
+	float WheelGroundOffset = 30.f;
 	
 private:
 	//
@@ -237,6 +269,7 @@ private:
 	void FFInteract();
 	void FFVehicleInteract();
 	void FFHandbreak();
+	void FFHandbreakReleased();
 	
 	UFUNCTION()
 	void FFLook(const FInputActionValue& Value);
@@ -269,6 +302,12 @@ private:
 	FHitResult WheelGroundedCheck(const FWheelData& WheelData);
 	float CalculateForcePerWheel();
 	void LateralWheelFriction();
+
+	//
+	//Suspension
+	//
+	void ApplySuspension();
+	void PositionWheelMesh(const FWheelData& Wheel);
 
 public:
 	

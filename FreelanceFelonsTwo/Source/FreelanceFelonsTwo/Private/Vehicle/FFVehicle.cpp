@@ -71,6 +71,7 @@ AFFVehicle::AFFVehicle()
 	FrontLeftWheelTracePoint = CreateDefaultSubobject<USceneComponent>(TEXT("FrontLeftWheelTracePoint"));
 	FrontLeftWheelTracePoint->SetupAttachment(Body);
 	WheelData0.TracePoint = FrontLeftWheelTracePoint;
+	WheelData0.bRearWheel = false;
 	Wheels.Add(WheelData0);
 
 	FrontRightWheel = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("FrontRightWheel"));
@@ -80,6 +81,7 @@ AFFVehicle::AFFVehicle()
 	FrontRightWheelTracePoint = CreateDefaultSubobject<USceneComponent>(TEXT("FrontRightWheelTracePoint"));
 	FrontRightWheelTracePoint->SetupAttachment(Body);
 	WheelData1.TracePoint = FrontRightWheelTracePoint;
+	WheelData1.bRearWheel = false;
 	Wheels.Add(WheelData1);
 
 	RearLeftWheel = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RearLeftWheel"));
@@ -89,6 +91,7 @@ AFFVehicle::AFFVehicle()
 	RearLeftWheelTracePoint = CreateDefaultSubobject<USceneComponent>(TEXT("RearLeftWheelTracePoint"));
 	RearLeftWheelTracePoint->SetupAttachment(Body);
 	WheelData2.TracePoint = RearLeftWheelTracePoint;
+	WheelData2.bRearWheel = true;
 	Wheels.Add(WheelData2);
 
 	RearRightWheel = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RearRightWheel"));
@@ -98,6 +101,7 @@ AFFVehicle::AFFVehicle()
 	RearRightWheelTracePoint = CreateDefaultSubobject<USceneComponent>(TEXT("RearRightWheelTracePoint"));
 	RearRightWheelTracePoint->SetupAttachment(Body);
 	WheelData3.TracePoint = RearRightWheelTracePoint;
+	WheelData3.bRearWheel = true;
 	Wheels.Add(WheelData3);
 
 }
@@ -115,6 +119,7 @@ void AFFVehicle::Tick(float DeltaTime)
 	UpdateWheelGroundedTrace();
 	LateralWheelFriction();
 	ApplyVehicleSteeringInput(DeltaTime);
+	ApplySuspension();
 }
 
 //
@@ -132,6 +137,7 @@ void AFFVehicle::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &ThisClass::FFInteract);
 		EnhancedInputComponent->BindAction(VehicleInteractAction, ETriggerEvent::Triggered, this, &ThisClass::FFVehicleInteract);
 		EnhancedInputComponent->BindAction(HandbreakAction, ETriggerEvent::Triggered, this, &ThisClass::FFHandbreak);
+		EnhancedInputComponent->BindAction(HandbreakAction, ETriggerEvent::Completed, this, &ThisClass::FFHandbreakReleased);
 	}
 }
 
@@ -179,7 +185,13 @@ void AFFVehicle::FFVehicleInteract()
 
 void AFFVehicle::FFHandbreak()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Handbreak"))
+	ApplyHandbrake(Wheels[RearLeftWheelData]);
+	ApplyHandbrake(Wheels[RearRightWheelData]);
+}
+
+void AFFVehicle::FFHandbreakReleased()
+{
+	bHandbrakeActive = false;
 }
 
 //
@@ -490,22 +502,49 @@ FHitResult AFFVehicle::WheelGroundedCheck(const FWheelData& WheelData)
 
 float AFFVehicle::CalculateForcePerWheel()
 {
+	float TotalForce;
+	float ForcePerWheel;
+
+	FVector2D Force = FVector2D(0.f, EngineForce);
+	FVector2D Speed = FVector2D(MaxSpeed, 0.f);
+	TotalForce = FMath::GetMappedRangeValueClamped(Speed, Force, GetVelocity().Size2D());
+	
 	if (DriveTrain == EDriveTrain::EDT_FourWheelDrive)
 	{
-		return EngineForce / 4;
+		ForcePerWheel = TotalForce / 4;
 	}
-	return  EngineForce / 2;
+	else
+	{
+		ForcePerWheel = TotalForce / 2;
+	}
+
+	return  ForcePerWheel;
 }
 
 //Friction
 void AFFVehicle::LateralWheelFriction()
 {
-	for (FWheelData Wheel : Wheels)
+	//maps speed to friction, so that as speed in cm/s increases the friction decreases so that the car is controllable at both low and high speeds
+	FVector2D InputSpeed = FVector2D(0.f, 2500.f);
+	FVector2D OutputFriction = FVector2D(MaxLateralFriction, MinLateralFriction);
+	float LateralFriction = FMath::GetMappedRangeValueClamped(InputSpeed, OutputFriction, GetVelocity().Size2D());
+
+	//UE_LOG(LogTemp, Warning, TEXT("Speed: %f, Friction: %f"), GetVelocity().Size2D(), LateralFriction)
+
+	//calculates the force pushing perpendicular to the wheel mesh forward vector and adds an opposite force to counteract sliding
+	for (const FWheelData& Wheel : Wheels)
 	{
-		if (!Wheel.WheelGroundedTrace.bBlockingHit) continue;
+		if (!Wheel.WheelGroundedTrace.bBlockingHit) continue; //wheel not on ground
+		if (bHandbrakeActive && Wheel.bRearWheel) LateralFriction *= HandbrakeGripMultiplier; //handbrake active - drift mode
 		
 		FVector VehicleVelocity = Root->GetPhysicsLinearVelocityAtPoint(Wheel.WheelGroundedTrace.ImpactPoint);
-		FVector WheelRight = Wheel.WheelMesh->GetForwardVector();
+		FVector WheelRight = Wheel.WheelMesh->GetForwardVector(); //Meshes flipped so this is actually right
+		/* Dot Product
+		*It's a math operation on two vectors that returns a single float representing how much one vector is pointing
+		*in the same direction as another.
+		*If the two vectors are pointing exactly the same direction the result is their magnitudes multiplied together.
+		*If they're perpendicular the result is zero. If they're opposite the result is negative.
+		*/
 		float LateralVelocity = FVector::DotProduct(VehicleVelocity, WheelRight);
 		Root->AddForceAtLocation(-WheelRight * LateralVelocity * LateralFriction * Root->GetMass(),
 			Wheel.WheelGroundedTrace.ImpactPoint);
@@ -521,8 +560,6 @@ void AFFVehicle::ApplyVehicleSteeringInput(float DeltaTime)
 	float Input = FMath::FInterpTo(CurrentSteerAngle, TargetSteerAngle, DeltaTime, MaxSteeringInterpSpeed);
 	CurrentSteerAngle = Input;
 
-	UE_LOG(LogTemp, Warning, TEXT("Input: %f, Current: %f, Target: %f"), Input, CurrentSteerAngle, TargetSteerAngle);
-	
 	RotateWheelMesh(Wheels[FrontLeftWheelData], Input);
 	RotateWheelMesh(Wheels[FrontRightWheelData], Input);
 }
@@ -531,14 +568,68 @@ void AFFVehicle::RotateWheelMesh(const FWheelData& Wheel, float Input)
 {
 	if (Wheel.WheelMesh == nullptr) return;
 
+	FVector2D InputSpeed = FVector2D(0.f, 2500.f);
+	FVector2D OutputSteerAngle = FVector2D(MaxSteeringAngle, MinSteeringAngle);
+	float SteerAngle = FMath::GetMappedRangeValueClamped(InputSpeed, OutputSteerAngle, GetVelocity().Size2D());
+
 	if (Wheel.WheelMesh->GetRelativeRotation().Yaw > 90.f || Wheel.WheelMesh->GetRelativeRotation().Yaw < -90.f)
 	{
 		//Wheel forward yaw = 180
-		Wheel.WheelMesh->SetRelativeRotation(FRotator(0.f, Input * MaxSteeringAngle + 180, 0.f));
+		Wheel.WheelMesh->SetRelativeRotation(FRotator(0.f, Input * SteerAngle + 180, 0.f));
 	}
 	else
 	{
 		//Wheel forward yaw = 0
-		Wheel.WheelMesh->SetRelativeRotation(FRotator(0.f, Input * MaxSteeringAngle, 0.f));
+		Wheel.WheelMesh->SetRelativeRotation(FRotator(0.f, Input * SteerAngle, 0.f));
 	}
+}
+
+//Handbrake
+void AFFVehicle::ApplyHandbrake(const FWheelData& Wheel)
+{
+	if (Wheel.WheelGroundedTrace.bBlockingHit == false) return;
+	
+	/* Dot Product
+	*It's a math operation on two vectors that returns a single float representing how much one vector is pointing
+	*in the same direction as another.
+	*If the two vectors are pointing exactly the same direction the result is their magnitudes multiplied together.
+	*If they're perpendicular the result is zero. If they're opposite the result is negative.
+	*/
+	float ForwardVelocity = FVector::DotProduct(Root->GetPhysicsLinearVelocityAtPoint( Wheel.WheelGroundedTrace.ImpactPoint), GetActorForwardVector());
+	FVector BrakeVector = -GetActorForwardVector();
+	Root->AddForceAtLocation(BrakeVector * HandbrakeForce * ForwardVelocity, Wheel.WheelGroundedTrace.ImpactPoint);
+	bHandbrakeActive = true;
+}
+
+//
+//Suspension
+//
+void AFFVehicle::ApplySuspension()
+{
+	for (const FWheelData& Wheel : Wheels)
+	{
+		if (!Wheel.WheelGroundedTrace.bBlockingHit) continue;
+		
+		FVector CompressedPoint = Wheel.TracePoint->GetComponentLocation();
+		FVector Ground = Wheel.WheelGroundedTrace.ImpactPoint;
+		float Compression = (CompressedPoint - Ground).Size();
+		/* Dot Product
+		*It's a math operation on two vectors that returns a single float representing how much one vector is pointing
+		*in the same direction as another.
+		*If the two vectors are pointing exactly the same direction the result is their magnitudes multiplied together.
+		*If they're perpendicular the result is zero. If they're opposite the result is negative.
+		*/
+		float VerticalVelocity = FVector::DotProduct(Root->GetPhysicsLinearVelocityAtPoint(
+			Wheel.WheelGroundedTrace.ImpactPoint), FVector::UpVector);
+		float SuspensionForce = SpringStrength * Compression - SpringDampening * VerticalVelocity;
+		Root->AddForceAtLocation(FVector::UpVector * SuspensionForce, Wheel.TracePoint->GetComponentLocation());
+
+		PositionWheelMesh(Wheel);
+	}
+}
+
+void AFFVehicle::PositionWheelMesh(const FWheelData& Wheel)
+{
+	FVector NewLocation = Wheel.WheelGroundedTrace.ImpactPoint + GetActorUpVector() * WheelGroundOffset;
+	Wheel.WheelMesh->SetWorldLocation(NewLocation);
 }
