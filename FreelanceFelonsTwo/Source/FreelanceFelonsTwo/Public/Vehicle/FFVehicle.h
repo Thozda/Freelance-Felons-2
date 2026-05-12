@@ -139,7 +139,7 @@ protected:
 	EDriveTrain DriveTrain = EDriveTrain::EDT_RearWheelDrive;
 	
 	UPROPERTY(EditAnywhere)
-	float MaxWheelHeight = 50.f;
+	float MaxWheelHeight = 55.f;
 
 	UPROPERTY(EditAnywhere)
 	float EngineForce = 1000000.f;
@@ -148,22 +148,22 @@ protected:
 	float MaxSpeed = 4470.f;
 	
 	UPROPERTY(EditAnywhere)
-	float MinLateralFriction = 1.f;
+	float MinLateralFriction = 0.7f;
 	
 	UPROPERTY(EditAnywhere)
-	float MaxLateralFriction = 1.f;
+	float MaxLateralFriction = 4.f;
 	
 	UPROPERTY(EditAnywhere)
 	float MaxSteeringAngle = 30.f;
 	
 	UPROPERTY(EditAnywhere)
-	float MinSteeringAngle = 5.f;
+	float MinSteeringAngle = 10.f;
 	
 	UPROPERTY(EditAnywhere)
-	float MaxSteeringInterpSpeed = 2.f;
+	float MaxSteeringInterpSpeed = 25.f;
 
 	UPROPERTY(EditAnywhere)
-	float HandbrakeForce = 2.f;
+	float HandbrakeForce = 1.f;
 
 	UPROPERTY(EditAnywhere)
 	float HandbrakeGripMultiplier = 0.5f;
@@ -171,12 +171,15 @@ protected:
 	//
 	//Suspension
 	//
-	UPROPERTY(EditAnywhere)
-	float SpringStrength = 150000.f;
+	UPROPERTY(EditAnywhere, Category = "Suspension")
+	float SpringStrength = 100000.f;
 	
-	UPROPERTY(EditAnywhere)
-	float SpringDampening = 8000.f;
+	UPROPERTY(EditAnywhere, Category = "Suspension")
+	float SpringDampening = 1000.f;
 
+	UPROPERTY(EditAnywhere, Category = "Suspension")
+	float RestHeight = 45.f;
+	
 	//Radius
 	UPROPERTY(EditAnywhere)
 	float WheelGroundOffset = 30.f;

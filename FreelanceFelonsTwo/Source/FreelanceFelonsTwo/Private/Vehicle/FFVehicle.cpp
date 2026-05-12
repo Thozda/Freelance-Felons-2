@@ -612,18 +612,17 @@ void AFFVehicle::ApplySuspension()
 		
 		FVector CompressedPoint = Wheel.TracePoint->GetComponentLocation();
 		FVector Ground = Wheel.WheelGroundedTrace.ImpactPoint;
-		float Compression = (CompressedPoint - Ground).Size();
-		/* Dot Product
-		*It's a math operation on two vectors that returns a single float representing how much one vector is pointing
-		*in the same direction as another.
-		*If the two vectors are pointing exactly the same direction the result is their magnitudes multiplied together.
-		*If they're perpendicular the result is zero. If they're opposite the result is negative.
-		*/
-		float VerticalVelocity = FVector::DotProduct(Root->GetPhysicsLinearVelocityAtPoint(
-			Wheel.WheelGroundedTrace.ImpactPoint), FVector::UpVector);
-		float SuspensionForce = SpringStrength * Compression - SpringDampening * VerticalVelocity;
-		Root->AddForceAtLocation(FVector::UpVector * SuspensionForce, Wheel.TracePoint->GetComponentLocation());
+		float SuspensionLength = (CompressedPoint - Ground).Size();
 
+		float Compression = FMath::Max(0, RestHeight - SuspensionLength);
+		
+		FVector WheelVelocity = Root->GetPhysicsLinearVelocityAtPoint(Wheel.TracePoint->GetComponentLocation());
+		FVector LocalWheelVelocity = GetActorTransform().InverseTransformVector(WheelVelocity);
+		float VerticalVelocity = LocalWheelVelocity.Z;
+		
+		float SuspensionForce = FMath::Max(0, SpringStrength * Compression - SpringDampening * VerticalVelocity);
+		Root->AddForceAtLocation(GetActorUpVector() * SuspensionForce, Wheel.TracePoint->GetComponentLocation());
+		
 		PositionWheelMesh(Wheel);
 	}
 }

@@ -702,7 +702,7 @@ struct Z_Construct_UClass_AFFVehicle_Statics
 		{ "ModuleRelativePath", "Public/Vehicle/FFVehicle.h" },
 	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_SpringStrength_MetaData[] = {
-		{ "Category", "FFVehicle" },
+		{ "Category", "Suspension" },
 #if !UE_BUILD_SHIPPING
 		{ "Comment", "//\n//Suspension\n//\n" },
 #endif
@@ -712,7 +712,11 @@ struct Z_Construct_UClass_AFFVehicle_Statics
 #endif
 	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_SpringDampening_MetaData[] = {
-		{ "Category", "FFVehicle" },
+		{ "Category", "Suspension" },
+		{ "ModuleRelativePath", "Public/Vehicle/FFVehicle.h" },
+	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_RestHeight_MetaData[] = {
+		{ "Category", "Suspension" },
 		{ "ModuleRelativePath", "Public/Vehicle/FFVehicle.h" },
 	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_WheelGroundOffset_MetaData[] = {
@@ -884,6 +888,7 @@ struct Z_Construct_UClass_AFFVehicle_Statics
 	static const UECodeGen_Private::FFloatPropertyParams NewProp_HandbrakeGripMultiplier;
 	static const UECodeGen_Private::FFloatPropertyParams NewProp_SpringStrength;
 	static const UECodeGen_Private::FFloatPropertyParams NewProp_SpringDampening;
+	static const UECodeGen_Private::FFloatPropertyParams NewProp_RestHeight;
 	static const UECodeGen_Private::FFloatPropertyParams NewProp_WheelGroundOffset;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_InstigatorCharacter;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_PlayerController;
@@ -961,6 +966,7 @@ const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_AFFVehicle_Stat
 const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_AFFVehicle_Statics::NewProp_HandbrakeGripMultiplier = { "HandbrakeGripMultiplier", nullptr, (EPropertyFlags)0x0020080000000001, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFFVehicle, HandbrakeGripMultiplier), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_HandbrakeGripMultiplier_MetaData), NewProp_HandbrakeGripMultiplier_MetaData) };
 const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_AFFVehicle_Statics::NewProp_SpringStrength = { "SpringStrength", nullptr, (EPropertyFlags)0x0020080000000001, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFFVehicle, SpringStrength), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_SpringStrength_MetaData), NewProp_SpringStrength_MetaData) };
 const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_AFFVehicle_Statics::NewProp_SpringDampening = { "SpringDampening", nullptr, (EPropertyFlags)0x0020080000000001, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFFVehicle, SpringDampening), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_SpringDampening_MetaData), NewProp_SpringDampening_MetaData) };
+const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_AFFVehicle_Statics::NewProp_RestHeight = { "RestHeight", nullptr, (EPropertyFlags)0x0020080000000001, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFFVehicle, RestHeight), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_RestHeight_MetaData), NewProp_RestHeight_MetaData) };
 const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_AFFVehicle_Statics::NewProp_WheelGroundOffset = { "WheelGroundOffset", nullptr, (EPropertyFlags)0x0020080000000001, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFFVehicle, WheelGroundOffset), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_WheelGroundOffset_MetaData), NewProp_WheelGroundOffset_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AFFVehicle_Statics::NewProp_InstigatorCharacter = { "InstigatorCharacter", nullptr, (EPropertyFlags)0x0040000000000000, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFFVehicle, InstigatorCharacter), Z_Construct_UClass_APawn_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_InstigatorCharacter_MetaData), NewProp_InstigatorCharacter_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AFFVehicle_Statics::NewProp_PlayerController = { "PlayerController", nullptr, (EPropertyFlags)0x0040000000000000, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFFVehicle, PlayerController), Z_Construct_UClass_APlayerController_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_PlayerController_MetaData), NewProp_PlayerController_MetaData) };
@@ -1008,6 +1014,7 @@ const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_AFFVehicl
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFFVehicle_Statics::NewProp_HandbrakeGripMultiplier,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFFVehicle_Statics::NewProp_SpringStrength,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFFVehicle_Statics::NewProp_SpringDampening,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFFVehicle_Statics::NewProp_RestHeight,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFFVehicle_Statics::NewProp_WheelGroundOffset,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFFVehicle_Statics::NewProp_InstigatorCharacter,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFFVehicle_Statics::NewProp_PlayerController,
@@ -1091,10 +1098,10 @@ struct Z_CompiledInDeferFile_FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Pu
 		{ FWheelData::StaticStruct, Z_Construct_UScriptStruct_FWheelData_Statics::NewStructOps, TEXT("WheelData"),&Z_Registration_Info_UScriptStruct_FWheelData, CONSTRUCT_RELOAD_VERSION_INFO(FStructReloadVersionInfo, sizeof(FWheelData), 550699615U) },
 	};
 	static constexpr FClassRegisterCompiledInInfo ClassInfo[] = {
-		{ Z_Construct_UClass_AFFVehicle, AFFVehicle::StaticClass, TEXT("AFFVehicle"), &Z_Registration_Info_UClass_AFFVehicle, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(AFFVehicle), 4150998889U) },
+		{ Z_Construct_UClass_AFFVehicle, AFFVehicle::StaticClass, TEXT("AFFVehicle"), &Z_Registration_Info_UClass_AFFVehicle, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(AFFVehicle), 2746038278U) },
 	};
 }; // Z_CompiledInDeferFile_FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Vehicle_FFVehicle_h__Script_FreelanceFelonsTwo_Statics 
-static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Vehicle_FFVehicle_h__Script_FreelanceFelonsTwo_1893767523{
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Vehicle_FFVehicle_h__Script_FreelanceFelonsTwo_2001346570{
 	TEXT("/Script/FreelanceFelonsTwo"),
 	Z_CompiledInDeferFile_FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Vehicle_FFVehicle_h__Script_FreelanceFelonsTwo_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Vehicle_FFVehicle_h__Script_FreelanceFelonsTwo_Statics::ClassInfo),
 	Z_CompiledInDeferFile_FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Vehicle_FFVehicle_h__Script_FreelanceFelonsTwo_Statics::ScriptStructInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Vehicle_FFVehicle_h__Script_FreelanceFelonsTwo_Statics::ScriptStructInfo),
