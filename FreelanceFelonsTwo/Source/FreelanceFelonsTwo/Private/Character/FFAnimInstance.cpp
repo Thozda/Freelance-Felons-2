@@ -26,6 +26,15 @@ void UFFAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	IsFalling = FFCharacter->GetIsFalling();
 }
 
+void UFFAnimInstance::CloseDoor()
+{
+	AFFPlayerController* FFController = Cast<AFFPlayerController>(UGameplayStatics::GetPlayerController(this, 0));
+	if (FFController)
+	{
+		FFController->CloseDoor();
+	}
+}
+
 void UFFAnimInstance::VehiclePossess()
 {
 	AFFPlayerController* FFController = Cast<AFFPlayerController>(UGameplayStatics::GetPlayerController(this, 0));

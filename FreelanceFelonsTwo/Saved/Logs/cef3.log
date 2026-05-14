@@ -1,5 +1,7 @@
-[42416:38672:0511/194956.951:WARNING:chrome_main_delegate.cc(745)] This is Chrome version 128.0.6613.138 (not a warning)
-[42416:38672:0511/194957.007:WARNING:account_consistency_mode_manager.cc(77)] Desktop Identity Consistency cannot be enabled as no OAuth client ID and client secret have been configured.
-[42416:38672:0511/195020.777:ERROR:device_event_log_impl.cc(196)] [19:50:20.570] USB: usb_service_win.cc:105 SetupDiGetDeviceProperty({{A45C254E-DF1C-4EFD-8020-67D146A850E0}, 6}) failed: Element not found. (0x490)
-[12936:31056:0511/195021.488:WARNING:frame_impl.cc(430)] virtual CefFrameImpl::SendProcessMessage sent to detached frame 5-A6938324E4AD6E650CB69AC52D492F5D will be ignored
-[42416:38672:0511/214626.063:WARNING:pref_notifier_impl.cc(41)] Pref observer for media_router.cast_allow_all_ips found at shutdown.
+[54732:55020:0514/180503.953:WARNING:chrome_main_delegate.cc(745)] This is Chrome version 128.0.6613.138 (not a warning)
+[54732:55020:0514/180504.126:WARNING:account_consistency_mode_manager.cc(77)] Desktop Identity Consistency cannot be enabled as no OAuth client ID and client secret have been configured.
+[54732:55020:0514/180514.908:ERROR:device_event_log_impl.cc(196)] [18:05:14.403] USB: usb_service_win.cc:105 SetupDiGetDeviceProperty({{A45C254E-DF1C-4EFD-8020-67D146A850E0}, 6}) failed: Element not found. (0x490)
+[27800:49616:0514/180517.180:WARNING:frame_impl.cc(430)] virtual CefFrameImpl::SendProcessMessage sent to detached frame 5-FA3FF68C4AEBC34118D2EB7D6B2D6B21 will be ignored
+[54732:55020:0514/182420.044:ERROR:device_event_log_impl.cc(196)] [18:24:19.756] USB: usb_service_win.cc:105 SetupDiGetDeviceProperty({{A45C254E-DF1C-4EFD-8020-67D146A850E0}, 6}) failed: Element not found. (0x490)
+[54732:55020:0514/182420.045:ERROR:device_event_log_impl.cc(196)] [18:24:19.797] USB: usb_service_win.cc:308 SetupDiEnumDeviceInterfaces: No more data is available. (0x103)
+[54732:55020:0514/184902.159:WARNING:pref_notifier_impl.cc(41)] Pref observer for media_router.cast_allow_all_ips found at shutdown.

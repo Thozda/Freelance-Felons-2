@@ -20,7 +20,8 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 #define FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Character_FFAnimInstance_h_16_RPC_WRAPPERS_NO_PURE_DECLS \
 	DECLARE_FUNCTION(execDoorExitAnimation); \
 	DECLARE_FUNCTION(execDoorEnterAnimation); \
-	DECLARE_FUNCTION(execVehiclePossess);
+	DECLARE_FUNCTION(execVehiclePossess); \
+	DECLARE_FUNCTION(execCloseDoor);
 
 
 struct Z_Construct_UClass_UFFAnimInstance_Statics;

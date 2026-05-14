@@ -20,6 +20,9 @@ public:
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 
 	UFUNCTION(BlueprintCallable)
+	void CloseDoor();
+	
+	UFUNCTION(BlueprintCallable)
 	void VehiclePossess();
 	
 	UFUNCTION(BlueprintCallable)

@@ -42,6 +42,8 @@ struct FWheelData;
 	DECLARE_FUNCTION(execFFMoveReset); \
 	DECLARE_FUNCTION(execFFMove); \
 	DECLARE_FUNCTION(execFFLook); \
+	DECLARE_FUNCTION(execCharacterExitRoof); \
+	DECLARE_FUNCTION(execCharacterExitPassenger); \
 	DECLARE_FUNCTION(execCharacterExit);
 
 

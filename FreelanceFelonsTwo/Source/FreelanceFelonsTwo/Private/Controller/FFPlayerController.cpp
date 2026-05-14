@@ -25,6 +25,7 @@ void AFFPlayerController::SetWalkInput()
 	{
 		Subsystem->RemoveMappingContext(VehicleInputContext);
 		Subsystem->AddMappingContext(WalkInputContext, 0);
+		bVehicleInput = false;
 	}
 }
 
@@ -35,6 +36,20 @@ void AFFPlayerController::SetVehicleInput()
 	{
 		Subsystem->RemoveMappingContext(WalkInputContext);
 		Subsystem->AddMappingContext(VehicleInputContext, 0);
+		bVehicleInput = true;
+	}
+}
+
+void AFFPlayerController::CloseDoor()
+{
+	AFFCharacter* FFCharacter = Cast<AFFCharacter>(GetPawn());
+	if (FFCharacter)
+	{
+		AFFVehicle* FFVehicle = Cast<AFFVehicle>(FFCharacter->GetLatestVehicleInteraction());
+		if (FFVehicle)
+		{
+			FFVehicle->CloseDoor();
+		}
 	}
 }
 
@@ -48,6 +63,11 @@ void AFFPlayerController::VehiclePossess()
 		{
 			FFVehicle->PossessVehicle();
 		}
+	}
+	AFFVehicle* FFVehicle = Cast<AFFVehicle>(GetPawn());
+	if (FFVehicle)
+	{
+		FFVehicle->PossessVehicle();
 	}
 }
 

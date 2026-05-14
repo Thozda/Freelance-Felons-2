@@ -23,9 +23,12 @@ public:
 	void SetWalkInput();
 	void SetVehicleInput();
 
+	bool bVehicleInput = false;
+
 	//
 	//Vehicles
 	//
+	void CloseDoor();
 	void VehiclePossess();
 
 	void EntryAnimationDoor();

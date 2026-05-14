@@ -20,6 +20,41 @@ FREELANCEFELONSTWO_API UClass* Z_Construct_UClass_UFFAnimInstance_NoRegister();
 UPackage* Z_Construct_UPackage__Script_FreelanceFelonsTwo();
 // ********** End Cross Module References **********************************************************
 
+// ********** Begin Class UFFAnimInstance Function CloseDoor ***************************************
+struct Z_Construct_UFunction_UFFAnimInstance_CloseDoor_Statics
+{
+#if WITH_METADATA
+	static constexpr UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[] = {
+		{ "ModuleRelativePath", "Public/Character/FFAnimInstance.h" },
+	};
+#endif // WITH_METADATA
+
+// ********** Begin Function CloseDoor constinit property declarations *****************************
+// ********** End Function CloseDoor constinit property declarations *******************************
+	static const UECodeGen_Private::FFunctionParams FuncParams;
+};
+const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_UFFAnimInstance_CloseDoor_Statics::FuncParams = { { (UObject*(*)())Z_Construct_UClass_UFFAnimInstance, nullptr, "CloseDoor", 	nullptr, 
+	0, 
+0,
+RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04020401, 0, 0, METADATA_PARAMS(UE_ARRAY_COUNT(Z_Construct_UFunction_UFFAnimInstance_CloseDoor_Statics::Function_MetaDataParams), Z_Construct_UFunction_UFFAnimInstance_CloseDoor_Statics::Function_MetaDataParams)},  };
+UFunction* Z_Construct_UFunction_UFFAnimInstance_CloseDoor()
+{
+	static UFunction* ReturnFunction = nullptr;
+	if (!ReturnFunction)
+	{
+		UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_UFFAnimInstance_CloseDoor_Statics::FuncParams);
+	}
+	return ReturnFunction;
+}
+DEFINE_FUNCTION(UFFAnimInstance::execCloseDoor)
+{
+	P_FINISH;
+	P_NATIVE_BEGIN;
+	P_THIS->CloseDoor();
+	P_NATIVE_END;
+}
+// ********** End Class UFFAnimInstance Function CloseDoor *****************************************
+
 // ********** Begin Class UFFAnimInstance Function DoorEnterAnimation ******************************
 struct Z_Construct_UFunction_UFFAnimInstance_DoorEnterAnimation_Statics
 {
@@ -199,12 +234,14 @@ struct Z_Construct_UClass_UFFAnimInstance_Statics
 	static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
 // ********** End Class UFFAnimInstance constinit property declarations ****************************
 	static constexpr UE::CodeGen::FClassNativeFunction Funcs[] = {
+		{ .NameUTF8 = UTF8TEXT("CloseDoor"), .Pointer = &UFFAnimInstance::execCloseDoor },
 		{ .NameUTF8 = UTF8TEXT("DoorEnterAnimation"), .Pointer = &UFFAnimInstance::execDoorEnterAnimation },
 		{ .NameUTF8 = UTF8TEXT("DoorExitAnimation"), .Pointer = &UFFAnimInstance::execDoorExitAnimation },
 		{ .NameUTF8 = UTF8TEXT("VehiclePossess"), .Pointer = &UFFAnimInstance::execVehiclePossess },
 	};
 	static UObject* (*const DependentSingletons[])();
 	static constexpr FClassFunctionLinkInfo FuncInfo[] = {
+		{ &Z_Construct_UFunction_UFFAnimInstance_CloseDoor, "CloseDoor" }, // 3396431147
 		{ &Z_Construct_UFunction_UFFAnimInstance_DoorEnterAnimation, "DoorEnterAnimation" }, // 781577376
 		{ &Z_Construct_UFunction_UFFAnimInstance_DoorExitAnimation, "DoorExitAnimation" }, // 3753133564
 		{ &Z_Construct_UFunction_UFFAnimInstance_VehiclePossess, "VehiclePossess" }, // 1321658338
@@ -285,10 +322,10 @@ UFFAnimInstance::~UFFAnimInstance() {}
 struct Z_CompiledInDeferFile_FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Character_FFAnimInstance_h__Script_FreelanceFelonsTwo_Statics
 {
 	static constexpr FClassRegisterCompiledInInfo ClassInfo[] = {
-		{ Z_Construct_UClass_UFFAnimInstance, UFFAnimInstance::StaticClass, TEXT("UFFAnimInstance"), &Z_Registration_Info_UClass_UFFAnimInstance, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(UFFAnimInstance), 2988261999U) },
+		{ Z_Construct_UClass_UFFAnimInstance, UFFAnimInstance::StaticClass, TEXT("UFFAnimInstance"), &Z_Registration_Info_UClass_UFFAnimInstance, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(UFFAnimInstance), 353719569U) },
 	};
 }; // Z_CompiledInDeferFile_FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Character_FFAnimInstance_h__Script_FreelanceFelonsTwo_Statics 
-static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Character_FFAnimInstance_h__Script_FreelanceFelonsTwo_2009449435{
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Character_FFAnimInstance_h__Script_FreelanceFelonsTwo_2814038570{
 	TEXT("/Script/FreelanceFelonsTwo"),
 	Z_CompiledInDeferFile_FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Character_FFAnimInstance_h__Script_FreelanceFelonsTwo_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_FreelanceFelonsTwo_Source_FreelanceFelonsTwo_Public_Character_FFAnimInstance_h__Script_FreelanceFelonsTwo_Statics::ClassInfo),
 	nullptr, 0,

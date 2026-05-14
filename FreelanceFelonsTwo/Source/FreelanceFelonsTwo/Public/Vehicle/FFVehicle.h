@@ -79,10 +79,17 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual void VehicleInteract(APawn* Instigator) override;
 	
+	void CloseDoor();
 	void PossessVehicle();
 
 	UFUNCTION(BlueprintCallable)
 	void CharacterExit();
+
+	UFUNCTION(BlueprintCallable)
+	void CharacterExitPassenger();
+
+	UFUNCTION(BlueprintCallable)
+	void CharacterExitRoof();
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void AnimateDoorEntry();
@@ -106,6 +113,7 @@ protected:
 	TOptional<FDoorData> SelectDoor();
 	bool NoDoorObstacles(const FDoorData& Door);
 	void Exit();
+	void ExitRoof();
 
 	float MaxEntryDistance = 150.f;
 
@@ -127,8 +135,9 @@ protected:
 	void ApplyVehicleForwardInput(float Input);
 	void ApplyForceAtWheel(const FWheelData& WheelData, float Input);
 	void ApplyVehicleSteeringInput(float DeltaTime);
-	void RotateWheelMesh(const FWheelData& Wheel, float Input);
+	void RotateWheelMesh(float Input, float DeltaTime);
 	void ApplyHandbrake(const FWheelData& Wheel);
+	void AutoHandbrake();
 
 	TArray<FWheelData> Wheels;
 	float TargetSteerAngle = 0.f;
@@ -148,7 +157,10 @@ protected:
 	float MaxSpeed = 4470.f;
 	
 	UPROPERTY(EditAnywhere)
-	float MinLateralFriction = 0.7f;
+	float WheelSpinMultiplier = 1.f;
+	
+	UPROPERTY(EditAnywhere)
+	float MinLateralFriction = 1.f;
 	
 	UPROPERTY(EditAnywhere)
 	float MaxLateralFriction = 4.f;
@@ -164,6 +176,12 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	float HandbrakeForce = 1.f;
+
+	UPROPERTY(EditAnywhere)
+	float HandbrakeStoppingForce = 1000.f;
+
+	UPROPERTY(EditAnywhere)
+	float HandbrakeStoppingForceSpeed = 200.f;
 
 	UPROPERTY(EditAnywhere)
 	float HandbrakeGripMultiplier = 0.5f;
@@ -215,6 +233,9 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent* CharacterSocketRight;
 
+	UPROPERTY(VisibleAnywhere)
+	USceneComponent* CharacterSocketRoof;
+
 	//Doors
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* LeftDoor;
@@ -223,6 +244,7 @@ private:
 	USceneComponent* LeftDoorTracePoint;
 	
 	FDoorData DriversDoorData;
+	FDoorData RightDoorData;
 	
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* RightDoor;
@@ -305,6 +327,8 @@ private:
 	FHitResult WheelGroundedCheck(const FWheelData& WheelData);
 	float CalculateForcePerWheel();
 	void LateralWheelFriction();
+
+	bool bMovementInput = false;
 
 	//
 	//Suspension
