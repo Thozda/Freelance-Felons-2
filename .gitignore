@@ -41,11 +41,6 @@
 *.VC.db
 *.VC.opendb
 
-# Unreal hard-noise protection
-Saved/ShaderDebugInfo/
-Saved/Crashes/
-Saved/Autosaves/
-
 # Precompiled Assets
 SourceArt/**/*.png
 SourceArt/**/*.tga
@@ -77,3 +72,6 @@ Plugins/**/Intermediate/*
 
 # Cache files for the editor to use
 DerivedDataCache/*
+
+#For Rider
+.idea/
