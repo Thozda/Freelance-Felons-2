@@ -157,6 +157,9 @@ protected:
 	float MaxSpeed = 4470.f;
 	
 	UPROPERTY(EditAnywhere)
+	float MaxReverseSpeed = 700.f;
+	
+	UPROPERTY(EditAnywhere)
 	float WheelSpinMultiplier = 1.f;
 	
 	UPROPERTY(EditAnywhere)
@@ -173,6 +176,9 @@ protected:
 	
 	UPROPERTY(EditAnywhere)
 	float MaxSteeringInterpSpeed = 25.f;
+
+	UPROPERTY(EditAnywhere)
+	float BrakeForceMultiplier = 5.f;
 
 	UPROPERTY(EditAnywhere)
 	float HandbrakeForce = 1.f;

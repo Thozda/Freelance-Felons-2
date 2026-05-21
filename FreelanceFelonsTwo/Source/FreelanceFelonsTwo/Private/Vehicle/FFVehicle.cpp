@@ -174,6 +174,13 @@ void AFFVehicle::FFMove(const FInputActionValue& Value)
 	//these are the magnitude of the controllers direction
 	float ForwardInput = -Value.Get<FVector2D>().X;
 	float RightInput = Value.Get<FVector2D>().Y;
+	
+	if (ForwardInput < 0 && FVector::DotProduct(GetVelocity(), GetActorForwardVector()) > 0 || 
+	ForwardInput > 0 && FVector::DotProduct(GetVelocity(), GetActorForwardVector()) < 0)
+	{
+		//Increases input if going forward but inputting backwards to act as brake
+		ForwardInput = ForwardInput * BrakeForceMultiplier;
+	}
 
 	ApplyVehicleForwardInput(ForwardInput);
 	TargetSteerAngle = RightInput;
@@ -640,7 +647,15 @@ float AFFVehicle::CalculateForcePerWheel()
 	float ForcePerWheel;
 
 	FVector2D Force = FVector2D(0.f, EngineForce);
-	FVector2D Speed = FVector2D(MaxSpeed, 0.f);
+	FVector2D Speed;
+	if (FVector::DotProduct(GetVelocity(), GetActorForwardVector()) < 0)
+	{
+		Speed = FVector2D(MaxReverseSpeed, 0.f);
+	}
+	else
+	{
+		Speed = FVector2D(MaxSpeed, 0.f);
+	}
 	TotalForce = FMath::GetMappedRangeValueClamped(Speed, Force, GetVelocity().Size2D());
 	
 	if (DriveTrain == EDriveTrain::EDT_FourWheelDrive)
@@ -685,7 +700,7 @@ void AFFVehicle::LateralWheelFriction()
 	}
 }
 
-//Steering
+//Steering && Wheel Spin
 void AFFVehicle::ApplyVehicleSteeringInput(float DeltaTime)
 {
 	//Turns the wheel mesh along with right input, allowing lateral friction to steer the cars direction
@@ -698,7 +713,8 @@ void AFFVehicle::RotateWheelMesh(float Input, float DeltaTime)
 {
 	for (const FWheelData& Wheel : Wheels)
 	{
-		if (Wheel.WheelMesh == nullptr) return;
+		if (Wheel.WheelMesh == nullptr) continue;
+		if (Wheel.bRearWheel && bHandbrakeActive) continue;
 		
 		FRotator NewWheelRotator = Wheel.WheelMesh->GetRelativeRotation();
 
