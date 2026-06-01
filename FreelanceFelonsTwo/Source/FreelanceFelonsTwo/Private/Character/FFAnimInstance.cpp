@@ -58,7 +58,6 @@ void UFFAnimInstance::DoorExitAnimation()
 	AFFPlayerController* FFController = Cast<AFFPlayerController>(UGameplayStatics::GetPlayerController(this, 0));
 	if (FFController)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Close door nitufy"))
 		FFController->ExitAnimationDoor();
 	}
 }

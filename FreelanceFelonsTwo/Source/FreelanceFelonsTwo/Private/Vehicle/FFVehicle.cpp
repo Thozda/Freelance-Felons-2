@@ -23,6 +23,7 @@ AFFVehicle::AFFVehicle()
 	Root->SetCollisionResponseToChannel(ECC_WorldStatic, ECR_Block);
 	Root->SetSimulatePhysics(true);
 	Root->SetCenterOfMass(FVector(0.f, 0.f, -15.f));
+	Root->SetUseCCD(true);
 	
 	CameraArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Camera Arm"));
 	CameraArm->SetupAttachment(GetRootComponent());
@@ -35,6 +36,7 @@ AFFVehicle::AFFVehicle()
 	Body->SetupAttachment(GetRootComponent());
 	Body->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	Body->SetMassOverrideInKg(NAME_None); //Makes the mass 1KG to allow vehicle mass to be set on the root only
+	Body->SetUseCCD(true);
 
 	CharacterSocketLeft = CreateDefaultSubobject<USceneComponent>(TEXT("CharacterSocketLeft"));
 	CharacterSocketLeft->SetupAttachment(GetRootComponent());
@@ -319,12 +321,16 @@ void AFFVehicle::Enter(const FDoorData& Door)
 	//To enable timing control, NPC spawning and PossessVehicle() handles by notifies on car enter animations
 	//vehicle state to transition
 
+	UE_LOG(LogTemp, Warning, TEXT("Enter"));
+
 	bool bShouldReturn = EnterMontage == nullptr ||
 		Cast<ACharacter>(InstigatorCharacter) == nullptr ||
 		Cast<ACharacter>(InstigatorCharacter)->GetMesh() == nullptr ||
 		Cast<ACharacter>(InstigatorCharacter)->GetCapsuleComponent() == nullptr ||
 		LeftDoor == nullptr;
 	if (bShouldReturn) return;
+
+	UE_LOG(LogTemp, Warning, TEXT("NotReturned"));
 
 	CurrentDoor = Door.DoorMesh;
 	EnteringDriversDoor = CurrentDoor == LeftDoor;
@@ -346,6 +352,8 @@ void AFFVehicle::Enter(const FDoorData& Door)
 		CharacterCapsule->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		//PossessVehicle();
 		
+		UE_LOG(LogTemp, Warning, TEXT("Parked"));
+
 		if (Door.DoorMesh == LeftDoor) //Getting in Drivers Side
 		{
 			InstigatorCharacter->AttachToComponent(CharacterSocketLeft, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
@@ -393,6 +401,8 @@ void AFFVehicle::CloseDoor()
 	PlayerController->Possess(this);
 
 	AnimateDoorEntryClose();
+
+	if (CharacterSocketLeft == nullptr) UE_LOG(LogTemp, Warning, TEXT("Character socket Null"));
 	
 	if (InstigatorCharacter && CharacterSocketLeft)
 	{
@@ -796,6 +806,8 @@ void AFFVehicle::AutoHandbrake()
 //
 void AFFVehicle::ApplySuspension()
 {
+	if (FVector::DotProduct(GetActorUpVector(), FVector::UpVector) < 0.5f) return;	//Disables suspension when inverted
+	
 	for (const FWheelData& Wheel : Wheels)
 	{
 		if (!Wheel.WheelGroundedTrace.bBlockingHit) continue;
