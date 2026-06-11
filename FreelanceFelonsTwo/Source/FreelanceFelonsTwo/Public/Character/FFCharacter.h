@@ -11,6 +11,7 @@ class USpringArmComponent;
 class UCameraComponent;
 class UInputMappingContext;
 class UInputAction;
+class UFFCombatComponent;
 
 UENUM()
 enum class ELocomotionState : uint8
@@ -38,6 +39,9 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void Landed(const FHitResult& Hit) override;
 
+	UPROPERTY(EditAnywhere)
+	UFFCombatComponent* CombatComponent;
+	
 private:
 	//
 	//Components
@@ -50,7 +54,7 @@ private:
 
 	UPROPERTY()
 	USkeletalMeshComponent* MetahumanBody;
-	
+
 	//
 	//Input
 	//
@@ -62,6 +66,7 @@ private:
 	void FFJump();
 	void FFInteract();
 	void FFVehicleInteract();
+	void FFWeaponSelectMenu(bool bOpen);
 
 	void AutoCancelSprint();
 	
@@ -79,6 +84,15 @@ private:
 
 	UFUNCTION()
 	void JumpPressed(const FInputActionValue& Value);
+
+	UFUNCTION()
+	void WeaponSelectPressed(const FInputActionValue& Value);
+
+	UFUNCTION()
+	void WeaponSelectReleased(const FInputActionValue& Value);
+
+	UFUNCTION()
+	void WeaponSelect(const FInputActionValue& Value);
 
 	UPROPERTY()
 	UCharacterMovementComponent* MovementComponent;
@@ -115,6 +129,21 @@ private:
 
 	UPROPERTY(EditAnywhere, Category="Input")
 	UInputAction* VehicleInteractAction;
+
+	UPROPERTY(EditAnywhere, Category="Input")
+	UInputAction* WeaponSelectOpenAction;
+
+	UPROPERTY(EditAnywhere, Category="Input")
+	UInputAction* WeaponSelectCloseAction;
+
+	UPROPERTY(EditAnywhere, Category="Input")
+	UInputAction* WeaponSelectAction;
+
+	UPROPERTY(EditAnywhere, Category="Input")
+	UInputAction* AimAction;
+
+	UPROPERTY(EditAnywhere, Category="Input")
+	UInputAction* FireAction;
 
 	//
 	//Animation

@@ -5,6 +5,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "Camera/CameraComponent.h"
+#include "Components/FFCombatComponent.h"
 #include "Controller/FFPlayerController.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -28,8 +29,10 @@ AFFCharacter::AFFCharacter()
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(CameraArm);
 
+	CombatComponent = CreateDefaultSubobject<UFFCombatComponent>(TEXT("Combat Component"));
+
 }
- 
+
 void AFFCharacter::BeginPlay()
 {
 	Super::BeginPlay();
@@ -66,6 +69,11 @@ void AFFCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 		EnhancedInputComponent->BindAction(SneakAction, ETriggerEvent::Triggered, this, &ThisClass::SneakPressed);
 		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &ThisClass::FFInteract);
 		EnhancedInputComponent->BindAction(VehicleInteractAction, ETriggerEvent::Triggered, this, &ThisClass::FFVehicleInteract);
+		EnhancedInputComponent->BindAction(WeaponSelectOpenAction, ETriggerEvent::Triggered, this, &ThisClass::WeaponSelectPressed);
+		EnhancedInputComponent->BindAction(WeaponSelectCloseAction, ETriggerEvent::Triggered, this, &ThisClass::WeaponSelectReleased);
+		EnhancedInputComponent->BindAction(WeaponSelectAction, ETriggerEvent::Triggered, this, &ThisClass::WeaponSelect);
+		//EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Triggered, this, &ThisClass::WeaponSelectReleased);
+		//EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Triggered, this, &ThisClass::WeaponSelectReleased);
 	}
 }
 
@@ -135,6 +143,24 @@ void AFFCharacter::JumpPressed(const FInputActionValue& Value)
 	}
 	
 	SetLocomotionState(ELocomotionState::ELS_Jump);
+}
+
+void AFFCharacter::WeaponSelectPressed(const FInputActionValue& Value)
+{
+	FFWeaponSelectMenu(true);
+}
+
+void AFFCharacter::WeaponSelectReleased(const FInputActionValue& Value)
+{
+	FFWeaponSelectMenu(false);
+}
+
+void AFFCharacter::WeaponSelect(const FInputActionValue& Value)
+{
+	if (CombatComponent)
+	{
+		CombatComponent->SelectWeapon();
+	}
 }
 
 void AFFCharacter::SetLocomotionState(ELocomotionState NewState)
@@ -280,6 +306,25 @@ TArray<AActor*> AFFCharacter::GetInteractableActorsInRange()
 	}
 
 	return InteractableActors;
+}
+
+//
+//Combat
+//
+void AFFCharacter::FFWeaponSelectMenu(bool bOpen)
+{
+	AFFPlayerController* FFPlayerController = Cast<AFFPlayerController>(Controller);
+	if (CombatComponent == nullptr || FFPlayerController == nullptr) return;
+	if (bOpen)
+	{
+		CombatComponent->OpenWeaponSelection();
+		FFPlayerController->SetWeaponSelectInput();
+	}
+	else
+	{
+		CombatComponent->CloseWeaponSelection();
+		FFPlayerController->SetWalkInput();
+	}
 }
 
 //

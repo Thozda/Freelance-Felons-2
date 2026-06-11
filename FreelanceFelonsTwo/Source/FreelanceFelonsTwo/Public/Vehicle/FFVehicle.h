@@ -36,6 +36,18 @@ enum class EDriveTrain : uint8
 	EDT_MAX UMETA(DisplayName = "DefaultMAX")
 };
 
+UENUM()
+enum class EDampeningState : uint8
+{
+	EDS_Transition,
+	EDS_Parked,
+	EDS_Driving,
+	EDS_Stationary,
+	EDS_Rolling,
+
+	EVS_MAX
+};
+
 USTRUCT()
 struct FDoorData
 {
@@ -117,10 +129,10 @@ protected:
 
 	float MaxEntryDistance = 150.f;
 
-	UPROPERTY(EditAnywhere, Category = "Animations")
+	UPROPERTY(EditAnywhere)
 	UAnimMontage* EnterMontage;
 
-	UPROPERTY(EditAnywhere, Category = "Animations")
+	UPROPERTY(EditAnywhere)
 	UAnimMontage* ExitAnim;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
@@ -193,15 +205,27 @@ protected:
 	float HandbrakeGripMultiplier = 0.5f;
 
 	//
+	//Dampening
+	//
+	UPROPERTY(EditAnywhere)
+	float BaseLinearDampening = 0.5f;
+
+	UPROPERTY(EditAnywhere)
+	float DampeningParkedMultiplier = 10.f;
+
+	UPROPERTY(EditAnywhere)
+	float DampeningStationaryMultiplier = 5.f;
+
+	//
 	//Suspension
 	//
-	UPROPERTY(EditAnywhere, Category = "Suspension")
+	UPROPERTY(EditAnywhere)
 	float SpringStrength = 100000.f;
 	
-	UPROPERTY(EditAnywhere, Category = "Suspension")
+	UPROPERTY(EditAnywhere)
 	float SpringDampening = 1000.f;
 
-	UPROPERTY(EditAnywhere, Category = "Suspension")
+	UPROPERTY(EditAnywhere)
 	float RestHeight = 45.f;
 	
 	//Radius
@@ -209,6 +233,8 @@ protected:
 	float WheelGroundOffset = 30.f;
 	
 private:
+	float MemberDeltaTime;
+	
 	//
 	//Player
 	//
@@ -311,19 +337,19 @@ private:
 	UFUNCTION()
 	void FFMoveReset(const FInputActionValue& Value);
 
-	UPROPERTY(EditAnywhere, Category="Input")
+	UPROPERTY(EditAnywhere)
 	UInputAction* LookAction;
 
-	UPROPERTY(EditAnywhere, Category="Input")
+	UPROPERTY(EditAnywhere)
 	UInputAction* MoveAction;
 
-	UPROPERTY(EditAnywhere, Category="Input")
+	UPROPERTY(EditAnywhere)
 	UInputAction* InteractAction;
 
-	UPROPERTY(EditAnywhere, Category="Input")
+	UPROPERTY(EditAnywhere)
 	UInputAction* VehicleInteractAction;
 
-	UPROPERTY(EditAnywhere, Category="Input")
+	UPROPERTY(EditAnywhere)
 	UInputAction* HandbreakAction;
 
 	//
@@ -332,14 +358,16 @@ private:
 	void UpdateWheelGroundedTrace();
 	FHitResult WheelGroundedCheck(const FWheelData& WheelData);
 	float CalculateForcePerWheel();
-	void LateralWheelFriction();
+	void LateralWheelFriction(float DeltaTime);
+	void PhysicsDampening();
 
 	bool bMovementInput = false;
+	EDampeningState LastDampeningState;
 
 	//
 	//Suspension
 	//
-	void ApplySuspension();
+	void ApplySuspension(float DeltaTime);
 	void PositionWheelMesh(const FWheelData& Wheel);
 
 public:

@@ -22,6 +22,7 @@ public:
 	//
 	void SetWalkInput();
 	void SetVehicleInput();
+	void SetWeaponSelectInput();
 
 	bool bVehicleInput = false;
 
@@ -52,6 +53,12 @@ private:
 	
 	UPROPERTY(EditAnywhere, Category="Input")
 	UInputMappingContext* VehicleInputContext;
+
+	UPROPERTY(EditAnywhere, Category="Input")
+	UInputMappingContext* WeaponSelectInputContext;
+
+	UPROPERTY(EditAnywhere, Category="Input")
+	UInputMappingContext* WeaponSelectToggleInputContext;
 
 public:
 	FORCEINLINE float GetMouseSensitivity() const { return MouseSensitivity; }

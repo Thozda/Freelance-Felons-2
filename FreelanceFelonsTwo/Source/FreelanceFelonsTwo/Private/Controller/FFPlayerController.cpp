@@ -15,6 +15,7 @@ void AFFPlayerController::BeginPlay()
 	{
 		Subsystem->AddMappingContext(BaseInputContext, 0);
 		Subsystem->AddMappingContext(WalkInputContext, 0);
+		Subsystem->AddMappingContext(WeaponSelectToggleInputContext, 0);
 	}
 }
 
@@ -24,7 +25,9 @@ void AFFPlayerController::SetWalkInput()
 		ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetWorld()->GetFirstLocalPlayerFromController()))
 	{
 		Subsystem->RemoveMappingContext(VehicleInputContext);
+		Subsystem->RemoveMappingContext(WeaponSelectInputContext);
 		Subsystem->AddMappingContext(WalkInputContext, 0);
+		Subsystem->AddMappingContext(WeaponSelectToggleInputContext, 0);
 		bVehicleInput = false;
 	}
 }
@@ -35,8 +38,20 @@ void AFFPlayerController::SetVehicleInput()
 		ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetWorld()->GetFirstLocalPlayerFromController()))
 	{
 		Subsystem->RemoveMappingContext(WalkInputContext);
+		Subsystem->RemoveMappingContext(WeaponSelectToggleInputContext);
 		Subsystem->AddMappingContext(VehicleInputContext, 0);
 		bVehicleInput = true;
+	}
+}
+
+void AFFPlayerController::SetWeaponSelectInput()
+{
+	if (UEnhancedInputLocalPlayerSubsystem* Subsystem =
+		ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetWorld()->GetFirstLocalPlayerFromController()))
+	{
+		Subsystem->RemoveMappingContext(WalkInputContext);
+		Subsystem->AddMappingContext(WeaponSelectInputContext, 0);
+		bVehicleInput = false;
 	}
 }
 

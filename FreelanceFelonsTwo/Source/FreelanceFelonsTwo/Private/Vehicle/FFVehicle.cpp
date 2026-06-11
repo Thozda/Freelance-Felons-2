@@ -4,11 +4,13 @@
 #include "Vehicle/FFVehicle.h"
 
 #include "EnhancedInputComponent.h"
+#include "ParticleHelper.h"
 #include "Camera/CameraComponent.h"
 #include "Components/BoxComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Controller/FFPlayerController.h"
 #include "GameFramework/Character.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -120,13 +122,20 @@ void AFFVehicle::BeginPlay()
 void AFFVehicle::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	
+	DeltaTime = FMath::Min(DeltaTime, 1.f/30.f);
+	MemberDeltaTime = DeltaTime;
 
+	if (GetGameInstance()->GetFirstLocalPlayerController()->GetPawn() &&
+		GetDistanceTo(GetGameInstance()->GetFirstLocalPlayerController()->GetPawn()) > 10000.f) return;
+		
 	UpdateWheelGroundedTrace(); //Must be called first - relied on everywhere
-	LateralWheelFriction();
+	LateralWheelFriction(DeltaTime);
 	ApplyVehicleSteeringInput(DeltaTime);
-	ApplySuspension();
+	ApplySuspension(DeltaTime);
 	RotateWheelMesh(CurrentSteerAngle, DeltaTime); //must be called after ApplyVehicleSteeringInput
 	AutoHandbrake();
+	PhysicsDampening(); //Replacing auto handbrake for now
 }
 
 //
@@ -177,11 +186,14 @@ void AFFVehicle::FFMove(const FInputActionValue& Value)
 	float ForwardInput = -Value.Get<FVector2D>().X;
 	float RightInput = Value.Get<FVector2D>().Y;
 	
-	if (ForwardInput < 0 && FVector::DotProduct(GetVelocity(), GetActorForwardVector()) > 0 || 
-	ForwardInput > 0 && FVector::DotProduct(GetVelocity(), GetActorForwardVector()) < 0)
+	if ((ForwardInput < 0 && FVector::DotProduct(GetVelocity(), GetActorForwardVector()) > 0 || 
+	ForwardInput > 0 && FVector::DotProduct(GetVelocity(), GetActorForwardVector()) < 0) && GetVelocity().Size2D() > 200.f)
 	{
+		FVector2D Force = FVector2D(0.f, BrakeForceMultiplier);
+		FVector2D Speed = FVector2D(200.f, 1000.f);
+		float CurrentBrakeForce = FMath::GetMappedRangeValueClamped(Speed, Force, GetVelocity().Size2D());
 		//Increases input if going forward but inputting backwards to act as brake
-		ForwardInput = ForwardInput * BrakeForceMultiplier;
+		ForwardInput = ForwardInput * CurrentBrakeForce;
 	}
 
 	ApplyVehicleForwardInput(ForwardInput);
@@ -321,25 +333,23 @@ void AFFVehicle::Enter(const FDoorData& Door)
 	//To enable timing control, NPC spawning and PossessVehicle() handles by notifies on car enter animations
 	//vehicle state to transition
 
-	UE_LOG(LogTemp, Warning, TEXT("Enter"));
-
 	bool bShouldReturn = EnterMontage == nullptr ||
 		Cast<ACharacter>(InstigatorCharacter) == nullptr ||
 		Cast<ACharacter>(InstigatorCharacter)->GetMesh() == nullptr ||
 		Cast<ACharacter>(InstigatorCharacter)->GetCapsuleComponent() == nullptr ||
+		Cast<ACharacter>(InstigatorCharacter)->GetCharacterMovement() == nullptr ||
 		LeftDoor == nullptr;
 	if (bShouldReturn) return;
-
-	UE_LOG(LogTemp, Warning, TEXT("NotReturned"));
 
 	CurrentDoor = Door.DoorMesh;
 	EnteringDriversDoor = CurrentDoor == LeftDoor;
 	USkeletalMeshComponent* CharacterMesh = Cast<ACharacter>(InstigatorCharacter)->GetMesh();
 	UCapsuleComponent* CharacterCapsule = Cast<ACharacter>(InstigatorCharacter)->GetCapsuleComponent();
+	UCharacterMovementComponent* CharacterMovement = Cast<ACharacter>(InstigatorCharacter)->GetCharacterMovement();
 	
 	//Stops vehicle instantly with extreme friction whilst maintaining suspension
-	Root->SetLinearDamping(1000.f);
-	Root->SetAngularDamping(1000.f);
+	//Root->SetLinearDamping(1000.f);
+	//Root->SetAngularDamping(1000.f);
 
 	
 	switch (VehicleState)
@@ -352,16 +362,16 @@ void AFFVehicle::Enter(const FDoorData& Door)
 		CharacterCapsule->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		//PossessVehicle();
 		
-		UE_LOG(LogTemp, Warning, TEXT("Parked"));
-
 		if (Door.DoorMesh == LeftDoor) //Getting in Drivers Side
 		{
+			CharacterMovement->DisableMovement();
 			InstigatorCharacter->AttachToComponent(CharacterSocketLeft, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 			CharacterMesh->GetAnimInstance()->Montage_Play(EnterMontage);
 			CharacterMesh->GetAnimInstance()->Montage_JumpToSection(FName("DriverParked"), EnterMontage);
 		}
 		else //Passenger Side
 		{
+			CharacterMovement->DisableMovement();
 			InstigatorCharacter->AttachToComponent(CharacterSocketRight, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 			CharacterMesh->GetAnimInstance()->Montage_Play(EnterMontage);
 			CharacterMesh->GetAnimInstance()->Montage_JumpToSection(FName("PassengerParked"), EnterMontage);
@@ -378,12 +388,14 @@ void AFFVehicle::Enter(const FDoorData& Door)
 		
 		if (Door.DoorMesh == LeftDoor) //Getting in Drivers Side
 		{
+			CharacterMovement->DisableMovement();
 			InstigatorCharacter->AttachToComponent(CharacterSocketLeft, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 			CharacterMesh->GetAnimInstance()->Montage_Play(EnterMontage);
 			CharacterMesh->GetAnimInstance()->Montage_JumpToSection(FName("OpenDriverDoor"), EnterMontage);
 		}
 		else //Passenger Side
 		{
+			CharacterMovement->DisableMovement();
 			InstigatorCharacter->AttachToComponent(CharacterSocketRight, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 			CharacterMesh->GetAnimInstance()->Montage_Play(EnterMontage);
 			CharacterMesh->GetAnimInstance()->Montage_JumpToSection(FName("PassengerParked"), EnterMontage);
@@ -403,6 +415,7 @@ void AFFVehicle::CloseDoor()
 	AnimateDoorEntryClose();
 
 	if (CharacterSocketLeft == nullptr) UE_LOG(LogTemp, Warning, TEXT("Character socket Null"));
+	if (InstigatorCharacter == nullptr) UE_LOG(LogTemp, Warning, TEXT("Character Null"));
 	
 	if (InstigatorCharacter && CharacterSocketLeft)
 	{
@@ -423,12 +436,26 @@ void AFFVehicle::PossessVehicle()
 	}
 	
 	VehicleState = EVehicleState::EVS_Player;
-	Root->SetLinearDamping(0.01f);
-	Root->SetAngularDamping(0.f);
+	//Root->SetLinearDamping(BaseLinearDampening);
+	//Root->SetAngularDamping(0.f);
 }
 
 void AFFVehicle::Exit()
 {
+	if (GetVelocity().Size2D() > 2000.f) return; //Cancel exit if moving too fast
+
+	bool bIsGrounded = false;
+	for (auto Wheel : Wheels) //Check if at least 1 wheel is on the ground
+	{
+		if (Wheel.WheelGroundedTrace.bBlockingHit)
+		{
+			bIsGrounded = true;
+			break;
+		}
+	}
+
+	if (!bIsGrounded && GetVelocity().Size2D() > 50.f) return; //cancel exit if moving through the air
+
 	if (!NoDoorObstacles(DriversDoorData))	//Drivers Door Blocked
 	{
 		if (NoDoorObstacles(RightDoorData))	//Passenger door clear - exit passenger side
@@ -442,8 +469,8 @@ void AFFVehicle::Exit()
 			ExitRoof();
 			
 			//Stops vehicle instantly with extreme friction whilst maintaining suspension
-			Root->SetLinearDamping(1000.f);
-			Root->SetAngularDamping(1000.f);
+			//Root->SetLinearDamping(1000.f);
+			//Root->SetAngularDamping(1000.f);
 			return;
 		}
 	}
@@ -462,8 +489,8 @@ void AFFVehicle::Exit()
 		VehicleState = EVehicleState::EVS_Transition;
 
 		//Stops vehicle instantly with extreme friction whilst maintaining suspension
-		Root->SetLinearDamping(1000.f);
-		Root->SetAngularDamping(1000.f);
+		//Root->SetLinearDamping(1000.f);
+		//Root->SetAngularDamping(1000.f);
 
 		//Open door before showing player
 		AnimateDoorExitOpen();
@@ -478,8 +505,8 @@ void AFFVehicle::ExitRoof()
 	if (InstigatorCharacter && PlayerController && Cast<ACharacter>(InstigatorCharacter)->GetMesh() && Cast<ACharacter>(InstigatorCharacter)->GetCapsuleComponent())
 	{
 		VehicleState = EVehicleState::EVS_Transition;
-		Root->SetLinearDamping(0.01f);
-		Root->SetAngularDamping(0.f);
+		//Root->SetLinearDamping(BaseLinearDampening);
+		//Root->SetAngularDamping(0.f);
 		CharacterExitRoof();
 	}
 }
@@ -490,8 +517,9 @@ void AFFVehicle::CharacterExit()
 	PlayerController = PlayerController == nullptr ? UGameplayStatics::GetPlayerController(this, 0) : PlayerController;
 	USkeletalMeshComponent* CharacterMesh = Cast<ACharacter>(InstigatorCharacter)->GetMesh();
 	UCapsuleComponent* CharacterCapsule = Cast<ACharacter>(InstigatorCharacter)->GetCapsuleComponent();
+	UCharacterMovementComponent* CharacterMovement = Cast<ACharacter>(InstigatorCharacter)->GetCharacterMovement();
 	
-	if (InstigatorCharacter && PlayerController && CharacterMesh && CharacterCapsule)
+	if (InstigatorCharacter && PlayerController && CharacterMesh && CharacterCapsule && CharacterMovement)
 	{
 		//Show the character, enable collision and play exit animation
 		InstigatorCharacter->SetActorHiddenInGame(false);
@@ -512,8 +540,8 @@ void AFFVehicle::CharacterExit()
 		}
 		
 		VehicleState = EVehicleState::EVS_Parked;
-		Root->SetLinearDamping(0.01f);
-		Root->SetAngularDamping(0.f);
+		//Root->SetLinearDamping(BaseLinearDampening);
+		//Root->SetAngularDamping(0.f);
 	}
 }
 
@@ -523,8 +551,9 @@ void AFFVehicle::CharacterExitPassenger()
 	PlayerController = PlayerController == nullptr ? UGameplayStatics::GetPlayerController(this, 0) : PlayerController;
 	USkeletalMeshComponent* CharacterMesh = Cast<ACharacter>(InstigatorCharacter)->GetMesh();
 	UCapsuleComponent* CharacterCapsule = Cast<ACharacter>(InstigatorCharacter)->GetCapsuleComponent();
+	UCharacterMovementComponent* CharacterMovement = Cast<ACharacter>(InstigatorCharacter)->GetCharacterMovement();
 	
-	if (InstigatorCharacter && PlayerController && CharacterMesh && CharacterCapsule)
+	if (InstigatorCharacter && PlayerController && CharacterMesh && CharacterCapsule && CharacterSocketRight && CharacterMovement)
 	{
 		//Show the character, enable collision and play exit animation
 		InstigatorCharacter->SetActorHiddenInGame(false);
@@ -546,8 +575,8 @@ void AFFVehicle::CharacterExitPassenger()
 		}
 		
 		VehicleState = EVehicleState::EVS_Parked;
-		Root->SetLinearDamping(0.01f);
-		Root->SetAngularDamping(0.f);
+		//Root->SetLinearDamping(BaseLinearDampening);
+		//Root->SetAngularDamping(0.f);
 	}
 }
 
@@ -557,9 +586,16 @@ void AFFVehicle::CharacterExitRoof()
 	PlayerController = PlayerController == nullptr ? UGameplayStatics::GetPlayerController(this, 0) : PlayerController;
 	USkeletalMeshComponent* CharacterMesh = Cast<ACharacter>(InstigatorCharacter)->GetMesh();
 	UCapsuleComponent* CharacterCapsule = Cast<ACharacter>(InstigatorCharacter)->GetCapsuleComponent();
+	UCharacterMovementComponent* CharacterMovement = Cast<ACharacter>(InstigatorCharacter)->GetCharacterMovement();
 	
-	if (InstigatorCharacter && PlayerController && CharacterMesh && CharacterCapsule)
+	if (InstigatorCharacter && PlayerController && CharacterMesh && CharacterCapsule && CharacterSocketRoof && CharacterMovement)
 	{
+		//Set roof socket Z position
+		FVector RoofPosition = CharacterSocketRoof->GetComponentLocation(); //gets world location for socket
+		RoofPosition.Z = GetActorLocation().Z; //sets sockets world z to the car center world z
+		RoofPosition += FVector::UpVector * 300.f; //calculates position straight up from new pos by 3M
+		CharacterSocketRoof->SetWorldLocation(RoofPosition);
+		
 		//Show the character, enable collision and play exit animation
 		InstigatorCharacter->SetActorHiddenInGame(false);
 		InstigatorCharacter->AttachToComponent(CharacterSocketRoof, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
@@ -613,8 +649,9 @@ void AFFVehicle::ApplyForceAtWheel(const FWheelData& WheelData, float Input)
 	//Checks if wheel grounded
 	//Add the actual force of the wheels
 	if (!WheelData.WheelGroundedTrace.bBlockingHit) return;
-
-	Root->AddForceAtLocation(GetActorForwardVector() * Input * CalculateForcePerWheel(), WheelData.WheelGroundedTrace.ImpactPoint);
+	
+	FVector Force = GetActorForwardVector() * Input * CalculateForcePerWheel() * MemberDeltaTime;
+	Root->AddForceAtLocation(Force, WheelData.WheelGroundedTrace.ImpactPoint);
 }
 
 void AFFVehicle::UpdateWheelGroundedTrace()
@@ -681,7 +718,7 @@ float AFFVehicle::CalculateForcePerWheel()
 }
 
 //Friction
-void AFFVehicle::LateralWheelFriction()
+void AFFVehicle::LateralWheelFriction(float DeltaTime)
 {
 	//maps speed to friction, so that as speed in cm/s increases the friction decreases so that the car is controllable at both low and high speeds
 	FVector2D InputSpeed = FVector2D(0.f, 2500.f);
@@ -705,8 +742,8 @@ void AFFVehicle::LateralWheelFriction()
 		*If they're perpendicular the result is zero. If they're opposite the result is negative.
 		*/
 		float LateralVelocity = FVector::DotProduct(VehicleVelocity, WheelRight);
-		Root->AddForceAtLocation(-WheelRight * LateralVelocity * LateralFriction * Root->GetMass(),
-			Wheel.WheelGroundedTrace.ImpactPoint);
+		FVector Force = -WheelRight * LateralVelocity * LateralFriction * Root->GetMass() * DeltaTime;
+		Root->AddForceAtLocation(Force,Wheel.WheelGroundedTrace.ImpactPoint);
 	}
 }
 
@@ -783,28 +820,88 @@ void AFFVehicle::ApplyHandbrake(const FWheelData& Wheel)
 	*/
 	float ForwardVelocity = FVector::DotProduct(Root->GetPhysicsLinearVelocityAtPoint( Wheel.WheelGroundedTrace.ImpactPoint), GetActorForwardVector());
 	FVector BrakeVector = -GetActorForwardVector();
-	Root->AddForceAtLocation(BrakeVector * VariableHandbrakeForce * ForwardVelocity, Wheel.WheelGroundedTrace.ImpactPoint);
+	FVector FinalForce = BrakeVector * VariableHandbrakeForce * ForwardVelocity * MemberDeltaTime;
+	Root->AddForceAtLocation(FinalForce, Wheel.WheelGroundedTrace.ImpactPoint);
 	bHandbrakeActive = true;
 }
 
 void AFFVehicle::AutoHandbrake()
 {
-	//Brings car to stop when below 1mph with no input - stops rolling
-	if (GetVelocity().Size2D() > 50.f || bMovementInput) return;
-
-	for (const FWheelData& Wheel : Wheels)
+	/*/Brings car to stop when below 1mph with no input - stops rolling
+	if (GetVelocity().Size2D() > 50.f || bMovementInput)
 	{
-		if (Wheel.bRearWheel == false || Wheel.WheelGroundedTrace.bBlockingHit == false) continue;
-		float ForwardVelocity = FVector::DotProduct(Root->GetPhysicsLinearVelocityAtPoint( Wheel.WheelGroundedTrace.ImpactPoint), GetActorForwardVector());
-		FVector BrakeVector = -GetActorForwardVector();
-		Root->AddForceAtLocation(BrakeVector * HandbrakeStoppingForce * ForwardVelocity, Wheel.WheelGroundedTrace.ImpactPoint);
+		
+		Root->SetLinearDamping(BaseLinearDampening);
+		Root->SetAngularDamping(0);
+	}
+	else
+	{
+		Root->SetLinearDamping(BaseLinearDampening * 10);
+		Root->SetAngularDamping(BaseLinearDampening * 10);
+	}*/
+}
+
+//
+//Dampening
+//
+void AFFVehicle::PhysicsDampening()
+{
+	EDampeningState DampeningState;
+	
+	if (VehicleState == EVehicleState::EVS_Transition)
+	{
+		DampeningState = EDampeningState::EDS_Transition;
+	}
+	else if (VehicleState == EVehicleState::EVS_Parked)
+	{
+		DampeningState = EDampeningState::EDS_Parked;
+	}
+	else if (bMovementInput)
+	{
+		DampeningState = EDampeningState::EDS_Driving;
+	}
+	else if (GetVelocity().Size2D() < 250.f && (VehicleState == EVehicleState::EVS_Player || VehicleState == EVehicleState::EVS_Traffic))
+	{
+		DampeningState = EDampeningState::EDS_Stationary;
+	}
+	else
+	{
+		DampeningState = EDampeningState::EDS_Rolling;
+	}
+
+	if (DampeningState == LastDampeningState) return;
+	LastDampeningState = DampeningState;
+
+	switch (DampeningState)
+	{
+	case EDampeningState::EDS_Transition:
+		//Stops vehicle instantly with extreme friction whilst maintaining suspension
+		Root->SetLinearDamping(1000.f);
+		Root->SetAngularDamping(1000.f);
+		break;
+	case EDampeningState::EDS_Parked:
+		Root->SetLinearDamping(BaseLinearDampening * DampeningParkedMultiplier);
+		Root->SetAngularDamping(BaseLinearDampening * DampeningParkedMultiplier);
+		break;
+	case EDampeningState::EDS_Driving:
+		Root->SetLinearDamping(0.01f);
+		Root->SetAngularDamping(0);
+		break;
+	case EDampeningState::EDS_Stationary:
+		Root->SetLinearDamping(BaseLinearDampening * DampeningStationaryMultiplier);
+		Root->SetAngularDamping(BaseLinearDampening * DampeningStationaryMultiplier);
+		break;
+	case EDampeningState::EDS_Rolling:
+		Root->SetLinearDamping(BaseLinearDampening);
+		Root->SetAngularDamping(0);
+		break;
 	}
 }
 
 //
 //Suspension
 //
-void AFFVehicle::ApplySuspension()
+void AFFVehicle::ApplySuspension(float DeltaTime)
 {
 	if (FVector::DotProduct(GetActorUpVector(), FVector::UpVector) < 0.5f) return;	//Disables suspension when inverted
 	
@@ -823,7 +920,7 @@ void AFFVehicle::ApplySuspension()
 		float VerticalVelocity = LocalWheelVelocity.Z;
 		
 		float SuspensionForce = FMath::Max(0, SpringStrength * Compression - SpringDampening * VerticalVelocity);
-		Root->AddForceAtLocation(GetActorUpVector() * SuspensionForce, Wheel.TracePoint->GetComponentLocation());
+		Root->AddForceAtLocation(GetActorUpVector() * SuspensionForce * DeltaTime, Wheel.TracePoint->GetComponentLocation());
 		
 		PositionWheelMesh(Wheel);
 	}
