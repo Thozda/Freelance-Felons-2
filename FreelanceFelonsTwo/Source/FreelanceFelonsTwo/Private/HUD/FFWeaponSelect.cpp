@@ -23,6 +23,13 @@ void UFFWeaponSelect::NativePreConstruct()
 	WeaponIcons.AddUnique(WeaponIcon0);
 	WeaponIcons.AddUnique(WeaponIcon1);
 	WeaponIcons.AddUnique(WeaponIcon2);
+	WeaponIcons.AddUnique(WeaponIcon3);
+	WeaponIcons.AddUnique(WeaponIcon4);
+	WeaponIcons.AddUnique(WeaponIcon5);
+	WeaponIcons.AddUnique(WeaponIcon6);
+	WeaponIcons.AddUnique(WeaponIcon7);
+	WeaponIcons.AddUnique(WeaponIcon8);
+	WeaponIcons.AddUnique(WeaponIcon9);
 	PositionWeaponIcons();
 }
 
@@ -44,7 +51,6 @@ void UFFWeaponSelect::WheelUpdate()
 	SelectedSection = FMath::Modulo( FMath::RoundToInt32(GetMouseRotation() / SectionSize), SectionCount);
 	float SelectedRotation = SelectedSection * SectionSize;
 	WeaponWheelMaterial->SetScalarParameterValue(FName("SelectedRotation"), SelectedRotation);
-	//UE_LOG(LogTemp, Warning, TEXT("Selected Section: %d, Mouse Rotation: %f"), SelectedSection, GetMouseRotation());
 }
 
 //
@@ -116,7 +122,13 @@ void UFFWeaponSelect::SetSectionCount(int32 Count)
 	PositionWeaponIcons();
 }
 
-void UFFWeaponSelect::SetWeaponIcon(int32 Weapon, UImage* WeaponIcon)
+void UFFWeaponSelect::SetWeaponIcon(int32 Weapon, UMaterialInstance* WeaponIcon)
 {
-	WeaponIcons[Weapon] = WeaponIcon;
+	if (WeaponIcon == nullptr) return;
+	UMaterialInstanceDynamic* Mat = UKismetMaterialLibrary::CreateDynamicMaterialInstance(this, WeaponIcon);
+	
+	if (Mat && WeaponIcons[Weapon])
+	{
+		WeaponIcons[Weapon]->SetBrushFromMaterial(Mat);
+	}
 }

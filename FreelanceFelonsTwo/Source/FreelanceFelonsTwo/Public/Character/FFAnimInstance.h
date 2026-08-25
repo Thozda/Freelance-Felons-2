@@ -36,6 +36,15 @@ protected:
 	float Speed = 0.f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	float MoveYaw = 0.f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	float LookYaw = 0.f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	float LookPitch = 0.f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	bool IsSneaking = false;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
@@ -43,6 +52,12 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	bool IsFalling = false;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	bool IsUnequipped = false;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	bool IsAiming = false;
 
 private:
 	UPROPERTY()

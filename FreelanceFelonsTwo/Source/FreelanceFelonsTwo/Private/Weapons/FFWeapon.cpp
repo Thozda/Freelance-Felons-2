@@ -7,6 +7,10 @@ AFFWeapon::AFFWeapon()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
+	WeaponMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Weapon Mesh"));
+	SetRootComponent(WeaponMesh);
+	WeaponMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
 }
 
 void AFFWeapon::BeginPlay()

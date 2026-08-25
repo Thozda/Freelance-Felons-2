@@ -231,6 +231,17 @@ protected:
 	//Radius
 	UPROPERTY(EditAnywhere)
 	float WheelGroundOffset = 30.f;
+
+	//
+	//Audio
+	//
+	void ChangeEngineAudioPitch();
+	
+	UPROPERTY(EditAnywhere)
+	USoundBase* EngineMetaSound;
+
+	UPROPERTY()
+	UAudioComponent* EngineSoundComponent;
 	
 private:
 	float MemberDeltaTime;

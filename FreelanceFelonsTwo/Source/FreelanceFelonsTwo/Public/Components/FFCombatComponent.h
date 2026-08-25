@@ -26,19 +26,42 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	//
+	//Weapons
+	//
 	UPROPERTY(EditAnywhere)
 	TArray<TSubclassOf<AFFWeapon>> UnlockedWeapons;
 
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AFFWeapon> UnequippedClass;
+	
 	UPROPERTY(VisibleAnywhere)
-	TSubclassOf<AFFWeapon> EquippedWeapon;
+	AFFWeapon* EquippedWeapon;
 
+	//
+	//Weapon Selector
+	//
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UFFWeaponSelect> WeaponSelectionWidgetClass;
 
 	UPROPERTY()
 	UFFWeaponSelect* WeaponSelectionWidget;
 
+	//
+	//Animations
+	//
+	UPROPERTY(EditAnywhere)
+	UAnimMontage* EquipMontage;
+
 private:	
 	void CreateWeaponSelectionWidget();
-		
+
+	bool bIsAiming = false;
+	bool bIsFireButtonPressed = false;
+
+public:
+	bool GetIsUnequipped() const;
+	void SetIsAiming(bool NewValue);
+	FORCEINLINE bool GetIsAiming() const { return bIsAiming; }
+	void SetIsFireButtonPressed(bool NewValue);
 };

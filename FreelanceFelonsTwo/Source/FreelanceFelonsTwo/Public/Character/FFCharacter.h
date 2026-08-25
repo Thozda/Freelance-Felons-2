@@ -24,6 +24,16 @@ enum class ELocomotionState : uint8
 	ELS_MAX
 };
 
+UENUM()
+enum class ETurningState : uint8
+{
+	ETS_NotTurning,
+	ETS_TurningLeft,
+	ETS_TurningRight,
+
+	ETS_MAX
+};
+
 UCLASS()
 class FREELANCEFELONSTWO_API AFFCharacter : public ACharacter
 {
@@ -69,6 +79,7 @@ private:
 	void FFWeaponSelectMenu(bool bOpen);
 
 	void AutoCancelSprint();
+	void CalculateWalkSpeed();
 	
 	UFUNCTION()
 	void FFLook(const FInputActionValue& Value);
@@ -93,6 +104,20 @@ private:
 
 	UFUNCTION()
 	void WeaponSelect(const FInputActionValue& Value);
+
+	UFUNCTION()
+	void AimPressed(const FInputActionValue& Value);
+
+	UFUNCTION()
+	void AimReleased(const FInputActionValue& Value);
+
+	UFUNCTION()
+	void FirePressed(const FInputActionValue& Value);
+
+	UFUNCTION()
+	void FireReleased(const FInputActionValue& Value);
+	
+	bool bCanEquippedSprint = false;
 
 	UPROPERTY()
 	UCharacterMovementComponent* MovementComponent;
@@ -140,15 +165,28 @@ private:
 	UInputAction* WeaponSelectAction;
 
 	UPROPERTY(EditAnywhere, Category="Input")
-	UInputAction* AimAction;
+	UInputAction* AimPressedAction;
 
 	UPROPERTY(EditAnywhere, Category="Input")
-	UInputAction* FireAction;
+	UInputAction* AimReleasedAction;
+
+	UPROPERTY(EditAnywhere, Category="Input")
+	UInputAction* FirePressedAction;
+
+	UPROPERTY(EditAnywhere, Category="Input")
+	UInputAction* FireReleasedAction;
 
 	//
 	//Animation
 	//
 	void CheckIsFalling();
+	void CharacterRotation(float DeltaTime);
+
+	ETurningState TurningState = ETurningState::ETS_NotTurning;
+	float TurningTargetYaw;
+
+	UPROPERTY(EditAnywhere)
+	UAnimMontage* TurningMontage;
 
 	//
 	//Interact
@@ -156,6 +194,7 @@ private:
 	TArray<AActor*> GetInteractableActorsInRange();
 	float InteractRadius = 100;
 
+	UPROPERTY()
 	AActor* LatestVehicleInteraction;
 
 	//
@@ -165,9 +204,13 @@ private:
 	
 public:
 	float GetSpeed() const;
+	FRotator GetLookDelta() const;
 	bool GetIsSneaking() const;
 	bool GetIsJumping() const;
 	bool GetIsFalling();
+	bool GetIsUnequipped() const;
+	bool GetIsAiming() const;
+	
 	FORCEINLINE AActor* GetLatestVehicleInteraction() const { return LatestVehicleInteraction; }
 
 };

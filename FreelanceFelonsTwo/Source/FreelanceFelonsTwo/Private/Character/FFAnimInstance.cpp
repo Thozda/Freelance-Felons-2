@@ -2,6 +2,8 @@
 
 
 #include "Character/FFAnimInstance.h"
+
+#include "KismetAnimationLibrary.h"
 #include "Character/FFCharacter.h"
 #include "Controller/FFPlayerController.h"
 #include "Kismet/GameplayStatics.h"
@@ -21,9 +23,15 @@ void UFFAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	if (FFCharacter == nullptr) return;
 
 	Speed = FFCharacter->GetSpeed();
+	MoveYaw = UKismetAnimationLibrary::CalculateDirection(FFCharacter->GetVelocity(), FFCharacter->GetActorRotation());
+	//UE_LOG(LogTemp, Warning, TEXT("Yaw: %f"), FFCharacter->GetMovementYaw())
+	LookPitch = FMath::Clamp(FFCharacter->GetLookDelta().Pitch, -90.f, 90.f);
+	LookYaw = FMath::Clamp(FFCharacter->GetLookDelta().Yaw, -90.f, 90.f);
 	IsSneaking = FFCharacter->GetIsSneaking();
 	IsJumping = FFCharacter->GetIsJumping();
 	IsFalling = FFCharacter->GetIsFalling();
+	IsUnequipped = FFCharacter->GetIsUnequipped();
+	IsAiming = FFCharacter->GetIsAiming();
 }
 
 void UFFAnimInstance::CloseDoor()

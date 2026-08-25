@@ -47,6 +47,27 @@ protected:
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
 	UImage* WeaponIcon2;
 
+	UPROPERTY(EditAnywhere, meta = (BindWidget))
+	UImage* WeaponIcon3;
+
+	UPROPERTY(EditAnywhere, meta = (BindWidget))
+	UImage* WeaponIcon4;
+
+	UPROPERTY(EditAnywhere, meta = (BindWidget))
+	UImage* WeaponIcon5;
+
+	UPROPERTY(EditAnywhere, meta = (BindWidget))
+	UImage* WeaponIcon6;
+
+	UPROPERTY(EditAnywhere, meta = (BindWidget))
+	UImage* WeaponIcon7;
+
+	UPROPERTY(EditAnywhere, meta = (BindWidget))
+	UImage* WeaponIcon8;
+
+	UPROPERTY(EditAnywhere, meta = (BindWidget))
+	UImage* WeaponIcon9;
+
 private:
 	float GetMouseRotation();
 	void WheelUpdate();
@@ -64,6 +85,6 @@ public:
 	int32 GetSelection();
 	void SetEquippedWeapon(int32 Section);
 	void SetSectionCount(int32 Count);
-	void SetWeaponIcon(int32 Weapon, UImage* WeaponIcon);
+	void SetWeaponIcon(int32 Weapon, UMaterialInstance* WeaponIcon);
 	
 };

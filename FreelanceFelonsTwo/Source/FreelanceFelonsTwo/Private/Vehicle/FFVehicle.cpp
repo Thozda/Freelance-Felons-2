@@ -6,6 +6,7 @@
 #include "EnhancedInputComponent.h"
 #include "ParticleHelper.h"
 #include "Camera/CameraComponent.h"
+#include "Components/AudioComponent.h"
 #include "Components/BoxComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Controller/FFPlayerController.h"
@@ -136,6 +137,7 @@ void AFFVehicle::Tick(float DeltaTime)
 	RotateWheelMesh(CurrentSteerAngle, DeltaTime); //must be called after ApplyVehicleSteeringInput
 	AutoHandbrake();
 	PhysicsDampening(); //Replacing auto handbrake for now
+	if (EngineSoundComponent) ChangeEngineAudioPitch();
 }
 
 //
@@ -436,6 +438,8 @@ void AFFVehicle::PossessVehicle()
 	}
 	
 	VehicleState = EVehicleState::EVS_Player;
+
+	if (EngineMetaSound && Body) EngineSoundComponent = UGameplayStatics::SpawnSoundAttached(EngineMetaSound, Body);
 	//Root->SetLinearDamping(BaseLinearDampening);
 	//Root->SetAngularDamping(0.f);
 }
@@ -455,6 +459,11 @@ void AFFVehicle::Exit()
 	}
 
 	if (!bIsGrounded && GetVelocity().Size2D() > 50.f) return; //cancel exit if moving through the air
+
+	if (EngineSoundComponent)
+	{
+		EngineSoundComponent->DestroyComponent();
+	}
 
 	if (!NoDoorObstacles(DriversDoorData))	//Drivers Door Blocked
 	{
@@ -860,7 +869,7 @@ void AFFVehicle::PhysicsDampening()
 	{
 		DampeningState = EDampeningState::EDS_Driving;
 	}
-	else if (GetVelocity().Size2D() < 250.f && (VehicleState == EVehicleState::EVS_Player || VehicleState == EVehicleState::EVS_Traffic))
+	else if (GetVelocity().Size2D() < 50.f && (VehicleState == EVehicleState::EVS_Player || VehicleState == EVehicleState::EVS_Traffic))
 	{
 		DampeningState = EDampeningState::EDS_Stationary;
 	}
@@ -920,7 +929,8 @@ void AFFVehicle::ApplySuspension(float DeltaTime)
 		float VerticalVelocity = LocalWheelVelocity.Z;
 		
 		float SuspensionForce = FMath::Max(0, SpringStrength * Compression - SpringDampening * VerticalVelocity);
-		Root->AddForceAtLocation(GetActorUpVector() * SuspensionForce * DeltaTime, Wheel.TracePoint->GetComponentLocation());
+		float FinalForce = FMath::Clamp(SuspensionForce * DeltaTime, 0.f, (Root->GetMass() / 4) * 1200.f);
+		Root->AddForceAtLocation(GetActorUpVector() * FinalForce, Wheel.TracePoint->GetComponentLocation());
 		
 		PositionWheelMesh(Wheel);
 	}
@@ -930,4 +940,16 @@ void AFFVehicle::PositionWheelMesh(const FWheelData& Wheel)
 {
 	FVector NewLocation = Wheel.WheelGroundedTrace.ImpactPoint + GetActorUpVector() * WheelGroundOffset;
 	Wheel.WheelMesh->SetWorldLocation(NewLocation);
+}
+
+//
+//Audio
+//
+void AFFVehicle::ChangeEngineAudioPitch()
+{
+	
+	float EnginePitchMultiplier = GetVelocity().Size2D() / 2000.f;
+	EnginePitchMultiplier = FMath::Max(EnginePitchMultiplier, 1.f);
+	if (EngineSoundComponent == nullptr) return;
+	EngineSoundComponent->SetPitchMultiplier(EnginePitchMultiplier);
 }

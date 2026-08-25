@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "FFWeapon.generated.h"
 
+class UImage;
+
 UCLASS()
 class FREELANCEFELONSTWO_API AFFWeapon : public AActor
 {
@@ -15,10 +17,14 @@ public:
 	AFFWeapon();
 	virtual void Tick(float DeltaTime) override;
 
-	FImage* WeaponIcon;
+	UPROPERTY(EditAnywhere)
+	UMaterialInstance* WeaponIcon;
 
 protected:
 	virtual void BeginPlay() override;
+
+	UPROPERTY(EditAnywhere)
+	UStaticMeshComponent* WeaponMesh;
 
 public:	
 

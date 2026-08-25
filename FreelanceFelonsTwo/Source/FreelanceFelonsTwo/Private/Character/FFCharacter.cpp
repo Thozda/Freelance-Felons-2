@@ -18,9 +18,7 @@ AFFCharacter::AFFCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 
 	bUseControllerRotationYaw = false;
-	
 	GetCharacterMovement()->bOrientRotationToMovement = true;
-	GetCharacterMovement()->bUseControllerDesiredRotation = true;
 
 	CameraArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Camera Arm"));
 	CameraArm->SetupAttachment(GetRootComponent());
@@ -44,6 +42,63 @@ void AFFCharacter::Tick(float DeltaTime)
 
 	AutoCancelSprint();
 	CheckIsFalling();
+	CharacterRotation(DeltaTime);
+}
+
+void AFFCharacter::CharacterRotation(float DeltaTime)
+{
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	if (AnimInstance == nullptr || TurningMontage == nullptr) return;
+	
+	if (GetCharacterMovement()->Velocity.SizeSquared2D() < 25.f)
+	{
+		bUseControllerRotationYaw = false;
+		GetCharacterMovement()->bOrientRotationToMovement = false;
+		
+		float LookYaw = GetLookDelta().Yaw;
+		//abs returns unsigned value
+		if (FMath::Abs(LookYaw) > 75.f && TurningState == ETurningState::ETS_NotTurning && CombatComponent && !CombatComponent->GetIsUnequipped())
+		{
+			AnimInstance->Montage_Play(TurningMontage);
+			if (LookYaw > 75.f)
+			{
+				TurningState = ETurningState::ETS_TurningRight;
+				TurningTargetYaw = GetActorRotation().Yaw + 90.f;
+				AnimInstance->Montage_JumpToSection(FName("Right"));
+			}
+			else
+			{
+				TurningState = ETurningState::ETS_TurningLeft;
+				TurningTargetYaw = GetActorRotation().Yaw - 90.f;
+				AnimInstance->Montage_JumpToSection(FName("Left"));
+			}
+		}
+	}
+	else
+	{
+		if (CombatComponent && !CombatComponent->GetIsUnequipped())
+		{
+			bUseControllerRotationYaw = true;
+			GetCharacterMovement()->bOrientRotationToMovement = false;
+		}
+		else
+		{
+			bUseControllerRotationYaw = false;
+			GetCharacterMovement()->bOrientRotationToMovement = true;
+		}
+	}
+
+	if (TurningState > ETurningState::ETS_NotTurning)
+	{
+		FRotator NewRotation = GetActorRotation();
+		NewRotation = FMath::RInterpTo(NewRotation, FRotator(0.f, TurningTargetYaw, 0.f), DeltaTime, 10.f);
+		SetActorRotation(NewRotation);
+		if (FMath::Abs(FMath::FindDeltaAngleDegrees(NewRotation.Yaw, TurningTargetYaw)) < 5.f)
+		{
+			TurningState = ETurningState::ETS_NotTurning;
+			AnimInstance->Montage_Stop(0.5f, TurningMontage);
+		}
+	}
 }
 
 //
@@ -72,8 +127,10 @@ void AFFCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 		EnhancedInputComponent->BindAction(WeaponSelectOpenAction, ETriggerEvent::Triggered, this, &ThisClass::WeaponSelectPressed);
 		EnhancedInputComponent->BindAction(WeaponSelectCloseAction, ETriggerEvent::Triggered, this, &ThisClass::WeaponSelectReleased);
 		EnhancedInputComponent->BindAction(WeaponSelectAction, ETriggerEvent::Triggered, this, &ThisClass::WeaponSelect);
-		//EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Triggered, this, &ThisClass::WeaponSelectReleased);
-		//EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Triggered, this, &ThisClass::WeaponSelectReleased);
+		EnhancedInputComponent->BindAction(AimPressedAction, ETriggerEvent::Triggered, this, &ThisClass::AimPressed);
+		EnhancedInputComponent->BindAction(AimReleasedAction, ETriggerEvent::Triggered, this, &ThisClass::AimReleased);
+		EnhancedInputComponent->BindAction(FirePressedAction, ETriggerEvent::Triggered, this, &ThisClass::FirePressed);
+		EnhancedInputComponent->BindAction(FireReleasedAction, ETriggerEvent::Triggered, this, &ThisClass::FireReleased);
 	}
 }
 
@@ -107,8 +164,10 @@ void AFFCharacter::FFMove(const FInputActionValue& Value)
 	FVector CameraRight = UKismetMathLibrary::GetRightVector(CameraRotation);
 
 	//This is the final movement vector
-	FVector Direction = CameraForward * ForwardInput + CameraRight * RightInput;
-	AddMovementInput(Direction.GetSafeNormal());
+	FVector FinalMovementDirection = CameraForward * ForwardInput + CameraRight * RightInput;
+	AddMovementInput(FinalMovementDirection.GetSafeNormal());
+
+	bCanEquippedSprint = ForwardInput > 0.9f && FMath::Abs(RightInput) < 0.1f;
 }
 
 void AFFCharacter::SprintPressed(const FInputActionValue& Value)
@@ -161,6 +220,41 @@ void AFFCharacter::WeaponSelect(const FInputActionValue& Value)
 	{
 		CombatComponent->SelectWeapon();
 	}
+	SwitchLocomotion();
+}
+
+void AFFCharacter::AimPressed(const FInputActionValue& Value)
+{
+	if (CombatComponent)
+	{
+		CombatComponent->SetIsAiming(true);
+	}
+	SwitchLocomotion();
+}
+
+void AFFCharacter::AimReleased(const FInputActionValue& Value)
+{
+	if (CombatComponent)
+	{
+		CombatComponent->SetIsAiming(false);
+	}
+	SwitchLocomotion();
+}
+
+void AFFCharacter::FirePressed(const FInputActionValue& Value)
+{
+	if (CombatComponent)
+	{
+		CombatComponent->SetIsFireButtonPressed(true);
+	}
+}
+
+void AFFCharacter::FireReleased(const FInputActionValue& Value)
+{
+	if (CombatComponent)
+	{
+		CombatComponent->SetIsFireButtonPressed(false);
+	}
 }
 
 void AFFCharacter::SetLocomotionState(ELocomotionState NewState)
@@ -196,18 +290,25 @@ void AFFCharacter::SwitchLocomotion()
 void AFFCharacter::FFWalk()
 {
 	MovementComponent = MovementComponent == nullptr ? GetCharacterMovement() : MovementComponent;
-	if (MovementComponent)
+	if (MovementComponent && CombatComponent)
 	{
-		MovementComponent->MaxWalkSpeed = WalkSpeed;
+		if (CombatComponent->GetIsUnequipped())
+		{
+			MovementComponent->MaxWalkSpeed = WalkSpeed;
+		}
+		else
+		{
+			MovementComponent->MaxWalkSpeed = CombatComponent->GetIsAiming() ? WalkSpeed - 100 : WalkSpeed;
+		}
 	}
 }
 
 void AFFCharacter::FFSprint()
 {
 	MovementComponent = MovementComponent == nullptr ? GetCharacterMovement() : MovementComponent;
-	if (MovementComponent)
+	if (MovementComponent && CombatComponent)
 	{
-		MovementComponent->MaxWalkSpeed = SprintSpeed;
+		MovementComponent->MaxWalkSpeed = CombatComponent->GetIsUnequipped() ? SprintSpeed : SprintSpeed - 100;
 	}
 }
 
@@ -248,7 +349,23 @@ void AFFCharacter::Landed(const FHitResult& Hit)
 
 void AFFCharacter::AutoCancelSprint()
 {
+	//If the player Stops
 	if (GetSpeed() <= 50.f && LocomotionState == ELocomotionState::ELS_Sprint)
+	{
+		SetLocomotionState(ELocomotionState::ELS_Walk);
+	}
+
+	//If the player runs not forward with a weapon or ADS
+	bool bEquippedReturn = CombatComponent &&
+		!CombatComponent->GetIsUnequipped() &&
+		!bCanEquippedSprint;
+	if (bEquippedReturn)
+	{
+		SetLocomotionState(ELocomotionState::ELS_Walk);
+	}
+
+	//If the player ADS with weapon
+	if (CombatComponent && !CombatComponent->GetIsUnequipped() && CombatComponent->GetIsAiming())
 	{
 		SetLocomotionState(ELocomotionState::ELS_Walk);
 	}
@@ -335,6 +452,12 @@ float AFFCharacter::GetSpeed() const
 	return GetVelocity().Size2D();
 }
 
+FRotator AFFCharacter::GetLookDelta() const
+{
+	FRotator Delta = UKismetMathLibrary::NormalizedDeltaRotator(GetControlRotation(), GetActorRotation());
+	return TurningState == ETurningState::ETS_NotTurning ? Delta : FRotator(Delta.Pitch, 0.f, Delta.Roll);
+}
+
 bool AFFCharacter::GetIsSneaking() const
 {
 	return LocomotionState == ELocomotionState::ELS_Sneak;
@@ -349,6 +472,24 @@ bool AFFCharacter::GetIsFalling()
 {
 	MovementComponent = MovementComponent == nullptr ? GetCharacterMovement() : MovementComponent;
 	return MovementComponent && MovementComponent->IsFalling();
+}
+
+bool AFFCharacter::GetIsUnequipped() const
+{
+	if (CombatComponent)
+	{
+		return CombatComponent->GetIsUnequipped();
+	}
+	return true;
+}
+
+bool AFFCharacter::GetIsAiming() const
+{
+	if (CombatComponent)
+	{
+		return CombatComponent->GetIsAiming();
+	}
+	return false;
 }
 
 AActor* AFFCharacter::GetClosestActorInArray(TArray<AActor*> Actors)
